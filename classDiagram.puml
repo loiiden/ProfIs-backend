@@ -1,0 +1,64 @@
+@startuml
+abstract class Person {
+    - id: Long
+    - firstName: String
+    - lastName: String
+    - phoneNumber: String
+    - email: String
+    - address: String
+    - level: AcademicLevel
+    - profilePicture: BufferedImage
+}
+
+abstract class Evaluator
+Person <|-- Evaluator
+Evaluator <|-- Professor
+Evaluator <|-- External
+
+class Student {
+    - studentNumber: Long
+    - major: String
+    - scientificWorks: List<ScientificWork>
+}
+Person <|-- Student
+
+enum AcademicLevel {
+    BACHELOR
+    MASTER
+    DOCTOR
+}
+
+class ScientificWork{
+    -id: Long
+    - title: String
+    - startDate: LocalDate
+    - endDate: LocalDate
+    - marks: List<Mark>
+    - finalGrade: Double
+}
+
+class Colloquium{
+    -id: Long
+    -appointment: LocalDateTime
+    -marks: List<Mark>
+}
+
+class Mark {
+    - id: Long
+    - score: int
+    - type: MarkType
+    - colloquium: Colloquium
+    - scientificWork: ScientificWork
+}
+
+enum MarkType {
+    WORK
+    COLLOQUIUM
+}
+
+ScientificWork "1" *-- "1" Colloquium : contains
+ScientificWork "n" -- "1" Student : writes
+
+ScientificWork "n" -- "2" Evaluator : evaluatedBy
+Colloquium "n" -- "2" Evaluator : evaluatedBy
+@enduml
