@@ -1,64 +1,69 @@
 @startuml
-abstract class Person {
-    - id: Long
-    - firstName: String
-    - lastName: String
-    - phoneNumber: String
-    - email: String
-    - address: String
-    - level: AcademicLevel
-    - profilePicture: BufferedImage
+abstract class Person{
+-id:Long
+-firstName: String
+-lastName: String
+-address: String
+-email: String
+-phoneNumber: String
+-level: AcademicLevel
+-profilePicture: BufferedImage
 }
+abstract class  Evaluator 
 
-abstract class Evaluator
-Person <|-- Evaluator
-Evaluator <|-- Professor
-Evaluator <|-- External
-
-class Student {
-    - studentNumber: Long
-    - major: String
-    - scientificWorks: List<ScientificWork>
+class Referent
+class Professor
+class Student{
+ -id: studentNumber
+ -scientificWorks: List<ScientificWork>
 }
+enum AcademicLevel{
+    NONE
+    BACHELOR_UNI
+    BACHELOR_FH
+    MASTER_UNI
+    MASTER_FH
+}
+Person<|-- Evaluator 
+Evaluator<|-- Referent
+Evaluator<|--Professor
 Person <|-- Student
 
-enum AcademicLevel {
-    BACHELOR
-    MASTER
-    DOCTOR
+class Mark{
+    -id: Long
+    -type: MARK_TYPE
 }
+Mark "n"<--"1"Evaluator : gives
 
+enum MARK_TYPE{
+     COLLOQUIUM
+     SCIENTIFICWORK
+}
 class ScientificWork{
     -id: Long
-    - title: String
-    - startDate: LocalDate
-    - endDate: LocalDate
-    - marks: List<Mark>
-    - finalGrade: Double
+    -colloquium:LocalDateTime
+    -title: String
+    -startDate: LocalDate
+    -endDate: LocalDate
 }
+ScientificWork "n"<--"1,2"Evaluator : monitor
+ScientificWork "1"<--"2,4"Mark: has
+ScientificWork "n"<--"1"Student: writes
+ScientificWork "1"--"1"StudyProgram: is related
 
-class Colloquium{
+
+
+class StudyProgram{
     -id: Long
-    -appointment: LocalDateTime
-    -marks: List<Mark>
+    -title: String
+    -rule: SWS
+}
+enum SWS{
+    ZERO_ONE
+    ZERO_TWO
+
 }
 
-class Mark {
-    - id: Long
-    - score: int
-    - type: MarkType
-    - colloquium: Colloquium
-    - scientificWork: ScientificWork
-}
 
-enum MarkType {
-    WORK
-    COLLOQUIUM
-}
 
-ScientificWork "1" *-- "1" Colloquium : contains
-ScientificWork "n" -- "1" Student : writes
-
-ScientificWork "n" -- "2" Evaluator : evaluatedBy
-Colloquium "n" -- "2" Evaluator : evaluatedBy
 @enduml
