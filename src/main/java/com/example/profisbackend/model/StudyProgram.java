@@ -1,5 +1,4 @@
 package com.example.profisbackend.model;
-import com.example.profisbackend.enums.SWS;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
@@ -9,5 +8,5 @@ public class StudyProgram {
     @Id
     private Long id;
     private String title;
-    private SWS rule;   
+    private float sws;   
 }

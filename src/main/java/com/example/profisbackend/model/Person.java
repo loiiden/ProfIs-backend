@@ -1,7 +1,5 @@
 package com.example.profisbackend.model;
 import com.example.profisbackend.enums.AcademicLevel;
-import java.io.BufferedInputStream;
-
 import jakarta.persistence.Lob;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -18,6 +16,7 @@ public abstract class Person {
     private String email;
     private String phoneNumber;
     private AcademicLevel academicLevel;
+
     @Lob
     private byte[] profilePicture;
 }

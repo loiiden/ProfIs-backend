@@ -5,6 +5,5 @@ public enum AcademicLevel {
     BACHELOR_FH,
     BACHELOR_UNI,
     MASTER_FH,
-    MASTER_UNI
-    
+    MASTER_UNI  
 }
