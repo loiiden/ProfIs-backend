@@ -15,5 +15,5 @@ public class Student extends Person  {
     private Long studentNumber;
     
     @OneToMany(mappedBy ="student")
-    private List<ScientificWork>scientificWorks;
+    private List<ScientificWork> scientificWorks;
 }

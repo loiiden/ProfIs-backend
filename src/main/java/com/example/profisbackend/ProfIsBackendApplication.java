@@ -10,5 +10,4 @@ public class ProfIsBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(ProfIsBackendApplication.class, args);
     }
-
 }
