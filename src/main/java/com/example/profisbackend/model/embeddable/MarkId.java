@@ -1,10 +1,6 @@
 package com.example.profisbackend.model.embeddable;
 
 import com.example.profisbackend.enums.MarkType;
-import com.example.profisbackend.model.Evaluator;
-import com.example.profisbackend.model.ScientificWork;
-import jakarta.persistence.ManyToOne;
-
 import java.io.Serializable;
 import java.util.Objects;
 
