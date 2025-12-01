@@ -2,6 +2,7 @@ package com.example.profisbackend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,5 +20,10 @@ public class StudyProgramController {
     @PostMapping
     public ResponseEntity<StudyProgram>createStudyProgram(@RequestBody StudyProgramDto studyProgramDto){
         return ResponseEntity.ok().body(studyProgramService.createStudyProgram(studyProgramDto));
-    }   
+    } 
+    @DeleteMapping
+    public ResponseEntity<String>deleteStudyProgram(@RequestBody Long id){
+        studyProgramService.deleteStudyProgram(id);
+        return ResponseEntity.ok().body("Deleted StudyProgram: "+id);
+    }
 }

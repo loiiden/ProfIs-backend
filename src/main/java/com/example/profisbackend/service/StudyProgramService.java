@@ -1,7 +1,10 @@
 package com.example.profisbackend.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.example.exception.StudyProgramNotFound;
 import com.example.profisbackend.dto.StudyProgramDto;
 import com.example.profisbackend.mapper.StudyProgramMapper;
 import com.example.profisbackend.model.StudyProgram;
@@ -17,5 +20,12 @@ public class StudyProgramService {
 
     public StudyProgram createStudyProgram(StudyProgramDto studyProgramDto) {
        return studyProgramRepository.save(StudyProgramMapper.studyProgramDtoToStudyProgram(studyProgramDto));
+    }
+    public void deleteStudyProgram(Long id){
+        Optional<StudyProgram> optionalStudyProgram=studyProgramRepository.findById(id);
+        optionalStudyProgram.ifPresentOrElse(program->
+            studyProgramRepository.delete(program),
+            () -> { throw new StudyProgramNotFound("Studyprogram not found"); }
+        );
     }
 }
