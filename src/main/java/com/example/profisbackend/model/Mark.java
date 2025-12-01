@@ -3,7 +3,6 @@ import com.example.profisbackend.model.embeddable.MarkId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
-import com.example.profisbackend.enums.MarkType;
 import lombok.Getter;
 import lombok.Setter;
 
