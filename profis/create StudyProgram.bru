@@ -6,10 +6,18 @@ meta {
 
 post {
   url: http://localhost:8080/api
-  body: none
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "title":"B.Sc. Mathe",
+    "sws": 0.1
+  }
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

@@ -10,12 +10,12 @@ import com.example.profisbackend.dto.StudyProgramDto;
 import com.example.profisbackend.model.StudyProgram;
 import com.example.profisbackend.service.StudyProgramService;
 
-import lombok.AllArgsConstructor;
-@AllArgsConstructor
+import lombok.RequiredArgsConstructor;
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/api")
 public class StudyProgramController {
-    private StudyProgramService studyProgramService;
+    private final StudyProgramService studyProgramService;
     @PostMapping
     public ResponseEntity<StudyProgram>createStudyProgram(@RequestBody StudyProgramDto studyProgramDto){
         return ResponseEntity.ok().body(studyProgramService.createStudyProgram(studyProgramDto));

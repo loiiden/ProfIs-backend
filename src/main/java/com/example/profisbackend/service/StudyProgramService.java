@@ -18,7 +18,4 @@ public class StudyProgramService {
     public StudyProgram createStudyProgram(StudyProgramDto studyProgramDto) {
        return studyProgramRepository.save(StudyProgramMapper.studyProgramDtoToStudyProgram(studyProgramDto));
     }
-
-    
-    
 }
