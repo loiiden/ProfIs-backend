@@ -4,7 +4,7 @@ import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.enums.EvaluatorRole;
 
 /**
- * Data Transfer Object for Referent resources exposed by the REST API.
+ * Data Transfer Object for Evaluator resources exposed by the REST API.
  *
  * Fields:
  * - id            : database id (null for create requests)
@@ -18,7 +18,7 @@ import com.example.profisbackend.enums.EvaluatorRole;
  * This DTO intentionally avoids including relational collections (e.g. marks)
  * to keep the payload small for the initial API.
  */
-public record ReferentDto(
+public record EvaluatorDto(
         Long id,
         String firstName,
         String lastName,
