@@ -14,6 +14,8 @@ import lombok.Setter;
 public class Student extends Person  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private Long studentNumber;
     
     @OneToMany(mappedBy ="student")

@@ -1,5 +1,6 @@
 package com.example.profisbackend.model;
 import com.example.profisbackend.enums.AcademicLevel;
+import jakarta.persistence.Column;
 import jakarta.persistence.Lob;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public abstract class Person {
     private String phoneNumber;
     private AcademicLevel academicLevel;
 
-    @Lob
+    //@Lob - was deleted due to SQL-lite driver issues.
+    @Column(columnDefinition = "BLOB")
     private byte[] profilePicture;
 }
