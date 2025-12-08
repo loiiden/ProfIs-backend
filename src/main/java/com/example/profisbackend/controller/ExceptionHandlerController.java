@@ -6,6 +6,7 @@ import com.example.profisbackend.exceptions.StudyProgramNotFound;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -46,6 +47,22 @@ public class ExceptionHandlerController {
                 status,
                 ex.getMessage()
         );
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
+    //to handle json parse errors
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex,
+            HttpServletRequest request){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse errorResponse = buildErrorResponse(
+                request,
+                status,
+                ex.getMessage()
+        );
+
 
         return new ResponseEntity<>(errorResponse, status);
     }
