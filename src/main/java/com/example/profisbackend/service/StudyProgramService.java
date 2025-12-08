@@ -2,9 +2,9 @@ package com.example.profisbackend.service;
 
 import java.util.Optional;
 
+import com.example.profisbackend.exceptions.StudyProgramNotFound;
 import org.springframework.stereotype.Service;
 
-import com.example.exception.StudyProgramNotFound;
 import com.example.profisbackend.dto.StudyProgramDto;
 import com.example.profisbackend.mapper.StudyProgramMapper;
 import com.example.profisbackend.model.StudyProgram;

@@ -1,19 +1,18 @@
 meta {
-  name: create StudyProgram
+  name: Create Evaluator
   type: http
   seq: 1
 }
 
 post {
-  url: http://localhost:8080/api/study-program
+  url: http://localhost:8080/api/evaluator
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "title":"B.Sc. Mathe",
-    "sws": 0.1
+    "firstName": "DR NEW"
   }
 }
 

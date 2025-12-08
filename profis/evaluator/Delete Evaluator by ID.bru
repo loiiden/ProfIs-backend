@@ -1,11 +1,11 @@
 meta {
-  name: getAllStudents
+  name: Delete Evaluator by ID
   type: http
-  seq: 2
+  seq: 5
 }
 
-get {
-  url: http://localhost:8080/api/student
+delete {
+  url: http://localhost:8080/api/evaluator/2
   body: none
   auth: inherit
 }

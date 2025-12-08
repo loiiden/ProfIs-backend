@@ -29,12 +29,9 @@ public class StudentService {
     public Student getStudentById(Long id) {
         return studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
     }
-    public boolean deleteStudentById(Long id) {
-        if (studentRepository.existsById(id)) {
-            studentRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteStudentById(Long id) {
+        Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
+        studentRepository.delete(student);
     }
     public Student patchStudentById(Long id, StudentPatchDTO studentPatchDTO) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));

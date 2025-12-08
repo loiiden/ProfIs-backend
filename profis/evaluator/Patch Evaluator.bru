@@ -1,18 +1,18 @@
 meta {
-  name: Patch Student By ID
+  name: Patch Evaluator
   type: http
   seq: 4
 }
 
 patch {
-  url: http://localhost:8080/api/student/154
+  url: http://localhost:8080/api/evaluator/2
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "firstName": "Max"
+    "firstName": "New Name"
   }
 }
 

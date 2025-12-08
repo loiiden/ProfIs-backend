@@ -15,21 +15,18 @@ import java.util.List;
 @RequestMapping("api/student")
 public class StudentController {
     private final StudentService studentService;
-    @PostMapping("create")
+    @PostMapping("")
     public ResponseEntity<Student> createStudent(@RequestBody StudentCreateDTO studentDTO) {
         return ResponseEntity.ok(studentService.createStudent(studentDTO));
     }
-    @GetMapping("getAll")
+    @GetMapping("")
     public ResponseEntity<List<Student>> getAllStudents() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudentById(@PathVariable Long id) {
-        boolean deleted = studentService.deleteStudentById(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        studentService.deleteStudentById(id);
+        return ResponseEntity.noContent().build();
     }
     @PatchMapping("/{id}")
     public ResponseEntity<Student> patchStudentById(@PathVariable Long id, @RequestBody StudentPatchDTO studentPatchDTO) {

@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/evaluator")
+@RequestMapping("/api/evaluator")
 public class EvaluatorController {
     private final EvaluatorService evaluatorService;
 
