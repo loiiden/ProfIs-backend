@@ -8,6 +8,7 @@ public record StudentCreateDTO(
         String address,
         String email,
         String phoneNumber,
+        Long studentNumber,
         AcademicLevel academicLevel
         ) {
 

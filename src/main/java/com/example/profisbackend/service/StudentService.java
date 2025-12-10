@@ -2,17 +2,14 @@ package com.example.profisbackend.service;
 
 import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.dto.student.StudentPatchDTO;
-import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.exceptions.StudentNotFoundException;
 import com.example.profisbackend.mapper.StudentMapper;
 import com.example.profisbackend.model.Student;
 import com.example.profisbackend.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,7 +17,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
 
     public Student createStudent(StudentCreateDTO studentDTO) {
-        return studentRepository.save(StudentMapper.studentCreateDTO_TO_Student_Mapper(studentDTO));
+        return studentRepository.save(StudentMapper.toStudent(studentDTO));
     }
 
     public List<Student> getAllStudents() {

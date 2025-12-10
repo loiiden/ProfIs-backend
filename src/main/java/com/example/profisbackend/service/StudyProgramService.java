@@ -21,11 +21,14 @@ public class StudyProgramService {
     public StudyProgram createStudyProgram(StudyProgramDto studyProgramDto) {
        return studyProgramRepository.save(StudyProgramMapper.studyProgramDtoToStudyProgram(studyProgramDto));
     }
+    public StudyProgram getStudyProgramById(Long id) throws StudyProgramNotFound {
+        return studyProgramRepository.findById(id).orElseThrow(() -> new StudyProgramNotFound(id));
+    }
     public void deleteStudyProgram(Long id){
         Optional<StudyProgram> optionalStudyProgram=studyProgramRepository.findById(id);
         optionalStudyProgram.ifPresentOrElse(program->
             studyProgramRepository.delete(program),
-            () -> { throw new StudyProgramNotFound("Studyprogram not found"); }
+            () -> { throw new StudyProgramNotFound(id); }
         );
     }
 }

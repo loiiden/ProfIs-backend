@@ -2,6 +2,8 @@ package com.example.profisbackend.controller;
 
 import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.dto.student.StudentPatchDTO;
+import com.example.profisbackend.dto.student.StudentResponseDTO;
+import com.example.profisbackend.mapper.StudentMapper;
 import com.example.profisbackend.model.Student;
 import com.example.profisbackend.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +17,13 @@ import java.util.List;
 @RequestMapping("api/student")
 public class StudentController {
     private final StudentService studentService;
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody StudentCreateDTO studentDTO) {
         return ResponseEntity.ok(studentService.createStudent(studentDTO));
     }
-    @GetMapping("")
-    public ResponseEntity<List<Student>> getAllStudents() {
-        return ResponseEntity.ok(studentService.getAllStudents());
+    @GetMapping
+    public ResponseEntity<List<StudentResponseDTO>> getAllStudents() {
+        return ResponseEntity.ok(studentService.getAllStudents().stream().map(student -> StudentMapper.toStudentResponseDTO(student)).toList());
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudentById(@PathVariable Long id) {
@@ -29,11 +31,11 @@ public class StudentController {
         return ResponseEntity.noContent().build();
     }
     @PatchMapping("/{id}")
-    public ResponseEntity<Student> patchStudentById(@PathVariable Long id, @RequestBody StudentPatchDTO studentPatchDTO) {
-        return ResponseEntity.ok(studentService.patchStudentById(id, studentPatchDTO));
+    public ResponseEntity<StudentResponseDTO> patchStudentById(@PathVariable Long id, @RequestBody StudentPatchDTO studentPatchDTO) {
+        return ResponseEntity.ok(StudentMapper.toStudentResponseDTO(studentService.patchStudentById(id, studentPatchDTO)));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-        return ResponseEntity.ok(studentService.getStudentById(id));
+    public ResponseEntity<StudentResponseDTO> getStudentById(@PathVariable Long id) {
+        return ResponseEntity.ok(StudentMapper.toStudentResponseDTO(studentService.getStudentById(id)));
     }
 }
