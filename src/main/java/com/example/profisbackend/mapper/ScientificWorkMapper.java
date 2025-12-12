@@ -1,8 +1,6 @@
 package com.example.profisbackend.mapper;
 
-import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkResponseDTO;
-import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.model.ScientificWork;
 
 public class ScientificWorkMapper {
