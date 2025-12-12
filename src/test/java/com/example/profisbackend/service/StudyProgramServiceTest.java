@@ -1,6 +1,8 @@
 package com.example.profisbackend.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.profisbackend.dto.StudyProgramDto;
+import com.example.profisbackend.exceptions.StudyProgramNotFound;
 import com.example.profisbackend.mapper.StudyProgramMapper;
 import com.example.profisbackend.model.StudyProgram;
 import com.example.profisbackend.repository.StudyProgramRepository;
@@ -27,7 +30,7 @@ public class StudyProgramServiceTest {
     StudyProgramService studyProgramService;
 
     @Test
-    void retunStudyProgram() {
+    void studyProgramSavedOnce() {
         // Arrange
         StudyProgramDto studyProgramDto = new StudyProgramDto("Computer Science", 0.1f);
         StudyProgram expectedProgram = StudyProgramMapper.studyProgramDtoToStudyProgram(studyProgramDto);
@@ -42,22 +45,38 @@ public class StudyProgramServiceTest {
     }
 
     @Test
-    void studyProgramFoundById() {
-        //Arrange 
-        Long id=1L;
-        StudyProgram studyProgram= StudyProgram.builder()
-        .id(id)
-        .title("Computer Science")
-        .sws(0.1f)
-        .build();
-        Optional<StudyProgram> expectedProgram= Optional.of(studyProgram);
-        when(studyProgramRepository.findById(id))
-        .thenReturn(expectedProgram);
-        //Act
-        studyProgramService.deleteStudyProgram(id);
-        //Assert
-        verify(studyProgramRepository,times(1)).findById(id);
-    }
-//Todo 
+    void returnStudyProgramNotFoundException() {
+        // Arrange
+        StudyProgram studyProgram = StudyProgram.builder()
+                .id(1L)
+                .title("Computer Science")
+                .sws(0.1f)
+                .build();
 
+        when(studyProgramRepository.findById(studyProgram.getId()))
+                .thenReturn(Optional.empty());
+        // Act
+        assertThrows(StudyProgramNotFound.class, () -> studyProgramService.deleteStudyProgram(studyProgram.getId()));
+        // Assert
+        verify(studyProgramRepository, never()).delete(studyProgram);
+    }
+
+    @Test
+    void studyProgramFoundByIdCalledOnce() {
+        // Arrange
+        Long id = 1L;
+        StudyProgram studyProgram = StudyProgram.builder()
+                .id(id)
+                .title("Computer Science")
+                .sws(0.1f)
+                .build();
+        Optional<StudyProgram> expectedProgram = Optional.of(studyProgram);
+        when(studyProgramRepository.findById(id))
+                .thenReturn(expectedProgram);
+        // Act
+       StudyProgram returnedStudyProgram= studyProgramService.getStudyProgramById(id);
+        // Assert
+        Assertions.assertEquals(expectedProgram.get(), returnedStudyProgram);
+        verify(studyProgramRepository, times(1)).findById(id);
+    }
 }
