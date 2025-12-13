@@ -17,4 +17,10 @@ public  class Evaluator extends Person{
     @OneToMany(mappedBy ="evaluator" )
     private List<Mark> marks;
     private EvaluatorRole role;
+
+    @OneToMany(mappedBy = "mainEvaluator")
+    private List<ScientificWork> scientificWorksAsMainEvaluator;
+
+    @OneToMany(mappedBy = "secondEvaluator")
+    private List<ScientificWork> scientificWorksAsSecondEvaluator;
 }

@@ -28,4 +28,10 @@ public class ScientificWork {
     @ManyToOne
     @JoinColumn(name = "study_program_id")
     private StudyProgram studyProgram;
+
+    @ManyToOne
+    private Evaluator mainEvaluator;
+
+    @ManyToOne
+    private Evaluator secondEvaluator;
 }
