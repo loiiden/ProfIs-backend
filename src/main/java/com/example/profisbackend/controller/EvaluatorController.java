@@ -1,5 +1,7 @@
 package com.example.profisbackend.controller;
 
+import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
+import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import com.example.profisbackend.dto.EvaluatorDto;
+import com.example.profisbackend.dto.evaluator.EvaluatorResponseDTO;
 import com.example.profisbackend.mapper.EvaluatorMapper;
 import com.example.profisbackend.model.Evaluator;
 import com.example.profisbackend.service.EvaluatorService;
@@ -43,13 +45,13 @@ public class EvaluatorController {
 
     /**
      * Create a Evaluator.
-     * Request body: EvaluatorDto JSON (id can be null for creation).
+     * Request body: EvaluatorCreateDTO JSON.
      * Response: 201 Created with saved EvaluatorDto in the body and Location header pointing to /Evaluator/{id}.
      */
     @PostMapping
-    public ResponseEntity<EvaluatorDto> createEvaluator(@RequestBody EvaluatorDto evaluatorDto){
-        Evaluator created = evaluatorService.createEvaluator(evaluatorDto);
-        EvaluatorDto dto = EvaluatorMapper.toDto(created);
+    public ResponseEntity<EvaluatorResponseDTO> createEvaluator(@RequestBody EvaluatorCreateDTO createDto){
+        Evaluator created = evaluatorService.createEvaluator(createDto);
+        EvaluatorResponseDTO dto = EvaluatorMapper.toDto(created);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.id()).toUri();
         return ResponseEntity.created(uri).body(dto);
@@ -61,7 +63,7 @@ public class EvaluatorController {
      * Response: 200 OK with EvaluatorDto if found, or 404 Not Found.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<EvaluatorDto> getEvaluator(@PathVariable Long id){
+    public ResponseEntity<EvaluatorResponseDTO> getEvaluator(@PathVariable Long id){
         Evaluator found = evaluatorService.findById(id);
         if(found == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(EvaluatorMapper.toDto(found));
@@ -71,9 +73,9 @@ public class EvaluatorController {
      * Retrieve all evaluators.
      */
     @GetMapping
-    public ResponseEntity<List<EvaluatorDto>> getAll(){
+    public ResponseEntity<List<EvaluatorResponseDTO>> getAll(){
         List<Evaluator> all = evaluatorService.findAll();
-        List<EvaluatorDto> dtos = all.stream().map(EvaluatorMapper::toDto).collect(Collectors.toList());
+        List<EvaluatorResponseDTO> dtos = all.stream().map(EvaluatorMapper::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
@@ -82,7 +84,7 @@ public class EvaluatorController {
      * The DTO's non-null fields will be applied. Returns 200 with updated DTO or 404 if not found.
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<EvaluatorDto> patchEvaluator(@PathVariable Long id, @RequestBody EvaluatorDto dto){
+    public ResponseEntity<EvaluatorResponseDTO> patchEvaluator(@PathVariable Long id, @RequestBody EvaluatorPatchDTO dto){
         var updated = evaluatorService.patchEvaluator(id, dto);
         if(updated.isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(EvaluatorMapper.toDto(updated.get()));

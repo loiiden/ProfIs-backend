@@ -1,8 +1,10 @@
 package com.example.profisbackend.service;
 
+import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
+import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
 import org.springframework.stereotype.Service;
 
-import com.example.profisbackend.dto.EvaluatorDto;
+import com.example.profisbackend.dto.evaluator.EvaluatorResponseDTO;
 import com.example.profisbackend.mapper.EvaluatorMapper;
 import com.example.profisbackend.model.Evaluator;
 import com.example.profisbackend.repository.EvaluatorRepository;
@@ -29,12 +31,12 @@ public class EvaluatorService {
     private final EvaluatorRepository evaluatorRepository;
 
     /**
-     * Create and persist a Evaluator from a DTO.
-     * @param evaluatorDto DTO with data for the new Evaluator (id may be null).
+     * Create and persist a Evaluator from a create DTO.
+     * @param createDto DTO with data for the new Evaluator (id is not present).
      * @return persisted Evaluator entity with generated id.
      */
-    public Evaluator createEvaluator(EvaluatorDto evaluatorDto) {
-        Evaluator toSave = EvaluatorMapper.toEntity(evaluatorDto);
+    public Evaluator createEvaluator(EvaluatorCreateDTO createDto) {
+        Evaluator toSave = EvaluatorMapper.toEntity(createDto);
         return evaluatorRepository.save(toSave);
     }
 
@@ -59,7 +61,7 @@ public class EvaluatorService {
      * are applied to the existing entity and saved. If the entity does not exist,
      * returns Optional.empty().
      */
-    public Optional<Evaluator> patchEvaluator(Long id, EvaluatorDto dto){
+    public Optional<Evaluator> patchEvaluator(Long id, EvaluatorPatchDTO dto){
         Optional<Evaluator> maybe = evaluatorRepository.findById(id);
         if(maybe.isEmpty()) return Optional.empty();
         Evaluator existing = maybe.get();
