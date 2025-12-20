@@ -4,7 +4,6 @@ import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkPatchDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkResponseDTO;
 import com.example.profisbackend.mapper.ScientificWorkMapper;
-import com.example.profisbackend.model.ScientificWork;
 import com.example.profisbackend.service.ScientificWorkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.example.profisbackend.exceptions;
+package com.example.profisbackend.dto;
 
 import java.time.LocalDateTime;
 
