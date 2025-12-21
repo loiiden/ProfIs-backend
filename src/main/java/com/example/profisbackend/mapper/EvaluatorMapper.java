@@ -4,6 +4,7 @@ import com.example.profisbackend.dto.evaluator.EvaluatorResponseDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
 import com.example.profisbackend.model.Evaluator;
+import com.example.profisbackend.model.ScientificWork;
 
 /**
  * Utility mapper that converts between EvaluatorDto and Evaluator entity.
@@ -58,7 +59,9 @@ public class EvaluatorMapper {
                 Evaluator.getEmail(),
                 Evaluator.getPhoneNumber(),
                 Evaluator.getAcademicLevel(),
-                Evaluator.getRole()
+                Evaluator.getRole(),
+                Evaluator.getScientificWorksAsMainEvaluator().stream().map(ScientificWork::getId).toList(),
+                Evaluator.getScientificWorksAsSecondEvaluator().stream().map(ScientificWork::getId).toList()
         );
     }
 

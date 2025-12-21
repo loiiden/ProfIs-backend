@@ -1,5 +1,6 @@
 package com.example.profisbackend.dto.scientificWork;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,6 +15,8 @@ public record ScientificWorkPatchDTO(
         LocalDate startDate,
         LocalDate endDate,
         Long studentId,
-        Long studyProgramId
+        Long studyProgramId,
+        Long mainEvaluatorId,
+        Long secondEvaluatorId
 ) {
 }

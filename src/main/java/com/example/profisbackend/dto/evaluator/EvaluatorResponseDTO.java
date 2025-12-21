@@ -3,6 +3,8 @@ package com.example.profisbackend.dto.evaluator;
 import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.enums.EvaluatorRole;
 
+import java.util.List;
+
 /**
  * Data Transfer Object for Evaluator resources exposed by the REST API.
  *
@@ -25,6 +27,8 @@ public record EvaluatorResponseDTO(
         String email,
         String phoneNumber,
         AcademicLevel academicLevel,
-        EvaluatorRole role
+        EvaluatorRole role,
+        List<Long> scientificWorksIdsAsMainEvaluator,
+        List<Long> scientificWorksIdsAsSecondEvaluator
 ) {
 }

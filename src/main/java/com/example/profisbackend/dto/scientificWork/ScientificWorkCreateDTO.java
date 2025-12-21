@@ -15,6 +15,8 @@ public record ScientificWorkCreateDTO(
     LocalDate startDate,
     LocalDate endDate,
     Long studentId,
-    Long studyProgramId
+    Long studyProgramId,
+    Long mainEvaluatorId,
+    Long secondEvaluatorId
 ) {
 }

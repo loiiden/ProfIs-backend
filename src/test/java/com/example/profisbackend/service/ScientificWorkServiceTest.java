@@ -47,8 +47,10 @@ public class ScientificWorkServiceTest {
         LocalDate endDate = LocalDate.of(2025, 12, 1);
         Long studentId = 559617L;
         Long studyProgramId = 333L;
+        Long mainEvaluatorId = 333L;
+        Long secondEvaluatorId = 334L;
         ScientificWorkCreateDTO scientificWorkCreateDTO = new ScientificWorkCreateDTO(colloquium, "Quantum Physics",
-                startDate, endDate, studentId, studyProgramId);
+                startDate, endDate, studentId, studyProgramId, mainEvaluatorId, secondEvaluatorId);
 
         Student expectedStudent = new Student();
         expectedStudent.setId(studentId);
