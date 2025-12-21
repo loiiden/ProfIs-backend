@@ -1,6 +1,8 @@
 package com.example.profisbackend.mapper;
 
-import com.example.profisbackend.dto.EvaluatorDto;
+import com.example.profisbackend.dto.evaluator.EvaluatorResponseDTO;
+import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
+import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
 import com.example.profisbackend.model.Evaluator;
 
 /**
@@ -14,7 +16,7 @@ import com.example.profisbackend.model.Evaluator;
  *   by higher-level services if needed.
  */
 public class EvaluatorMapper {
-    public static Evaluator toEntity(EvaluatorDto dto){
+    public static Evaluator toEntity(EvaluatorResponseDTO dto){
         if(dto == null) return null;
         Evaluator r = new Evaluator();
         r.setId(dto.id());
@@ -28,12 +30,28 @@ public class EvaluatorMapper {
     }
 
     /**
+     * Create an entity from a create-only DTO. This intentionally does not copy an id.
+     */
+    public static Evaluator toEntity(EvaluatorCreateDTO dto) {
+        if (dto == null) return null;
+        Evaluator r = new Evaluator();
+        r.setFirstName(dto.firstName());
+        r.setLastName(dto.lastName());
+        r.setAddress(dto.address());
+        r.setEmail(dto.email());
+        r.setPhoneNumber(dto.phoneNumber());
+        r.setAcademicLevel(dto.academicLevel());
+        r.setRole(dto.role());
+        return r;
+    }
+
+    /**
      * Convert a persisted Evaluator into a DTO suitable for transport over HTTP.
      * The mapper reads fields inherited from Person and Evaluator.
      */
-    public static EvaluatorDto toDto(Evaluator Evaluator){
+    public static EvaluatorResponseDTO toDto(Evaluator Evaluator){
         if(Evaluator == null) return null;
-        return new EvaluatorDto(
+        return new EvaluatorResponseDTO(
                 Evaluator.getId(),
                 Evaluator.getFirstName(),
                 Evaluator.getLastName(),
@@ -48,7 +66,7 @@ public class EvaluatorMapper {
      * Apply non-null fields from the DTO to an existing entity. This enables
      * partial updates (PATCH). The dto.id() is ignored to avoid changing the primary key.
      */
-    public static void updateEntityFromDto(Evaluator entity, EvaluatorDto dto) {
+    public static void updateEntityFromDto(Evaluator entity, EvaluatorPatchDTO dto) {
         if(entity == null || dto == null) return;
         if(dto.firstName() != null) entity.setFirstName(dto.firstName());
         if(dto.lastName() != null) entity.setLastName(dto.lastName());
