@@ -1,0 +1,79 @@
+package com.example.profisbackend.service;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
+import com.example.profisbackend.enums.AcademicLevel;
+import com.example.profisbackend.model.ScientificWork;
+import com.example.profisbackend.model.Student;
+import com.example.profisbackend.model.StudyProgram;
+import com.example.profisbackend.repository.ScientificWorkRepository;
+
+@ExtendWith(MockitoExtension.class)
+public class ScientificWorkServiceTest {
+    @Mock
+    ScientificWorkRepository scientificWorkRepository;
+    @Mock
+    StudentService studentService;
+    @Mock
+    StudyProgramService studyProgramService;
+    @InjectMocks
+    ScientificWorkService scientificWorkService;
+    @Captor
+    ArgumentCaptor<ScientificWork> scientificWorkCaptor;
+
+    @Test
+    void saveScientificWorkOnce() {
+        // Arrange
+        LocalDateTime colloquium = LocalDateTime.of(2025, 1, 1, 12, 0, 0);
+        LocalDate startDate = LocalDate.of(2024, 5, 1);
+        LocalDate endDate = LocalDate.of(2025, 12, 1);
+        Long studentId = 559617L;
+        Long studyProgramId = 333L;
+        ScientificWorkCreateDTO scientificWorkCreateDTO = new ScientificWorkCreateDTO(colloquium, "Quantum Physics",
+                startDate, endDate, studentId, studyProgramId);
+
+        Student expectedStudent = new Student();
+        expectedStudent.setId(studentId);
+        expectedStudent.setStudentNumber(1L);
+        expectedStudent.setAcademicLevel(AcademicLevel.NONE);
+        expectedStudent.setScientificWorks(new ArrayList<ScientificWork>());
+
+        StudyProgram expectedStudyProgram = new StudyProgram(scientificWorkCreateDTO.studyProgramId(),
+                "Computer Science", 0.1f);
+
+        when(studentService.getStudentById(studentId))
+                .thenReturn(expectedStudent);
+        when(studyProgramService.getStudyProgramById(expectedStudyProgram.getId()))
+                .thenReturn(expectedStudyProgram);
+        when(scientificWorkRepository.save(any(ScientificWork.class)))
+                .thenReturn(new ScientificWork());
+
+        // Act
+        scientificWorkService.create(scientificWorkCreateDTO);
+        verify(scientificWorkRepository, times(1)).save(scientificWorkCaptor.capture());
+        // Assert
+        verify(scientificWorkRepository, times(1)).save(scientificWorkCaptor.getValue());
+        Assertions.assertEquals(scientificWorkCreateDTO.title(), scientificWorkCaptor.getValue().getTitle());
+        Assertions.assertEquals(scientificWorkCreateDTO.studyProgramId(),
+                scientificWorkCaptor.getValue().getStudyProgram().getId());
+        Assertions.assertEquals(scientificWorkCreateDTO.studentId(), scientificWorkCaptor.getValue().getStudent().getId());
+    }
+}
