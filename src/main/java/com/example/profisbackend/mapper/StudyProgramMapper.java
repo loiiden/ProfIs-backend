@@ -1,5 +1,6 @@
 package com.example.profisbackend.mapper;
 
+import com.example.profisbackend.dto.studyprogram.StudyProgramDto;
 import com.example.profisbackend.dto.studyprogram.StudyProgramResponseDTO;
 import com.example.profisbackend.model.StudyProgram;
 
