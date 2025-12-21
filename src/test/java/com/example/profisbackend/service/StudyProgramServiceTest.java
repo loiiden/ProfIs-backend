@@ -16,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.profisbackend.dto.StudyProgramDto;
+import com.example.profisbackend.dto.studyprogram.StudyProgramDto;
 import com.example.profisbackend.exceptions.StudyProgramNotFound;
 import com.example.profisbackend.mapper.StudyProgramMapper;
 import com.example.profisbackend.model.StudyProgram;
