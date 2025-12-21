@@ -1,9 +1,5 @@
 package com.example.profisbackend.mapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.example.profisbackend.dto.studyprogram.StudyProgramDto;
 import com.example.profisbackend.dto.studyprogram.StudyProgramResponseDTO;
 import com.example.profisbackend.model.StudyProgram;
 

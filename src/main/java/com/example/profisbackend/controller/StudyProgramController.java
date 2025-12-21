@@ -33,6 +33,6 @@ public class StudyProgramController {
     }
     @GetMapping()
     public ResponseEntity<List<StudyProgramResponseDTO>> getMethodName() {
-        return ResponseEntity.ok(studyProgramService.getAllStudyPrograms().stream().map(StudyProgramMapper::convertToStudyProgramResponseDTO).collect(Collectors.toList()));
+        return ResponseEntity.ok(studyProgramService.findAll().stream().map(StudyProgramMapper::convertToStudyProgramResponseDTO).collect(Collectors.toList()));
     }
 }

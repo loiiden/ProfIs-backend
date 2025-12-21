@@ -36,7 +36,7 @@ public class StudyProgramService {
                     throw new StudyProgramNotFound(id);
                 });
     }
-    public List<StudyProgram> getAllStudyPrograms() {
+    public List<StudyProgram> findAll() {
        return studyProgramRepository.findAll();
     }
 }
