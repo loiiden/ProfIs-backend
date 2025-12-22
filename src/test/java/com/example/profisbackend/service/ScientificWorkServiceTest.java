@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -61,7 +60,7 @@ public class ScientificWorkServiceTest {
 
         when(studentService.getStudentById(studentId))
                 .thenReturn(expectedStudent);
-        when(studyProgramService.getStudyProgramById(expectedStudyProgram.getId()))
+        when(studyProgramService.findById(expectedStudyProgram.getId()))
                 .thenReturn(expectedStudyProgram);
         when(scientificWorkRepository.save(any(ScientificWork.class)))
                 .thenReturn(new ScientificWork());

@@ -1,7 +1,6 @@
 package com.example.profisbackend.model;
 import com.example.profisbackend.enums.AcademicLevel;
 import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;

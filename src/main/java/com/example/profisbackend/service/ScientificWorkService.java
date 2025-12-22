@@ -39,7 +39,7 @@ public class ScientificWorkService {
         // One Student can have mutliple scientificworks
         student.getScientificWorks().add(scientificWork);
 
-        StudyProgram studyProgram = studyProgramService.getStudyProgramById(scientificWorkCreateDTO.studyProgramId());
+        StudyProgram studyProgram = studyProgramService.findById(scientificWorkCreateDTO.studyProgramId());
 
         scientificWork.setStudyProgram(studyProgram);// Scientificwork refers to a studyprogram
         scientificWorkRepository.save(scientificWork);
@@ -67,7 +67,7 @@ public class ScientificWorkService {
         }
         if (scientificWorkPatchDTO.studyProgramId() != null) {
             StudyProgram newStudyProgram = studyProgramService
-                    .getStudyProgramById(scientificWorkPatchDTO.studyProgramId());
+                    .findById(scientificWorkPatchDTO.studyProgramId());
             scientificWork.setStudyProgram(newStudyProgram);
         }
         scientificWorkRepository.save(scientificWork);

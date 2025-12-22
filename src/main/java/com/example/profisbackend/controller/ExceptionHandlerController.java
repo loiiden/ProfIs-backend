@@ -2,7 +2,6 @@ package com.example.profisbackend.controller;
 
 import com.example.profisbackend.exceptions.ErrorResponse;
 import com.example.profisbackend.exceptions.StudentNotFoundException;
-import com.example.profisbackend.exceptions.StudyProgramNotFound;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-
 @RestControllerAdvice
 public class ExceptionHandlerController {
     private ErrorResponse buildErrorResponse(HttpServletRequest request, HttpStatus status, String message) {
@@ -22,33 +20,17 @@ public class ExceptionHandlerController {
                 status.value(),
                 status.getReasonPhrase(),
                 message,
-                request.getRequestURI()
-        );
+                request.getRequestURI());
     }
-    
-    
+
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e,
+            HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        ErrorResponse errorResponse = buildErrorResponse(request,status,e.getMessage());
-        return new ResponseEntity<>(errorResponse,status);
-    }
-    
-    
-    @ExceptionHandler(StudyProgramNotFound.class)
-    public ResponseEntity<ErrorResponse> handleStudyProgramNotFound(
-            StudyProgramNotFound e,
-            HttpServletRequest request ) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        ErrorResponse errorResponse = buildErrorResponse(
-                request,
-                status,
-                e.getMessage()
-        );
+        ErrorResponse errorResponse = buildErrorResponse(request, status, e.getMessage());
         return new ResponseEntity<>(errorResponse, status);
     }
-    
-    
+
     @ExceptionHandler(StudentNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleStudentNotFound(
             StudentNotFoundException e,
@@ -58,24 +40,21 @@ public class ExceptionHandlerController {
         ErrorResponse errorResponse = buildErrorResponse(
                 request,
                 status,
-                e.getMessage()
-        );
+                e.getMessage());
 
         return new ResponseEntity<>(errorResponse, status);
     }
 
-    
-    //to handle json parse errors
+    // to handle json parse errors
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(
             HttpMessageNotReadableException e,
-            HttpServletRequest request){
+            HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ErrorResponse errorResponse = buildErrorResponse(
                 request,
                 status,
-                e.getMessage()
-        );
+                e.getMessage());
 
         return new ResponseEntity<>(errorResponse, status);
     }

@@ -1,11 +1,11 @@
 package com.example.profisbackend.mapper;
 
-import com.example.profisbackend.dto.studyprogram.StudyProgramDto;
+import com.example.profisbackend.dto.studyprogram.StudyProgramDTO;
 import com.example.profisbackend.dto.studyprogram.StudyProgramResponseDTO;
 import com.example.profisbackend.model.StudyProgram;
 
 public class StudyProgramMapper {
-    public static StudyProgram studyProgramDtoToStudyProgram(StudyProgramDto studyProgramDto) {
+    public static StudyProgram studyProgramDtoToStudyProgram(StudyProgramDTO studyProgramDto) {
         return StudyProgram.builder()
                 .title(studyProgramDto.title())
                 .sws(studyProgramDto.sws())

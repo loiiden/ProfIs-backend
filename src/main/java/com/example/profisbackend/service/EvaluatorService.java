@@ -3,8 +3,6 @@ package com.example.profisbackend.service;
 import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
 import org.springframework.stereotype.Service;
-
-import com.example.profisbackend.dto.evaluator.EvaluatorResponseDTO;
 import com.example.profisbackend.mapper.EvaluatorMapper;
 import com.example.profisbackend.model.Evaluator;
 import com.example.profisbackend.repository.EvaluatorRepository;
