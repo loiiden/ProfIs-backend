@@ -73,6 +73,7 @@ public class ScientificWorkServiceTest {
         Assertions.assertEquals(scientificWorkCreateDTO.title(), scientificWorkCaptor.getValue().getTitle());
         Assertions.assertEquals(scientificWorkCreateDTO.studyProgramId(),
                 scientificWorkCaptor.getValue().getStudyProgram().getId());
-        Assertions.assertEquals(scientificWorkCreateDTO.studentId(), scientificWorkCaptor.getValue().getStudent().getId());
+        Assertions.assertEquals(scientificWorkCreateDTO.studentId(),
+                scientificWorkCaptor.getValue().getStudent().getId());
     }
 }

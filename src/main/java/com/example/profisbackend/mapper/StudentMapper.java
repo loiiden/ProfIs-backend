@@ -2,10 +2,7 @@ package com.example.profisbackend.mapper;
 
 import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.dto.student.StudentResponseDTO;
-import com.example.profisbackend.model.ScientificWork;
 import com.example.profisbackend.model.Student;
-
-import java.util.List;
 
 public class StudentMapper {
     public static Student toStudent(StudentCreateDTO studentCreateDTO) {
@@ -20,6 +17,7 @@ public class StudentMapper {
 
         return student;
     }
+
     public static StudentResponseDTO toStudentResponseDTO(Student student) {
         return new StudentResponseDTO(
                 student.getId(),
@@ -30,7 +28,6 @@ public class StudentMapper {
                 student.getPhoneNumber(),
                 student.getStudentNumber(),
                 student.getAcademicLevel(),
-                student.getScientificWorks().stream().map((scientificWork -> scientificWork.getId())).toList()
-        );
+                student.getScientificWorks().stream().map((scientificWork -> scientificWork.getId())).toList());
     }
 }
