@@ -21,14 +21,15 @@ public class StudyProgramService {
         return studyProgramRepository.save(StudyProgramMapper.studyProgramDtoToStudyProgram(studyProgramDTO));
     }
 
-    public StudyProgram findById(Long id){
+    public StudyProgram findById(Long id) {
         return studyProgramRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
     }
 
     public void deleteStudyProgram(Long id) {
-       studyProgramRepository.delete(findById(id));
+        studyProgramRepository.delete(findById(id));
     }
+
     public List<StudyProgram> findAll() {
-       return studyProgramRepository.findAll();
+        return studyProgramRepository.findAll();
     }
 }

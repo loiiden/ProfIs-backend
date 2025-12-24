@@ -31,7 +31,7 @@ public class StudyProgramController {
         return ResponseEntity.ok().body("Deleted StudyProgram: "+id);
     }
     @GetMapping()
-    public ResponseEntity<List<StudyProgramResponseDTO>> getMethodName() {
+    public ResponseEntity<List<StudyProgramResponseDTO>> getAllStudyPrograms() {
         return ResponseEntity.ok(studyProgramService.findAll().stream().map(StudyProgramMapper::convertToStudyProgramResponseDTO).collect(Collectors.toList()));
     }
 }
