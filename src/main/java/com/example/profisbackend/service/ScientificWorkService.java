@@ -29,16 +29,26 @@ public class ScientificWorkService {
     public ScientificWork create(ScientificWorkCreateDTO scientificWorkCreateDTO) {
         ScientificWork scientificWork = new ScientificWork();
         scientificWork.setColloquium(scientificWorkCreateDTO.colloquium());
+        scientificWork.setColloquiumLocation(scientificWorkCreateDTO.colloquiumLocation());
+        scientificWork.setColloquiumDuration(scientificWorkCreateDTO.colloquiumDuration());
+        scientificWork.setPresentationStart(scientificWorkCreateDTO.presentationStart());
+        scientificWork.setPresentationEnd(scientificWorkCreateDTO.presentationEnd());
+        scientificWork.setDiscussionStart(scientificWorkCreateDTO.discussionStart());
+        scientificWork.setDiscussionEnd(scientificWorkCreateDTO.discussionEnd());
         scientificWork.setTitle(scientificWorkCreateDTO.title());
         scientificWork.setStartDate(scientificWorkCreateDTO.startDate());
         scientificWork.setEndDate(scientificWorkCreateDTO.endDate());
 
-        // Student must already exit it will be retrieved from the database
-        Student student = studentService.getStudentById(scientificWorkCreateDTO.studentId());
-        // A Scientificwork contains a Student
-        scientificWork.setStudent(student);
-        // One Student can have mutliple scientificworks
-        student.getScientificWorks().add(scientificWork);
+        if (scientificWorkCreateDTO.studentId() != null) {
+            Student student = studentService.getStudentById(scientificWorkCreateDTO.studentId());
+            scientificWork.setStudent(student);
+            student.getScientificWorks().add(scientificWork);
+        }
+
+        if(scientificWorkCreateDTO.studyProgramId() != null) {
+            StudyProgram studyProgram = studyProgramService.getStudyProgramById(scientificWorkCreateDTO.studyProgramId());
+            scientificWork.setStudyProgram(studyProgram);
+        }
 
         if(scientificWorkCreateDTO.mainEvaluatorId() != null) {
             Evaluator mainEvaluator = evaluatorService.findById(scientificWorkCreateDTO.mainEvaluatorId());
@@ -51,28 +61,30 @@ public class ScientificWorkService {
             secondEvaluator.getScientificWorksAsSecondEvaluator().add(scientificWork);
         }
 
-        StudyProgram studyProgram = studyProgramService.getStudyProgramById(scientificWorkCreateDTO.studyProgramId());
+        scientificWork.setMainEvaluatorWorkMark(scientificWorkCreateDTO.mainEvaluatorWorkMark());
+        scientificWork.setMainEvaluatorColloquiumMark(scientificWorkCreateDTO.mainEvaluatorColloquiumMark());
+        scientificWork.setSecondEvaluatorWorkMark(scientificWorkCreateDTO.secondEvaluatorWorkMark());
+        scientificWork.setSecondEvaluatorColloquiumMark(scientificWorkCreateDTO.secondEvaluatorColloquiumMark());
 
-        scientificWork.setStudyProgram(studyProgram);
+
         scientificWorkRepository.save(scientificWork);
 
         return scientificWork;
     }
 
     public ScientificWork patchScientificWorkById(Long id, ScientificWorkPatchDTO scientificWorkPatchDTO) {
+        //TODO: think if it's needed to check if fields are nulls, maybe just handle it like "put" and not "patch".
         ScientificWork scientificWork = findById(id);
-        if (scientificWorkPatchDTO.colloquium() != null) {
-            scientificWork.setColloquium(scientificWorkPatchDTO.colloquium());
-        }
-        if (scientificWorkPatchDTO.title() != null) {
-            scientificWork.setTitle(scientificWorkPatchDTO.title());
-        }
-        if (scientificWorkPatchDTO.startDate() != null) {
-            scientificWork.setStartDate(scientificWorkPatchDTO.startDate());
-        }
-        if (scientificWorkPatchDTO.endDate() != null) {
-            scientificWork.setEndDate(scientificWorkPatchDTO.endDate());
-        }
+        scientificWork.setColloquium(scientificWorkPatchDTO.colloquium());
+        scientificWork.setColloquiumLocation(scientificWorkPatchDTO.colloquiumLocation());
+        scientificWork.setColloquiumDuration(scientificWorkPatchDTO.colloquiumDuration());
+        scientificWork.setPresentationStart(scientificWorkPatchDTO.presentationStart());
+        scientificWork.setPresentationEnd(scientificWorkPatchDTO.presentationEnd());
+        scientificWork.setDiscussionStart(scientificWorkPatchDTO.discussionStart());
+        scientificWork.setDiscussionEnd(scientificWorkPatchDTO.discussionEnd());
+        scientificWork.setTitle(scientificWorkPatchDTO.title());
+        scientificWork.setStartDate(scientificWorkPatchDTO.startDate());
+        scientificWork.setEndDate(scientificWorkPatchDTO.endDate());
         if (scientificWorkPatchDTO.studentId() != null) {
             Student newStudent = studentService.getStudentById(scientificWorkPatchDTO.studentId());
             scientificWork.setStudent(newStudent);
@@ -111,6 +123,11 @@ public class ScientificWorkService {
             scientificWork.setSecondEvaluator(null);
         }
 
+        scientificWork.setMainEvaluatorWorkMark(scientificWorkPatchDTO.mainEvaluatorWorkMark());
+        scientificWork.setMainEvaluatorColloquiumMark(scientificWorkPatchDTO.mainEvaluatorColloquiumMark());
+        scientificWork.setSecondEvaluatorWorkMark(scientificWorkPatchDTO.secondEvaluatorWorkMark());
+        scientificWork.setSecondEvaluatorColloquiumMark(scientificWorkPatchDTO.secondEvaluatorColloquiumMark());
+
         scientificWorkRepository.save(scientificWork);
         return scientificWork;
     }
@@ -120,10 +137,7 @@ public class ScientificWorkService {
         scientificWorkRepository.deleteById(scientificWork.getId());
     }
 
-    /*
-     * DO IT IN NOTE SERVICE
-     * public void addNote()
-     */
+
     public List<ScientificWork> findAll() {
         return scientificWorkRepository.findAll();
     }

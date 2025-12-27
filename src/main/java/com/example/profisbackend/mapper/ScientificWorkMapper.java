@@ -25,13 +25,23 @@ public class ScientificWorkMapper {
         return new ScientificWorkResponseDTO(
                 scientificWork.getId(),
                 scientificWork.getColloquium(),
+                scientificWork.getColloquiumLocation(),
+                scientificWork.getColloquiumDuration(),
+                scientificWork.getPresentationStart(),
+                scientificWork.getPresentationEnd(),
+                scientificWork.getDiscussionStart(),
+                scientificWork.getDiscussionEnd(),
                 scientificWork.getTitle(),
                 scientificWork.getStartDate(),
                 scientificWork.getEndDate(),
                 studentId,
                 studyProgramId,
                 mainEvaluatorId,
-                secondEvaluatorId
+                scientificWork.getMainEvaluatorWorkMark(),
+                scientificWork.getMainEvaluatorColloquiumMark(),
+                secondEvaluatorId,
+                scientificWork.getSecondEvaluatorWorkMark(),
+                scientificWork.getSecondEvaluatorColloquiumMark()
         );
     }
 }

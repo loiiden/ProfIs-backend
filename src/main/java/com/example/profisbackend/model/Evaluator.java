@@ -1,4 +1,5 @@
 package com.example.profisbackend.model;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.profisbackend.enums.EvaluatorRole;
@@ -14,13 +15,11 @@ public  class Evaluator extends Person{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy ="evaluator" )
-    private List<Mark> marks;
     private EvaluatorRole role;
 
     @OneToMany(mappedBy = "mainEvaluator")
-    private List<ScientificWork> scientificWorksAsMainEvaluator;
+    private List<ScientificWork> scientificWorksAsMainEvaluator = new ArrayList<>();
 
     @OneToMany(mappedBy = "secondEvaluator")
-    private List<ScientificWork> scientificWorksAsSecondEvaluator;
+    private List<ScientificWork> scientificWorksAsSecondEvaluator = new ArrayList<>();
 }
