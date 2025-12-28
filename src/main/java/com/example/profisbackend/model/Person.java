@@ -16,8 +16,4 @@ public abstract class Person {
     private String email;
     private String phoneNumber;
     private AcademicLevel academicLevel;
-
-    //@Lob - was deleted due to SQL-lite driver issues.
-    @Column(columnDefinition = "BLOB")
-    private byte[] profilePicture;
 }

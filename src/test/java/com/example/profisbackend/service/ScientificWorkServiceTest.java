@@ -5,10 +5,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
+import com.example.profisbackend.model.Evaluator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +35,8 @@ public class ScientificWorkServiceTest {
     @Mock
     StudentService studentService;
     @Mock
+    EvaluatorService evaluatorService;
+    @Mock
     StudyProgramService studyProgramService;
     @InjectMocks
     ScientificWorkService scientificWorkService;
@@ -42,12 +47,24 @@ public class ScientificWorkServiceTest {
     void saveScientificWorkOnce() {
         // Arrange
         LocalDateTime colloquium = LocalDateTime.of(2025, 1, 1, 12, 0, 0);
+        String location = "Frankfurt";
+        Duration duration = Duration.ofHours(1);
+        LocalTime presentationStart = LocalTime.of(2, 0);
+        LocalTime presentationEnd = LocalTime.of(3, 0);
+        LocalTime discussionStart = LocalTime.of(4, 0);
+        LocalTime discussionEnd = LocalTime.of(5, 0);
         LocalDate startDate = LocalDate.of(2024, 5, 1);
         LocalDate endDate = LocalDate.of(2025, 12, 1);
         Long studentId = 559617L;
         Long studyProgramId = 333L;
-        ScientificWorkCreateDTO scientificWorkCreateDTO = new ScientificWorkCreateDTO(colloquium, "Quantum Physics",
-                startDate, endDate, studentId, studyProgramId);
+        Long mainEvaluatorId = 333L;
+        int mainEvaluatorWorkMark = 55;
+        int mainEvaluatorColloquiumMark = 55;
+        Long secondEvaluatorId = 334L;
+        int secondEvaluatorWorkMark = 55;
+        int secondEvaluatorColloquiumMark = 55;
+        ScientificWorkCreateDTO scientificWorkCreateDTO = new ScientificWorkCreateDTO(colloquium, location, duration, presentationStart, presentationEnd, discussionStart, discussionEnd, "Quantum Physics",
+                startDate, endDate, studentId, studyProgramId, mainEvaluatorId, mainEvaluatorWorkMark, mainEvaluatorColloquiumMark, secondEvaluatorId, secondEvaluatorWorkMark, secondEvaluatorColloquiumMark);
 
         Student expectedStudent = new Student();
         expectedStudent.setId(studentId);
@@ -58,10 +75,18 @@ public class ScientificWorkServiceTest {
         StudyProgram expectedStudyProgram = new StudyProgram(scientificWorkCreateDTO.studyProgramId(),
                 "Computer Science", 0.1f);
 
+        Evaluator expectedMainEvaluator = new Evaluator();
+        expectedMainEvaluator.setId(mainEvaluatorId);
+        Evaluator expectedSecondEvaluator = new Evaluator();
+        expectedSecondEvaluator.setId(secondEvaluatorId);
         when(studentService.getStudentById(studentId))
                 .thenReturn(expectedStudent);
         when(studyProgramService.findById(expectedStudyProgram.getId()))
                 .thenReturn(expectedStudyProgram);
+        when(evaluatorService.findById(expectedMainEvaluator.getId()))
+                .thenReturn(expectedMainEvaluator);
+        when(evaluatorService.findById(expectedSecondEvaluator.getId()))
+                .thenReturn(expectedSecondEvaluator);
         when(scientificWorkRepository.save(any(ScientificWork.class)))
                 .thenReturn(new ScientificWork());
 

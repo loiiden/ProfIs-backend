@@ -5,14 +5,43 @@ import com.example.profisbackend.model.ScientificWork;
 
 public class ScientificWorkMapper {
     public static ScientificWorkResponseDTO convertToResponseDTO(ScientificWork scientificWork) {
+        Long studentId = null;
+        Long studyProgramId = null;
+        Long mainEvaluatorId = null;
+        Long secondEvaluatorId = null;
+        if(scientificWork.getStudent() != null) {
+            studentId = scientificWork.getStudent().getId();
+        }
+        if(scientificWork.getStudyProgram() != null) {
+            studyProgramId = scientificWork.getStudyProgram().getId();
+        }
+        if(scientificWork.getMainEvaluator() != null) {
+            mainEvaluatorId = scientificWork.getMainEvaluator().getId();
+        }
+        if(scientificWork.getSecondEvaluator() != null) {
+            secondEvaluatorId = scientificWork.getSecondEvaluator().getId();
+        }
+
         return new ScientificWorkResponseDTO(
                 scientificWork.getId(),
                 scientificWork.getColloquium(),
+                scientificWork.getColloquiumLocation(),
+                scientificWork.getColloquiumDuration(),
+                scientificWork.getPresentationStart(),
+                scientificWork.getPresentationEnd(),
+                scientificWork.getDiscussionStart(),
+                scientificWork.getDiscussionEnd(),
                 scientificWork.getTitle(),
                 scientificWork.getStartDate(),
                 scientificWork.getEndDate(),
-                scientificWork.getStudent().getId(),
-                scientificWork.getStudyProgram().getId()
+                studentId,
+                studyProgramId,
+                mainEvaluatorId,
+                scientificWork.getMainEvaluatorWorkMark(),
+                scientificWork.getMainEvaluatorColloquiumMark(),
+                secondEvaluatorId,
+                scientificWork.getSecondEvaluatorWorkMark(),
+                scientificWork.getSecondEvaluatorColloquiumMark()
         );
     }
 }

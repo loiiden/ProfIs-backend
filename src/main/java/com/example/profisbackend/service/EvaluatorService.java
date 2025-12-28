@@ -2,6 +2,7 @@ package com.example.profisbackend.service;
 
 import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import com.example.profisbackend.mapper.EvaluatorMapper;
 import com.example.profisbackend.model.Evaluator;
@@ -41,10 +42,11 @@ public class EvaluatorService {
     /**
      * Find a Evaluator by id.
      * @param id primary key
-     * @return Evaluator entity or null if not present
+     * @return Evaluator entity
      */
     public Evaluator findById(Long id){
-        return evaluatorRepository.findById(id).orElse(null);
+        return evaluatorRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Evaluator Not Found. ID: " + id));
     }
 
     /**
@@ -59,21 +61,18 @@ public class EvaluatorService {
      * are applied to the existing entity and saved. If the entity does not exist,
      * returns Optional.empty().
      */
-    public Optional<Evaluator> patchEvaluator(Long id, EvaluatorPatchDTO dto){
-        Optional<Evaluator> maybe = evaluatorRepository.findById(id);
-        if(maybe.isEmpty()) return Optional.empty();
-        Evaluator existing = maybe.get();
-        EvaluatorMapper.updateEntityFromDto(existing, dto);
-        Evaluator saved = evaluatorRepository.save(existing);
-        return Optional.of(saved);
+    public Evaluator patchEvaluator(Long id, EvaluatorPatchDTO dto){
+        Evaluator evaluator = findById(id);
+        EvaluatorMapper.updateEntityFromDto(evaluator, dto);
+        evaluatorRepository.save(evaluator);
+        return evaluator;
     }
 
     /**
      * Delete evaluator by id. Returns true if an entity was deleted, false if none existed.
      */
-    public boolean deleteById(Long id){
-        if(!evaluatorRepository.existsById(id)) return false;
-        evaluatorRepository.deleteById(id);
-        return true;
+    public void deleteById(Long id){
+        Evaluator toDelete = findById(id);
+        evaluatorRepository.deleteById(toDelete.getId());
     }
 }

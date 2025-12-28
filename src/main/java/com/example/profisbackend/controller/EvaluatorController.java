@@ -85,9 +85,8 @@ public class EvaluatorController {
      */
     @PatchMapping("/{id}")
     public ResponseEntity<EvaluatorResponseDTO> patchEvaluator(@PathVariable Long id, @RequestBody EvaluatorPatchDTO dto){
-        var updated = evaluatorService.patchEvaluator(id, dto);
-        if(updated.isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(EvaluatorMapper.toDto(updated.get()));
+        Evaluator updated = evaluatorService.patchEvaluator(id, dto);
+        return ResponseEntity.ok(EvaluatorMapper.toDto(updated));
     }
 
     /**
@@ -95,8 +94,7 @@ public class EvaluatorController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvaluator(@PathVariable Long id){
-        boolean deleted = evaluatorService.deleteById(id);
-        if(!deleted) return ResponseEntity.notFound().build();
+        evaluatorService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

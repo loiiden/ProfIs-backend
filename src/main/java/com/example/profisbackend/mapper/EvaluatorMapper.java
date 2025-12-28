@@ -4,6 +4,8 @@ import com.example.profisbackend.dto.evaluator.EvaluatorResponseDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
 import com.example.profisbackend.model.Evaluator;
+import com.example.profisbackend.model.ScientificWork;
+
 
 /**
  * Utility mapper that converts between EvaluatorDto and Evaluator entity.
@@ -16,19 +18,6 @@ import com.example.profisbackend.model.Evaluator;
  *   by higher-level services if needed.
  */
 public class EvaluatorMapper {
-    public static Evaluator toEntity(EvaluatorResponseDTO dto){
-        if(dto == null) return null;
-        Evaluator r = new Evaluator();
-        r.setId(dto.id());
-        r.setFirstName(dto.firstName());
-        r.setLastName(dto.lastName());
-        r.setEmail(dto.email());
-        r.setPhoneNumber(dto.phoneNumber());
-        r.setAcademicLevel(dto.academicLevel());
-        r.setRole(dto.role());
-        return r;
-    }
-
     /**
      * Create an entity from a create-only DTO. This intentionally does not copy an id.
      */
@@ -58,7 +47,9 @@ public class EvaluatorMapper {
                 Evaluator.getEmail(),
                 Evaluator.getPhoneNumber(),
                 Evaluator.getAcademicLevel(),
-                Evaluator.getRole()
+                Evaluator.getRole(),
+                Evaluator.getScientificWorksAsMainEvaluator().stream().map(ScientificWork::getId).toList(),
+                Evaluator.getScientificWorksAsSecondEvaluator().stream().map(ScientificWork::getId).toList()
         );
     }
 
