@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.profisbackend.dto.studyprogram.StudyProgramDTO;
 import com.example.profisbackend.dto.studyprogram.StudyProgramResponseDTO;
+import com.example.profisbackend.entities.StudyProgram;
 import com.example.profisbackend.mapper.StudyProgramMapper;
-import com.example.profisbackend.model.StudyProgram;
 import com.example.profisbackend.service.StudyProgramService;
 
 import lombok.RequiredArgsConstructor;

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.example.profisbackend.dto.evaluator.EvaluatorResponseDTO;
+import com.example.profisbackend.entities.Evaluator;
 import com.example.profisbackend.mapper.EvaluatorMapper;
-import com.example.profisbackend.model.Evaluator;
 import com.example.profisbackend.service.EvaluatorService;
 
 import lombok.RequiredArgsConstructor;

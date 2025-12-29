@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import com.example.profisbackend.model.Evaluator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,10 +21,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
+import com.example.profisbackend.entities.Evaluator;
+import com.example.profisbackend.entities.ScientificWork;
+import com.example.profisbackend.entities.Student;
+import com.example.profisbackend.entities.StudyProgram;
 import com.example.profisbackend.enums.AcademicLevel;
-import com.example.profisbackend.model.ScientificWork;
-import com.example.profisbackend.model.Student;
-import com.example.profisbackend.model.StudyProgram;
 import com.example.profisbackend.repository.ScientificWorkRepository;
 
 @ExtendWith(MockitoExtension.class)

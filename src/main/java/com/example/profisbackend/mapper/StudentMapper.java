@@ -2,7 +2,7 @@ package com.example.profisbackend.mapper;
 
 import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.dto.student.StudentResponseDTO;
-import com.example.profisbackend.model.Student;
+import com.example.profisbackend.entities.Student;
 
 public class StudentMapper {
     public static Student toStudent(StudentCreateDTO studentCreateDTO) {
@@ -14,6 +14,7 @@ public class StudentMapper {
         student.setPhoneNumber(studentCreateDTO.phoneNumber());
         student.setStudentNumber(studentCreateDTO.studentNumber());
         student.setAcademicLevel(studentCreateDTO.academicLevel());
+        student.setSalutation(studentCreateDTO.salutation());
 
         return student;
     }
@@ -27,6 +28,7 @@ public class StudentMapper {
                 student.getEmail(),
                 student.getPhoneNumber(),
                 student.getStudentNumber(),
+                student.getSalutation(),
                 student.getAcademicLevel(),
                 student.getScientificWorks().stream().map((scientificWork -> scientificWork.getId())).toList());
     }

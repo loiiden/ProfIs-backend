@@ -17,8 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.profisbackend.dto.studyprogram.StudyProgramDTO;
+import com.example.profisbackend.entities.StudyProgram;
 import com.example.profisbackend.mapper.StudyProgramMapper;
-import com.example.profisbackend.model.StudyProgram;
 import com.example.profisbackend.repository.StudyProgramRepository;
 
 import jakarta.persistence.EntityNotFoundException;

@@ -2,10 +2,11 @@ package com.example.profisbackend.service;
 
 import java.util.List;
 import com.example.profisbackend.dto.studyprogram.StudyProgramDTO;
+import com.example.profisbackend.entities.StudyProgram;
+
 import org.springframework.stereotype.Service;
 
 import com.example.profisbackend.mapper.StudyProgramMapper;
-import com.example.profisbackend.model.StudyProgram;
 import com.example.profisbackend.repository.StudyProgramRepository;
 
 import jakarta.persistence.EntityNotFoundException;

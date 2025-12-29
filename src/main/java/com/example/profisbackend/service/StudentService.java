@@ -2,9 +2,9 @@ package com.example.profisbackend.service;
 
 import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.dto.student.StudentPatchDTO;
+import com.example.profisbackend.entities.Student;
 import com.example.profisbackend.exceptions.StudentNotFoundException;
 import com.example.profisbackend.mapper.StudentMapper;
-import com.example.profisbackend.model.Student;
 import com.example.profisbackend.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,16 @@ public class StudentService {
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
+
     public Student getStudentById(Long id) {
         return studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
     }
+
     public void deleteStudentById(Long id) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
         studentRepository.delete(student);
     }
+
     public Student patchStudentById(Long id, StudentPatchDTO studentPatchDTO) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
 
@@ -45,15 +48,16 @@ public class StudentService {
         if (studentPatchDTO.email() != null) {
             student.setEmail(studentPatchDTO.email());
         }
-        if(studentPatchDTO.phoneNumber() != null) {
+        if (studentPatchDTO.phoneNumber() != null) {
             student.setPhoneNumber(studentPatchDTO.phoneNumber());
         }
-        if(studentPatchDTO.academicLevel() != null) {
+        if (studentPatchDTO.academicLevel() != null) {
             student.setAcademicLevel(studentPatchDTO.academicLevel());
         }
-        if(studentPatchDTO.studentNumber() != null) {
+        if (studentPatchDTO.studentNumber() != null) {
             student.setStudentNumber(studentPatchDTO.studentNumber());
         }
         return studentRepository.save(student);
     }
+
 }

@@ -1,7 +1,7 @@
 package com.example.profisbackend.mapper;
 
 import com.example.profisbackend.dto.scientificWork.ScientificWorkResponseDTO;
-import com.example.profisbackend.model.ScientificWork;
+import com.example.profisbackend.entities.ScientificWork;
 
 public class ScientificWorkMapper {
     public static ScientificWorkResponseDTO convertToResponseDTO(ScientificWork scientificWork) {

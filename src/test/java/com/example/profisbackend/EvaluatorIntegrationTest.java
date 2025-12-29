@@ -30,7 +30,7 @@ public class EvaluatorIntegrationTest {
 
     // --- Helper ---
     private EvaluatorResponseDTO createSampleEvaluator(String firstName, String phone) {
-        EvaluatorCreateDTO create = new EvaluatorCreateDTO(firstName, "Doe", firstName.toLowerCase() + "@example.com", phone, null, AcademicLevel.MASTER_UNI, EvaluatorRole.PROFESSOR);
+        EvaluatorCreateDTO create = new EvaluatorCreateDTO(firstName, "Doe", firstName.toLowerCase() + "@example.com", phone, null, AcademicLevel.MASTER, EvaluatorRole.PROFESSOR);
         ResponseEntity<EvaluatorResponseDTO> createResp = restTemplate.postForEntity("/api/evaluator", create, EvaluatorResponseDTO.class);
         assertThat(createResp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         EvaluatorResponseDTO created = createResp.getBody();
