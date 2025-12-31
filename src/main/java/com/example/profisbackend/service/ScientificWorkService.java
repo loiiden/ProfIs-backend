@@ -88,11 +88,15 @@ public class ScientificWorkService {
         if (scientificWorkPatchDTO.studentId() != null) {
             Student newStudent = studentService.findStudentById(scientificWorkPatchDTO.studentId());
             scientificWork.setStudent(newStudent);
+        }else{
+            scientificWork.setStudent(null);
         }
         if (scientificWorkPatchDTO.studyProgramId() != null) {
             StudyProgram newStudyProgram = studyProgramService
                     .findById(scientificWorkPatchDTO.studyProgramId());
             scientificWork.setStudyProgram(newStudyProgram);
+        }else{
+            scientificWork.setStudyProgram(null);
         }
 
         if(scientificWorkPatchDTO.mainEvaluatorId() != null) {

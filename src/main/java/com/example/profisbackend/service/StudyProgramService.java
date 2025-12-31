@@ -23,7 +23,7 @@ public class StudyProgramService {
     }
 
     public StudyProgram findById(Long id) {
-        return studyProgramRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+        return studyProgramRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Study program not found " + id));
     }
 
     public void deleteStudyProgram(Long id) {
