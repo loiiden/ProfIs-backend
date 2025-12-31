@@ -1,19 +1,18 @@
 package com.example.profisbackend.controller;
 
+import com.example.profisbackend.dto.scientificWork.ScientificWorkShortDTO;
 import com.example.profisbackend.dto.student.StudentCreateDTO;
-import com.example.profisbackend.dto.student.StudentMileStoneDTO;
 import com.example.profisbackend.dto.student.StudentPatchDTO;
 import com.example.profisbackend.dto.student.StudentResponseDTO;
 import com.example.profisbackend.entities.Student;
+import com.example.profisbackend.mapper.ScientificWorkMapper;
 import com.example.profisbackend.mapper.StudentMapper;
-import com.example.profisbackend.mapper.StudentMileStoneMapper;
 import com.example.profisbackend.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class StudentController {
     @GetMapping
     public ResponseEntity<List<StudentResponseDTO>> getAllStudents() {
         return ResponseEntity.ok(studentService.getAllStudents().stream()
-                .map(student -> StudentMapper.toStudentResponseDTO(student)).toList());
+                .map(StudentMapper::toStudentResponseDTO).toList());
     }
 
     @DeleteMapping("/{id}")
@@ -47,13 +46,11 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<StudentResponseDTO> getStudentById(@PathVariable Long id) {
-        return ResponseEntity.ok(StudentMapper.toStudentResponseDTO(studentService.getStudentById(id)));
+        return ResponseEntity.ok(StudentMapper.toStudentResponseDTO(studentService.findStudentById(id)));
     }
 
-    @GetMapping("/{id}/milestones")
-    public ResponseEntity<List<StudentMileStoneDTO>> getStudentMilestones(@PathVariable Long id) {
-        return ResponseEntity.ok(studentService.getStudentMileStones(id).stream().map(StudentMileStoneMapper::toDto)
-                .collect(Collectors.toList()));
+    @GetMapping("/{id}/shortWorks")
+    public ResponseEntity<List<ScientificWorkShortDTO>> getStudentMilestones(@PathVariable Long id) {
+        return ResponseEntity.ok(studentService.getStudentsScientificWorksByStudentId(id).stream().map(ScientificWorkMapper::convertToShortDTO).toList());
     }
-
 }

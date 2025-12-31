@@ -1,6 +1,7 @@
 package com.example.profisbackend.dto.student;
 
 import com.example.profisbackend.enums.AcademicLevel;
+import com.example.profisbackend.enums.Salutation;
 
 public record StudentPatchDTO(
         String firstName,
@@ -9,5 +10,6 @@ public record StudentPatchDTO(
         String email,
         String phoneNumber,
         Long studentNumber,
-        AcademicLevel academicLevel
+        AcademicLevel academicLevel,
+        Salutation salutation
         ){}

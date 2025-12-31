@@ -79,7 +79,7 @@ public class ScientificWorkServiceTest {
         expectedMainEvaluator.setId(mainEvaluatorId);
         Evaluator expectedSecondEvaluator = new Evaluator();
         expectedSecondEvaluator.setId(secondEvaluatorId);
-        when(studentService.getStudentById(studentId))
+        when(studentService.findStudentById(studentId))
                 .thenReturn(expectedStudent);
         when(studyProgramService.findById(expectedStudyProgram.getId()))
                 .thenReturn(expectedStudyProgram);

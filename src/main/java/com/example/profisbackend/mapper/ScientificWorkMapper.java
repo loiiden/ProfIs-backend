@@ -1,6 +1,7 @@
 package com.example.profisbackend.mapper;
 
 import com.example.profisbackend.dto.scientificWork.ScientificWorkResponseDTO;
+import com.example.profisbackend.dto.scientificWork.ScientificWorkShortDTO;
 import com.example.profisbackend.entities.ScientificWork;
 
 public class ScientificWorkMapper {
@@ -43,5 +44,13 @@ public class ScientificWorkMapper {
                 scientificWork.getSecondEvaluatorWorkMark(),
                 scientificWork.getSecondEvaluatorColloquiumMark()
         );
+    }
+    public static ScientificWorkShortDTO convertToShortDTO(ScientificWork scientificWork) {
+        String StudyProgramTitle = null;
+        if(scientificWork.getStudyProgram() != null) {
+            StudyProgramTitle = scientificWork.getStudyProgram().getTitle();
+        }
+        return new ScientificWorkShortDTO(scientificWork.getTitle(), StudyProgramTitle);
+
     }
 }

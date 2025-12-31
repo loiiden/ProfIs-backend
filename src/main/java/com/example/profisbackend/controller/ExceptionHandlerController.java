@@ -1,7 +1,6 @@
 package com.example.profisbackend.controller;
 
 import com.example.profisbackend.exceptions.ErrorResponse;
-import com.example.profisbackend.exceptions.StudentNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -28,20 +27,6 @@ public class ExceptionHandlerController {
             HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         ErrorResponse errorResponse = buildErrorResponse(request, status, e.getMessage());
-        return new ResponseEntity<>(errorResponse, status);
-    }
-
-    @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleStudentNotFound(
-            StudentNotFoundException e,
-            HttpServletRequest request) {
-
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        ErrorResponse errorResponse = buildErrorResponse(
-                request,
-                status,
-                e.getMessage());
-
         return new ResponseEntity<>(errorResponse, status);
     }
 

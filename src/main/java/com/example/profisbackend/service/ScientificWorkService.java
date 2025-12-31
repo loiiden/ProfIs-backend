@@ -40,7 +40,7 @@ public class ScientificWorkService {
         scientificWork.setEndDate(scientificWorkCreateDTO.endDate());
 
         if (scientificWorkCreateDTO.studentId() != null) {
-            Student student = studentService.getStudentById(scientificWorkCreateDTO.studentId());
+            Student student = studentService.findStudentById(scientificWorkCreateDTO.studentId());
             scientificWork.setStudent(student);
             student.getScientificWorks().add(scientificWork);
         }
@@ -86,7 +86,7 @@ public class ScientificWorkService {
         scientificWork.setStartDate(scientificWorkPatchDTO.startDate());
         scientificWork.setEndDate(scientificWorkPatchDTO.endDate());
         if (scientificWorkPatchDTO.studentId() != null) {
-            Student newStudent = studentService.getStudentById(scientificWorkPatchDTO.studentId());
+            Student newStudent = studentService.findStudentById(scientificWorkPatchDTO.studentId());
             scientificWork.setStudent(newStudent);
         }
         if (scientificWorkPatchDTO.studyProgramId() != null) {
