@@ -70,13 +70,13 @@ public class StudentService {
         List<ScientificWork> scientificWorks=student.getScientificWorks();
         List<StudentMileStone> mileStones= new ArrayList<>();
         for (ScientificWork x: scientificWorks){
-          mileStones.add(aggregateToStudentCard(x))  ;
+          mileStones.add(aggreagteToStudentMileStone(x))  ;
         }
         return mileStones;
 
     }
 
-     private StudentMileStone aggregateToStudentCard(ScientificWork scientificWork) {
+     private StudentMileStone aggreagteToStudentMileStone(ScientificWork scientificWork) {
         StudyProgram studyProgram = scientificWork.getStudyProgram();
         String studyProgramTitle;
         if (studyProgram == null) {
