@@ -21,17 +21,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("/api/study-program")
 public class StudyProgramController {
     private final StudyProgramService studyProgramService;
+
     @PostMapping
-    public ResponseEntity<StudyProgram>createStudyProgram(@RequestBody StudyProgramDTO studyProgramDto){
+    public ResponseEntity<StudyProgram> createStudyProgram(@RequestBody StudyProgramDTO studyProgramDto) {
         return ResponseEntity.ok().body(studyProgramService.createStudyProgram(studyProgramDto));
-    } 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String>deleteStudyProgram(@PathVariable Long id){
-        studyProgramService.deleteStudyProgram(id);
-        return ResponseEntity.ok().body("Deleted StudyProgram: "+id);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteStudyProgram(@PathVariable Long id) {
+        studyProgramService.deleteStudyProgram(id);
+        return ResponseEntity.ok().body("Deleted StudyProgram: " + id);
+    }
+
     @GetMapping()
     public ResponseEntity<List<StudyProgramResponseDTO>> getAllStudyPrograms() {
-        return ResponseEntity.ok(studyProgramService.findAll().stream().map(StudyProgramMapper::convertToStudyProgramResponseDTO).collect(Collectors.toList()));
+        return ResponseEntity.ok(studyProgramService.findAll().stream()
+                .map(StudyProgramMapper::convertToStudyProgramResponseDTO).collect(Collectors.toList()));
     }
 }

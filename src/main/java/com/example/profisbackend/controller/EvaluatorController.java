@@ -28,14 +28,17 @@ import java.util.stream.Collectors;
  * EvaluatorController exposes a minimal REST API to manage Evaluator entities.
  *
  * Endpoints:
- * - POST  /Evaluator       : Create a new Evaluator from a EvaluatorDto JSON body.
- *                           Returns 201 Created with the created EvaluatorDto and Location header /Evaluator/{id}.
- * - GET   /Evaluator/{id}  : Retrieve a Evaluator by id. Returns 200 with EvaluatorDto or 404 if not found.
- * - GET   /Evaluator       : Retrieve all evaluators.
- * - PATCH /Evaluator/{id}  : Partially update an evaluator.
+ * - POST /Evaluator : Create a new Evaluator from a EvaluatorDto JSON body.
+ * Returns 201 Created with the created EvaluatorDto and Location header
+ * /Evaluator/{id}.
+ * - GET /Evaluator/{id} : Retrieve a Evaluator by id. Returns 200 with
+ * EvaluatorDto or 404 if not found.
+ * - GET /Evaluator : Retrieve all evaluators.
+ * - PATCH /Evaluator/{id} : Partially update an evaluator.
  * - DELETE /Evaluator/{id} : Delete an evaluator by id.
  *
- * DTO shape (EvaluatorDto): { id, firstName, lastName, email, phoneNumber, academicLevel, role }
+ * DTO shape (EvaluatorDto): { id, firstName, lastName, email, phoneNumber,
+ * academicLevel, role }
  */
 @RequiredArgsConstructor
 @RestController
@@ -46,10 +49,11 @@ public class EvaluatorController {
     /**
      * Create a Evaluator.
      * Request body: EvaluatorCreateDTO JSON.
-     * Response: 201 Created with saved EvaluatorDto in the body and Location header pointing to /Evaluator/{id}.
+     * Response: 201 Created with saved EvaluatorDto in the body and Location header
+     * pointing to /Evaluator/{id}.
      */
     @PostMapping
-    public ResponseEntity<EvaluatorResponseDTO> createEvaluator(@RequestBody EvaluatorCreateDTO createDto){
+    public ResponseEntity<EvaluatorResponseDTO> createEvaluator(@RequestBody EvaluatorCreateDTO createDto) {
         Evaluator created = evaluatorService.createEvaluator(createDto);
         EvaluatorResponseDTO dto = EvaluatorMapper.toDto(created);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -63,9 +67,10 @@ public class EvaluatorController {
      * Response: 200 OK with EvaluatorDto if found, or 404 Not Found.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<EvaluatorResponseDTO> getEvaluator(@PathVariable Long id){
+    public ResponseEntity<EvaluatorResponseDTO> getEvaluator(@PathVariable Long id) {
         Evaluator found = evaluatorService.findById(id);
-        if(found == null) return ResponseEntity.notFound().build();
+        if (found == null)
+            return ResponseEntity.notFound().build();
         return ResponseEntity.ok(EvaluatorMapper.toDto(found));
     }
 
@@ -73,7 +78,7 @@ public class EvaluatorController {
      * Retrieve all evaluators.
      */
     @GetMapping
-    public ResponseEntity<List<EvaluatorResponseDTO>> getAll(){
+    public ResponseEntity<List<EvaluatorResponseDTO>> getAll() {
         List<Evaluator> all = evaluatorService.findAll();
         List<EvaluatorResponseDTO> dtos = all.stream().map(EvaluatorMapper::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
@@ -81,19 +86,22 @@ public class EvaluatorController {
 
     /**
      * Partially update an existing evaluator by id.
-     * The DTO's non-null fields will be applied. Returns 200 with updated DTO or 404 if not found.
+     * The DTO's non-null fields will be applied. Returns 200 with updated DTO or
+     * 404 if not found.
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<EvaluatorResponseDTO> patchEvaluator(@PathVariable Long id, @RequestBody EvaluatorPatchDTO dto){
+    public ResponseEntity<EvaluatorResponseDTO> patchEvaluator(@PathVariable Long id,
+            @RequestBody EvaluatorPatchDTO dto) {
         Evaluator updated = evaluatorService.patchEvaluator(id, dto);
         return ResponseEntity.ok(EvaluatorMapper.toDto(updated));
     }
 
     /**
-     * Delete an evaluator by id. Returns 204 No Content if deleted, 404 if not found.
+     * Delete an evaluator by id. Returns 204 No Content if deleted, 404 if not
+     * found.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEvaluator(@PathVariable Long id){
+    public ResponseEntity<Void> deleteEvaluator(@PathVariable Long id) {
         evaluatorService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

@@ -21,7 +21,7 @@ public class ScientificWorkService {
     private final StudyProgramService studyProgramService;
     private final EvaluatorService evaluatorService;
 
-    public ScientificWork findById(Long id) {
+    public com.example.profisbackend.entities.ScientificWork findById(Long id) {
         return scientificWorkRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Scientific Work Not Found. ID: " + id));
     }
@@ -45,17 +45,17 @@ public class ScientificWorkService {
             student.getScientificWorks().add(scientificWork);
         }
 
-        if (scientificWorkCreateDTO.studyProgramId() != null) {
+        if(scientificWorkCreateDTO.studyProgramId() != null) {
             StudyProgram studyProgram = studyProgramService.findById(scientificWorkCreateDTO.studyProgramId());
             scientificWork.setStudyProgram(studyProgram);
         }
 
-        if (scientificWorkCreateDTO.mainEvaluatorId() != null) {
+        if(scientificWorkCreateDTO.mainEvaluatorId() != null) {
             Evaluator mainEvaluator = evaluatorService.findById(scientificWorkCreateDTO.mainEvaluatorId());
             scientificWork.setMainEvaluator(mainEvaluator);
             mainEvaluator.getScientificWorksAsMainEvaluator().add(scientificWork);
         }
-        if (scientificWorkCreateDTO.secondEvaluatorId() != null) {
+        if(scientificWorkCreateDTO.secondEvaluatorId() != null) {
             Evaluator secondEvaluator = evaluatorService.findById(scientificWorkCreateDTO.secondEvaluatorId());
             scientificWork.setSecondEvaluator(secondEvaluator);
             secondEvaluator.getScientificWorksAsSecondEvaluator().add(scientificWork);
@@ -66,14 +66,14 @@ public class ScientificWorkService {
         scientificWork.setSecondEvaluatorWorkMark(scientificWorkCreateDTO.secondEvaluatorWorkMark());
         scientificWork.setSecondEvaluatorColloquiumMark(scientificWorkCreateDTO.secondEvaluatorColloquiumMark());
 
+
         scientificWorkRepository.save(scientificWork);
 
         return scientificWork;
     }
 
     public ScientificWork patchScientificWorkById(Long id, ScientificWorkPatchDTO scientificWorkPatchDTO) {
-        // TODO: think if it's needed to check if fields are nulls, maybe just handle it
-        // like "put" and not "patch".
+        //TODO: think if it's needed to check if fields are nulls, maybe just handle it like "put" and not "patch".
         ScientificWork scientificWork = findById(id);
         scientificWork.setColloquium(scientificWorkPatchDTO.colloquium());
         scientificWork.setColloquiumLocation(scientificWorkPatchDTO.colloquiumLocation());
@@ -95,35 +95,31 @@ public class ScientificWorkService {
             scientificWork.setStudyProgram(newStudyProgram);
         }
 
-        if (scientificWorkPatchDTO.mainEvaluatorId() != null) {
+        if(scientificWorkPatchDTO.mainEvaluatorId() != null) {
             if (scientificWork.getMainEvaluator() != null) {
-                Evaluator currentMainEvaluator = scientificWork.getMainEvaluator();
+                Evaluator currentMainEvaluator =  scientificWork.getMainEvaluator();
                 currentMainEvaluator.getScientificWorksAsMainEvaluator().remove(scientificWork);
-            }
-            ;
+            };
             scientificWork.setMainEvaluator(evaluatorService.findById(scientificWorkPatchDTO.mainEvaluatorId()));
-        } else {
+        }else{
             if (scientificWork.getMainEvaluator() != null) {
-                Evaluator currentMainEvaluator = scientificWork.getMainEvaluator();
+                Evaluator currentMainEvaluator =  scientificWork.getMainEvaluator();
                 currentMainEvaluator.getScientificWorksAsMainEvaluator().remove(scientificWork);
-            }
-            ;
+            };
             scientificWork.setMainEvaluator(null);
         }
 
-        if (scientificWorkPatchDTO.secondEvaluatorId() != null) {
+        if(scientificWorkPatchDTO.secondEvaluatorId() != null) {
             if (scientificWork.getSecondEvaluator() != null) {
-                Evaluator currentSecondEvaluator = scientificWork.getSecondEvaluator();
+                Evaluator currentSecondEvaluator =  scientificWork.getSecondEvaluator();
                 currentSecondEvaluator.getScientificWorksAsSecondEvaluator().remove(scientificWork);
-            }
-            ;
+            };
             scientificWork.setSecondEvaluator(evaluatorService.findById(scientificWorkPatchDTO.secondEvaluatorId()));
-        } else {
+        }else{
             if (scientificWork.getSecondEvaluator() != null) {
-                Evaluator currentSecondEvaluator = scientificWork.getSecondEvaluator();
+                Evaluator currentSecondEvaluator =  scientificWork.getSecondEvaluator();
                 currentSecondEvaluator.getScientificWorksAsSecondEvaluator().remove(scientificWork);
-            }
-            ;
+            };
             scientificWork.setSecondEvaluator(null);
         }
 
@@ -141,11 +137,8 @@ public class ScientificWorkService {
         scientificWorkRepository.deleteById(scientificWork.getId());
     }
 
+
     public List<ScientificWork> findAll() {
         return scientificWorkRepository.findAll();
-    }
-
-    public List<ScientificWork> findAllById(List<Long> scientificWorkIds) {
-        return scientificWorkRepository.findAllById(scientificWorkIds);
     }
 }
