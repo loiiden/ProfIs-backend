@@ -1,4 +1,4 @@
-package com.example.profisbackend.model;
+package com.example.profisbackend.entities;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

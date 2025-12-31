@@ -2,10 +2,10 @@ package com.example.profisbackend.service;
 
 import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkPatchDTO;
-import com.example.profisbackend.model.Evaluator;
-import com.example.profisbackend.model.ScientificWork;
-import com.example.profisbackend.model.Student;
-import com.example.profisbackend.model.StudyProgram;
+import com.example.profisbackend.entities.Evaluator;
+import com.example.profisbackend.entities.ScientificWork;
+import com.example.profisbackend.entities.Student;
+import com.example.profisbackend.entities.StudyProgram;
 import com.example.profisbackend.repository.ScientificWorkRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class ScientificWorkService {
     private final StudyProgramService studyProgramService;
     private final EvaluatorService evaluatorService;
 
-    public ScientificWork findById(Long id) {
+    public com.example.profisbackend.entities.ScientificWork findById(Long id) {
         return scientificWorkRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Scientific Work Not Found. ID: " + id));
     }
@@ -40,13 +40,13 @@ public class ScientificWorkService {
         scientificWork.setEndDate(scientificWorkCreateDTO.endDate());
 
         if (scientificWorkCreateDTO.studentId() != null) {
-            Student student = studentService.getStudentById(scientificWorkCreateDTO.studentId());
+            Student student = studentService.findStudentById(scientificWorkCreateDTO.studentId());
             scientificWork.setStudent(student);
             student.getScientificWorks().add(scientificWork);
         }
 
         if(scientificWorkCreateDTO.studyProgramId() != null) {
-            StudyProgram studyProgram = studyProgramService.getStudyProgramById(scientificWorkCreateDTO.studyProgramId());
+            StudyProgram studyProgram = studyProgramService.findById(scientificWorkCreateDTO.studyProgramId());
             scientificWork.setStudyProgram(studyProgram);
         }
 
@@ -86,13 +86,17 @@ public class ScientificWorkService {
         scientificWork.setStartDate(scientificWorkPatchDTO.startDate());
         scientificWork.setEndDate(scientificWorkPatchDTO.endDate());
         if (scientificWorkPatchDTO.studentId() != null) {
-            Student newStudent = studentService.getStudentById(scientificWorkPatchDTO.studentId());
+            Student newStudent = studentService.findStudentById(scientificWorkPatchDTO.studentId());
             scientificWork.setStudent(newStudent);
+        }else{
+            scientificWork.setStudent(null);
         }
         if (scientificWorkPatchDTO.studyProgramId() != null) {
             StudyProgram newStudyProgram = studyProgramService
-                    .getStudyProgramById(scientificWorkPatchDTO.studyProgramId());
+                    .findById(scientificWorkPatchDTO.studyProgramId());
             scientificWork.setStudyProgram(newStudyProgram);
+        }else{
+            scientificWork.setStudyProgram(null);
         }
 
         if(scientificWorkPatchDTO.mainEvaluatorId() != null) {

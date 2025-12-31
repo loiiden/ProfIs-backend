@@ -1,7 +1,5 @@
 package com.example.profisbackend.exceptions;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package com.example.profisbackend.model;
+package com.example.profisbackend.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

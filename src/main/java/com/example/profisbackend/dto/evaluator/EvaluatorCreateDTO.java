@@ -18,6 +18,9 @@ public record EvaluatorCreateDTO(
         String phoneNumber,
         AcademicLevel academicLevel,
         @NotNull EvaluatorRole role
+        //Hr,Fr,Divers
+        //status ( intern,extern)
+
 ) {
 }
 

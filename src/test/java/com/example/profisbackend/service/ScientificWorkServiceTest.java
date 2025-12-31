@@ -10,9 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
 
-import com.example.profisbackend.model.Evaluator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +21,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
+import com.example.profisbackend.entities.Evaluator;
+import com.example.profisbackend.entities.ScientificWork;
+import com.example.profisbackend.entities.Student;
+import com.example.profisbackend.entities.StudyProgram;
 import com.example.profisbackend.enums.AcademicLevel;
-import com.example.profisbackend.model.ScientificWork;
-import com.example.profisbackend.model.Student;
-import com.example.profisbackend.model.StudyProgram;
 import com.example.profisbackend.repository.ScientificWorkRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,9 +79,9 @@ public class ScientificWorkServiceTest {
         expectedMainEvaluator.setId(mainEvaluatorId);
         Evaluator expectedSecondEvaluator = new Evaluator();
         expectedSecondEvaluator.setId(secondEvaluatorId);
-        when(studentService.getStudentById(studentId))
+        when(studentService.findStudentById(studentId))
                 .thenReturn(expectedStudent);
-        when(studyProgramService.getStudyProgramById(expectedStudyProgram.getId()))
+        when(studyProgramService.findById(expectedStudyProgram.getId()))
                 .thenReturn(expectedStudyProgram);
         when(evaluatorService.findById(expectedMainEvaluator.getId()))
                 .thenReturn(expectedMainEvaluator);
@@ -99,6 +98,7 @@ public class ScientificWorkServiceTest {
         Assertions.assertEquals(scientificWorkCreateDTO.title(), scientificWorkCaptor.getValue().getTitle());
         Assertions.assertEquals(scientificWorkCreateDTO.studyProgramId(),
                 scientificWorkCaptor.getValue().getStudyProgram().getId());
-        Assertions.assertEquals(scientificWorkCreateDTO.studentId(), scientificWorkCaptor.getValue().getStudent().getId());
+        Assertions.assertEquals(scientificWorkCreateDTO.studentId(),
+                scientificWorkCaptor.getValue().getStudent().getId());
     }
 }

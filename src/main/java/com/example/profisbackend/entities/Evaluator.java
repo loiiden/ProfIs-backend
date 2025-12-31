@@ -1,4 +1,4 @@
-package com.example.profisbackend.model;
+package com.example.profisbackend.entities;
 import java.util.ArrayList;
 import java.util.List;
 
