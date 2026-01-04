@@ -1,4 +1,8 @@
 package com.example.profisbackend.dto.event;
 
-public record EventResponseDTO() {
+import com.example.profisbackend.enums.EventType;
+
+import java.time.LocalDate;
+
+public record EventResponseDTO(EventType eventType, LocalDate eventDate, Long scientificWorkId) {
 }

@@ -1,9 +1,12 @@
 package com.example.profisbackend.controller;
 
+import com.example.profisbackend.dto.event.EventResponseDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkPatchDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkResponseDTO;
+import com.example.profisbackend.mapper.EventMapper;
 import com.example.profisbackend.mapper.ScientificWorkMapper;
+import com.example.profisbackend.service.EventService;
 import com.example.profisbackend.service.ScientificWorkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,7 @@ import java.util.List;
 @RequestMapping("api/scientific-work")
 public class ScientificWorkController {
     private final ScientificWorkService scientificWorkService;
+    private final EventService eventService;
 
     @GetMapping("{id}")
     public ResponseEntity<ScientificWorkResponseDTO> getScientificWorkById(@PathVariable("id") Long id) {
@@ -46,5 +50,10 @@ public class ScientificWorkController {
     public ResponseEntity<Void> deleteScientificWorkById(@PathVariable Long id) {
         scientificWorkService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<List<EventResponseDTO>> getEventsByScientificWorkId(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.getAllEventsForScientificWorkByScientificWorkId(id).stream().map(EventMapper::toEventResponseDTO).toList()) ;
     }
 }
