@@ -3,9 +3,16 @@ package com.example.profisbackend.mapper;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkResponseDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkShortDTO;
 import com.example.profisbackend.entities.ScientificWork;
+import com.example.profisbackend.enums.EventType;
+import com.example.profisbackend.service.EventService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class ScientificWorkMapper {
-    public static ScientificWorkResponseDTO convertToResponseDTO(ScientificWork scientificWork) {
+    private final EventService eventService;
+    public ScientificWorkResponseDTO convertToResponseDTO(ScientificWork scientificWork) {
         Long studentId = null;
         Long studyProgramId = null;
         Long mainEvaluatorId = null;
@@ -22,6 +29,7 @@ public class ScientificWorkMapper {
         if(scientificWork.getSecondEvaluator() != null) {
             secondEvaluatorId = scientificWork.getSecondEvaluator().getId();
         }
+        EventType status = eventService.getCurrentStatusForScientificWorkByScientificWorkId(scientificWork.getId());
 
         return new ScientificWorkResponseDTO(
                 scientificWork.getId(),
@@ -42,7 +50,8 @@ public class ScientificWorkMapper {
                 scientificWork.getMainEvaluatorColloquiumMark(),
                 secondEvaluatorId,
                 scientificWork.getSecondEvaluatorWorkMark(),
-                scientificWork.getSecondEvaluatorColloquiumMark()
+                scientificWork.getSecondEvaluatorColloquiumMark(),
+                status
         );
     }
     public static ScientificWorkShortDTO convertToShortDTO(ScientificWork scientificWork) {

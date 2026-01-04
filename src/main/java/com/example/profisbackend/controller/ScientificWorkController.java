@@ -20,30 +20,31 @@ import java.util.List;
 public class ScientificWorkController {
     private final ScientificWorkService scientificWorkService;
     private final EventService eventService;
+    private final ScientificWorkMapper scientificWorkMapper;
 
     @GetMapping("{id}")
     public ResponseEntity<ScientificWorkResponseDTO> getScientificWorkById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(ScientificWorkMapper.convertToResponseDTO(scientificWorkService.findById(id)));
+        return ResponseEntity.ok(scientificWorkMapper.convertToResponseDTO(scientificWorkService.findById(id)));
     }
 
     @GetMapping
     public ResponseEntity<List<ScientificWorkResponseDTO>> getAllScientificWorks() {
         return ResponseEntity.ok(scientificWorkService.findAll().stream()
-                .map(scientificWork -> ScientificWorkMapper.convertToResponseDTO(scientificWork)).toList());
+                .map(scientificWork -> scientificWorkMapper.convertToResponseDTO(scientificWork)).toList());
     }
 
     @PatchMapping("{id}")
     public ResponseEntity<ScientificWorkResponseDTO> patchScientificWorkById(@PathVariable Long id,
             @RequestBody ScientificWorkPatchDTO patchDTO) {
         return ResponseEntity.ok(
-                ScientificWorkMapper.convertToResponseDTO(scientificWorkService.patchScientificWorkById(id, patchDTO)));
+                scientificWorkMapper.convertToResponseDTO(scientificWorkService.patchScientificWorkById(id, patchDTO)));
     }
 
     @PostMapping
     public ResponseEntity<ScientificWorkResponseDTO> createScientificWork(
             @RequestBody ScientificWorkCreateDTO scientificWorkCreateDTO) {
         return ResponseEntity
-                .ok(ScientificWorkMapper.convertToResponseDTO(scientificWorkService.create(scientificWorkCreateDTO)));
+                .ok(scientificWorkMapper.convertToResponseDTO(scientificWorkService.create(scientificWorkCreateDTO)));
     }
 
     @DeleteMapping("{id}")
@@ -52,7 +53,7 @@ public class ScientificWorkController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{id}/events")
     public ResponseEntity<List<EventResponseDTO>> getEventsByScientificWorkId(@PathVariable Long id) {
         return ResponseEntity.ok(eventService.getAllEventsForScientificWorkByScientificWorkId(id).stream().map(EventMapper::toEventResponseDTO).toList()) ;
     }

@@ -5,5 +5,6 @@ public enum EventType {
     DISCUSSION, // some appointment for discussion
     FINAL_SUBMISSION,
     REVIEW,
-    ARCHIVE
+    ARCHIVE,
+    ABORT
 }

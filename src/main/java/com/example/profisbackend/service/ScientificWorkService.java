@@ -3,6 +3,7 @@ package com.example.profisbackend.service;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkPatchDTO;
 import com.example.profisbackend.entities.*;
+import com.example.profisbackend.enums.EventType;
 import com.example.profisbackend.repository.ScientificWorkRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

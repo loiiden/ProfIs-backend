@@ -1,5 +1,6 @@
 package com.example.profisbackend.dto.scientificWork;
 
+import com.example.profisbackend.enums.EventType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -29,6 +30,7 @@ public record ScientificWorkResponseDTO(
         Integer mainEvaluatorColloquiumMark,
         Long secondEvaluatorId,
         Integer secondEvaluatorWorkMark,
-        Integer secondEvaluatorColloquiumMark
+        Integer secondEvaluatorColloquiumMark,
+        EventType status
 ) {
 }

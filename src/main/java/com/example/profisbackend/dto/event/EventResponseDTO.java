@@ -4,5 +4,5 @@ import com.example.profisbackend.enums.EventType;
 
 import java.time.LocalDate;
 
-public record EventResponseDTO(EventType eventType, LocalDate eventDate, Long scientificWorkId) {
+public record EventResponseDTO(Long id, EventType eventType, LocalDate eventDate, Long scientificWorkId) {
 }
