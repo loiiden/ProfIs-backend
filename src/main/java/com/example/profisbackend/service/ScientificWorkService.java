@@ -65,6 +65,7 @@ public class ScientificWorkService {
         scientificWork.setMainEvaluatorColloquiumMark(scientificWorkCreateDTO.mainEvaluatorColloquiumMark());
         scientificWork.setSecondEvaluatorWorkMark(scientificWorkCreateDTO.secondEvaluatorWorkMark());
         scientificWork.setSecondEvaluatorColloquiumMark(scientificWorkCreateDTO.secondEvaluatorColloquiumMark());
+        scientificWork.setComment(scientificWorkCreateDTO.comment());
 
 
         scientificWorkRepository.save(scientificWork);
@@ -131,6 +132,7 @@ public class ScientificWorkService {
         scientificWork.setMainEvaluatorColloquiumMark(scientificWorkPatchDTO.mainEvaluatorColloquiumMark());
         scientificWork.setSecondEvaluatorWorkMark(scientificWorkPatchDTO.secondEvaluatorWorkMark());
         scientificWork.setSecondEvaluatorColloquiumMark(scientificWorkPatchDTO.secondEvaluatorColloquiumMark());
+        scientificWork.setComment(scientificWorkPatchDTO.comment());
 
         scientificWorkRepository.save(scientificWork);
         return scientificWork;

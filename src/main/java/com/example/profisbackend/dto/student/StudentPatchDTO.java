@@ -11,5 +11,6 @@ public record StudentPatchDTO(
         String phoneNumber,
         Long studentNumber,
         AcademicLevel academicLevel,
-        Salutation salutation
+        Salutation salutation,
+        Long studyProgramId
         ){}

@@ -42,7 +42,9 @@ public class ScientificWorkMapper {
                 scientificWork.getMainEvaluatorColloquiumMark(),
                 secondEvaluatorId,
                 scientificWork.getSecondEvaluatorWorkMark(),
-                scientificWork.getSecondEvaluatorColloquiumMark()
+                scientificWork.getSecondEvaluatorColloquiumMark(),
+                scientificWork.getComment()
+
         );
     }
     public static ScientificWorkShortDTO convertToShortDTO(ScientificWork scientificWork) {

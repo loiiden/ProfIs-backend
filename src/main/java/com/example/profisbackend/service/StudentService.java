@@ -4,6 +4,7 @@ import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.dto.student.StudentPatchDTO;
 import com.example.profisbackend.entities.ScientificWork;
 import com.example.profisbackend.entities.Student;
+import com.example.profisbackend.entities.StudyProgram;
 import com.example.profisbackend.mapper.StudentMapper;
 import com.example.profisbackend.repository.StudentRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,9 +17,11 @@ import java.util.List;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
+    private final StudyProgramService studyProgramService;
 
     public Student createStudent(StudentCreateDTO studentDTO) {
-        return studentRepository.save(StudentMapper.toStudent(studentDTO));
+        return studentRepository.save(studentMapper.toStudent(studentDTO));
     }
 
     public List<Student> getAllStudents() {
@@ -45,6 +48,9 @@ public class StudentService {
         student.setAcademicLevel(studentPatchDTO.academicLevel());
         student.setStudentNumber(studentPatchDTO.studentNumber());
         student.setSalutation(studentPatchDTO.salutation());
+        StudyProgram studyProgram = studyProgramService.findById(studentPatchDTO.studyProgramId());
+        student.setStudyProgram(studyProgram);
+
         return studentRepository.save(student);
     }
     public List<ScientificWork> getStudentsScientificWorksByStudentId(Long studentId) {

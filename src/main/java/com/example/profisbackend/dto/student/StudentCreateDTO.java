@@ -11,7 +11,8 @@ public record StudentCreateDTO(
         String phoneNumber,
         Long studentNumber,
         Salutation salutation,
-        AcademicLevel academicLevel
+        AcademicLevel academicLevel,
+        Long studyProgramId
         ) {
 
 }

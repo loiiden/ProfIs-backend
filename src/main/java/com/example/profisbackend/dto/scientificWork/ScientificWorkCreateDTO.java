@@ -48,6 +48,8 @@ public record ScientificWorkCreateDTO(
 
     @Min(0)
     @Max(100)
-    Integer secondEvaluatorColloquiumMark
+    Integer secondEvaluatorColloquiumMark,
+
+    String comment
 ) {
 }

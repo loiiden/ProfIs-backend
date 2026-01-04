@@ -63,8 +63,9 @@ public class ScientificWorkServiceTest {
         Long secondEvaluatorId = 334L;
         int secondEvaluatorWorkMark = 55;
         int secondEvaluatorColloquiumMark = 55;
+        String comment = "comment";
         ScientificWorkCreateDTO scientificWorkCreateDTO = new ScientificWorkCreateDTO(colloquium, location, duration, presentationStart, presentationEnd, discussionStart, discussionEnd, "Quantum Physics",
-                startDate, endDate, studentId, studyProgramId, mainEvaluatorId, mainEvaluatorWorkMark, mainEvaluatorColloquiumMark, secondEvaluatorId, secondEvaluatorWorkMark, secondEvaluatorColloquiumMark);
+                startDate, endDate, studentId, studyProgramId, mainEvaluatorId, mainEvaluatorWorkMark, mainEvaluatorColloquiumMark, secondEvaluatorId, secondEvaluatorWorkMark, secondEvaluatorColloquiumMark, comment);
 
         Student expectedStudent = new Student();
         expectedStudent.setId(studentId);

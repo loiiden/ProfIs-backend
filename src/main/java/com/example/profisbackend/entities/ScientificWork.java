@@ -58,4 +58,6 @@ public class ScientificWork {
     @Min(0)
     @Max(100)
     private Integer secondEvaluatorColloquiumMark;
+
+    String comment;
 }

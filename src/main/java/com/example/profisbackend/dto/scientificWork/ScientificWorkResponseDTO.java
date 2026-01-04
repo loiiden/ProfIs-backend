@@ -29,6 +29,7 @@ public record ScientificWorkResponseDTO(
         Integer mainEvaluatorColloquiumMark,
         Long secondEvaluatorId,
         Integer secondEvaluatorWorkMark,
-        Integer secondEvaluatorColloquiumMark
+        Integer secondEvaluatorColloquiumMark,
+        String comment
 ) {
 }

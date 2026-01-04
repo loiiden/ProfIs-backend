@@ -5,8 +5,6 @@ import com.example.profisbackend.enums.Salutation;
 
 import java.util.List;
 
-//do not delete this.
-//It could be needed in order to control what is exposed to frontend!
 public record StudentResponseDTO(
         Long id,
         String firstName,
@@ -17,6 +15,7 @@ public record StudentResponseDTO(
         Long studentNumber,
         Salutation salutation,
         AcademicLevel academicLevel,
-        List<Long> scientificWorksIds
+        List<Long> scientificWorksIds,
+        Long studyProgramId
 ) {
 }
