@@ -7,5 +7,6 @@ public enum AcademicLevel {
     MASTER,
     DR,
     PROF,
-    PROF_DOCTOR;
+    PROF_DOCTOR,
+    DIPLOMA;
 }

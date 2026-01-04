@@ -48,7 +48,10 @@ public class StudentService {
         student.setAcademicLevel(studentPatchDTO.academicLevel());
         student.setStudentNumber(studentPatchDTO.studentNumber());
         student.setSalutation(studentPatchDTO.salutation());
-        StudyProgram studyProgram = studyProgramService.findById(studentPatchDTO.studyProgramId());
+        StudyProgram studyProgram = null;
+        if (studentPatchDTO.studyProgramId() != null) {
+            studyProgram = studyProgramService.findById(studentPatchDTO.studyProgramId());
+        }
         student.setStudyProgram(studyProgram);
 
         return studentRepository.save(student);
