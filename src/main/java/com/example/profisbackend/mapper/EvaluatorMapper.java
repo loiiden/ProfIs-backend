@@ -5,6 +5,10 @@ import com.example.profisbackend.entities.Evaluator;
 import com.example.profisbackend.entities.ScientificWork;
 import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
+import com.example.profisbackend.service.EvaluatorService;
+import com.example.profisbackend.service.StatisticsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 /**
  * Utility mapper that converts between EvaluatorDto and Evaluator entity.
@@ -18,7 +22,10 @@ import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
  * handled
  * by higher-level services if needed.
  */
+@Component
+@RequiredArgsConstructor
 public class EvaluatorMapper {
+    private final StatisticsService statisticsService;
     /**
      * Create an entity from a create-only DTO. This intentionally does not copy an
      * id.
@@ -42,7 +49,7 @@ public class EvaluatorMapper {
      * Convert a persisted Evaluator into a DTO suitable for transport over HTTP.
      * The mapper reads fields inherited from Person and Evaluator.
      */
-    public static EvaluatorResponseDTO toDto(Evaluator Evaluator) {
+    public EvaluatorResponseDTO toDto(Evaluator Evaluator) {
         if (Evaluator == null)
             return null;
         return new EvaluatorResponseDTO(
@@ -56,7 +63,8 @@ public class EvaluatorMapper {
                 Evaluator.getRole(),
                 Evaluator.getScientificWorksAsMainEvaluator().stream().map(ScientificWork::getId).toList(),
                 Evaluator.getScientificWorksAsSecondEvaluator().stream().map(ScientificWork::getId).toList(),
-                Evaluator.getSalutation()
+                Evaluator.getSalutation(),
+                statisticsService.getNumberOfOpenWorksByEvaluatorId(Evaluator.getId())
         );
     }
 

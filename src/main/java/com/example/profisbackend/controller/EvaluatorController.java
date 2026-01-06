@@ -45,6 +45,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/evaluator")
 public class EvaluatorController {
     private final EvaluatorService evaluatorService;
+    private final EvaluatorMapper evaluatorMapper;
 
     /**
      * Create a Evaluator.
@@ -55,7 +56,7 @@ public class EvaluatorController {
     @PostMapping
     public ResponseEntity<EvaluatorResponseDTO> createEvaluator(@RequestBody EvaluatorCreateDTO createDto) {
         Evaluator created = evaluatorService.createEvaluator(createDto);
-        EvaluatorResponseDTO dto = EvaluatorMapper.toDto(created);
+        EvaluatorResponseDTO dto = evaluatorMapper.toDto(created);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.id()).toUri();
         return ResponseEntity.created(uri).body(dto);
@@ -71,7 +72,7 @@ public class EvaluatorController {
         Evaluator found = evaluatorService.findById(id);
         if (found == null)
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(EvaluatorMapper.toDto(found));
+        return ResponseEntity.ok(evaluatorMapper.toDto(found));
     }
 
     /**
@@ -80,7 +81,7 @@ public class EvaluatorController {
     @GetMapping
     public ResponseEntity<List<EvaluatorResponseDTO>> getAll() {
         List<Evaluator> all = evaluatorService.findAll();
-        List<EvaluatorResponseDTO> dtos = all.stream().map(EvaluatorMapper::toDto).collect(Collectors.toList());
+        List<EvaluatorResponseDTO> dtos = all.stream().map(evaluatorMapper::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
@@ -93,7 +94,7 @@ public class EvaluatorController {
     public ResponseEntity<EvaluatorResponseDTO> patchEvaluator(@PathVariable Long id,
             @RequestBody EvaluatorPatchDTO dto) {
         Evaluator updated = evaluatorService.patchEvaluator(id, dto);
-        return ResponseEntity.ok(EvaluatorMapper.toDto(updated));
+        return ResponseEntity.ok(evaluatorMapper.toDto(updated));
     }
 
     /**

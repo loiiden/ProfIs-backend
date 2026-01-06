@@ -32,6 +32,7 @@ public record EvaluatorResponseDTO(
         EvaluatorRole role,
         List<Long> scientificWorksIdsAsMainEvaluator,
         List<Long> scientificWorksIdsAsSecondEvaluator,
-        Salutation salutation
+        Salutation salutation,
+        Integer numberOfOpenWorks
 ) {
 }
