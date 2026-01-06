@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import com.example.profisbackend.enums.DegreeType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,7 +74,9 @@ public class ScientificWorkServiceTest {
         expectedStudent.setAcademicLevel(AcademicLevel.NONE);
         expectedStudent.setScientificWorks(new ArrayList<ScientificWork>());
 
-        StudyProgram expectedStudyProgram = new StudyProgram(scientificWorkCreateDTO.studyProgramId(),
+        StudyProgram expectedStudyProgram = new StudyProgram
+                (scientificWorkCreateDTO.studyProgramId(),
+                DegreeType.B_A,
                 "Computer Science", 0.1f);
 
         Evaluator expectedMainEvaluator = new Evaluator();
