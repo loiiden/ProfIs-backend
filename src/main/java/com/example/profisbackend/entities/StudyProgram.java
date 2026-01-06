@@ -1,4 +1,5 @@
 package com.example.profisbackend.entities;
+import com.example.profisbackend.enums.DegreeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,7 @@ public class StudyProgram {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private DegreeType degreeType;
     private String title;
     private float sws;   
 }
