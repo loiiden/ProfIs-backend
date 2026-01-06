@@ -20,5 +20,5 @@ public class StudyProgram {
     private Long id;
     private DegreeType degreeType;
     private String title;
-    private float sws;   
+    private double sws;
 }

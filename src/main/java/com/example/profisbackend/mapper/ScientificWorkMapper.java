@@ -61,6 +61,5 @@ public class ScientificWorkMapper {
             StudyProgramTitle = scientificWork.getStudyProgram().getTitle();
         }
         return new ScientificWorkShortDTO(scientificWork.getTitle(), StudyProgramTitle);
-
     }
 }

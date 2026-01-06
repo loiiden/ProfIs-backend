@@ -5,10 +5,13 @@ import com.example.profisbackend.dto.scientificWork.ScientificWorkPatchDTO;
 import com.example.profisbackend.entities.*;
 import com.example.profisbackend.enums.EventType;
 import com.example.profisbackend.repository.ScientificWorkRepository;
+import com.example.profisbackend.utils.SemesterUtility;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -144,5 +147,27 @@ public class ScientificWorkService {
 
     public List<ScientificWork> findAll() {
         return scientificWorkRepository.findAll();
+    }
+
+
+    //this property is being recalculated each time it's used.
+    //If you use it so much, that it decreases performance, it's sane to store it inside scientific work as a field.
+    public List<String> getSemestersOfScientificWork(ScientificWork scientificWork) {
+        LocalDate startDate = scientificWork.getStartDate();
+        LocalDate endDate = scientificWork.getEndDate();
+        return SemesterUtility.getAllSemestersBetweenTwoDates(startDate, endDate);
+    }
+
+
+    public List<String> getSemestersOfScientificWorkById(Long id) {
+        ScientificWork scientificWork = findById(id);
+        return getSemestersOfScientificWork(scientificWork);
+    }
+
+    public Boolean isScientificWorkHasSemester(ScientificWork scientificWork, String semester){
+        if (!semester.matches("(WS|SS)\\d{4}")){
+            throw new IllegalArgumentException("Illegal semester argument in provided");
+        }
+        return (getSemestersOfScientificWork(scientificWork).contains(semester));
     }
 }

@@ -6,6 +6,7 @@ import com.example.profisbackend.dto.evaluator.EvaluatorResponseDTO;
 import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.enums.EvaluatorRole;
 import com.example.profisbackend.enums.Salutation;
+import com.example.profisbackend.repository.EvaluatorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +14,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 public class EvaluatorIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
+    @Autowired
+    private EvaluatorRepository evaluatorRepository;
 
     @BeforeEach
     public void cleanup() {
-        // no-op: tests run against an in-memory or file DB depending on application.yml
+        evaluatorRepository.deleteAll();
     }
 
     // --- Helper ---
