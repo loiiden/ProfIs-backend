@@ -4,6 +4,7 @@ import com.example.profisbackend.entities.Evaluator;
 import com.example.profisbackend.entities.ScientificWork;
 import com.example.profisbackend.enums.EventType;
 import com.example.profisbackend.utils.SemesterUtility;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
