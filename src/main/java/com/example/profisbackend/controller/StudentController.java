@@ -3,7 +3,9 @@ package com.example.profisbackend.controller;
 import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.dto.student.StudentPatchDTO;
 import com.example.profisbackend.dto.student.StudentResponseDTO;
+import com.example.profisbackend.dto.StudentSummaryDTO;
 import com.example.profisbackend.mapper.StudentMapper;
+import com.example.profisbackend.mapper.StudentSummaryMapper;
 import com.example.profisbackend.model.Student;
 import com.example.profisbackend.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +39,12 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<StudentResponseDTO> getStudentById(@PathVariable Long id) {
         return ResponseEntity.ok(StudentMapper.toStudentResponseDTO(studentService.getStudentById(id)));
+    }
+
+    // New endpoint: returns compact summary for frontend including works, events and aggregated scores
+    @GetMapping("/{id}/summary")
+    public ResponseEntity<StudentSummaryDTO> getStudentSummaryById(@PathVariable Long id) {
+        Student student = studentService.getStudentById(id);
+        return ResponseEntity.ok(StudentSummaryMapper.toSummary(student));
     }
 }

@@ -29,7 +29,7 @@ public class EvaluatorIntegrationTest {
     // --- Helper ---
     private EvaluatorDto createSampleEvaluator(String firstName, String phone) {
         EvaluatorDto create = new EvaluatorDto(null, firstName, "Doe", firstName.toLowerCase() + "@example.com", phone, AcademicLevel.MASTER_UNI, EvaluatorRole.PROFESSOR);
-        ResponseEntity<EvaluatorDto> createResp = restTemplate.postForEntity("/evaluator", create, EvaluatorDto.class);
+        ResponseEntity<EvaluatorDto> createResp = restTemplate.postForEntity("/api/evaluator", create, EvaluatorDto.class);
         assertThat(createResp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         EvaluatorDto created = createResp.getBody();
         assertThat(created).isNotNull();
@@ -48,7 +48,7 @@ public class EvaluatorIntegrationTest {
     public void getAll_includesCreatedEvaluator() {
         EvaluatorDto created = createSampleEvaluator("Alice", "321");
         ResponseEntity<List<EvaluatorDto>> allResp = restTemplate.exchange(
-                "/evaluator",
+                "/api/evaluator",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<>(){}
@@ -69,7 +69,7 @@ public class EvaluatorIntegrationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<EvaluatorDto> patchReq = new HttpEntity<>(patch, headers);
-        ResponseEntity<EvaluatorDto> patchResp = restTemplate.exchange("/evaluator/" + id, HttpMethod.PATCH, patchReq, EvaluatorDto.class);
+        ResponseEntity<EvaluatorDto> patchResp = restTemplate.exchange("/api/evaluator/" + id, HttpMethod.PATCH, patchReq, EvaluatorDto.class);
         assertThat(patchResp.getStatusCode()).isEqualTo(HttpStatus.OK);
         EvaluatorDto patched = patchResp.getBody();
         assertThat(patched).isNotNull();
@@ -82,10 +82,10 @@ public class EvaluatorIntegrationTest {
         EvaluatorDto created = createSampleEvaluator("Carl", "777");
         Long id = created.id();
 
-        ResponseEntity<Void> delResp = restTemplate.exchange("/evaluator/" + id, HttpMethod.DELETE, null, Void.class);
+        ResponseEntity<Void> delResp = restTemplate.exchange("/api/evaluator/" + id, HttpMethod.DELETE, null, Void.class);
         assertThat(delResp.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
-        ResponseEntity<EvaluatorDto> getResp = restTemplate.getForEntity("/evaluator/" + id, EvaluatorDto.class);
+        ResponseEntity<EvaluatorDto> getResp = restTemplate.getForEntity("/api/evaluator/" + id, EvaluatorDto.class);
         assertThat(getResp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
@@ -95,13 +95,13 @@ public class EvaluatorIntegrationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<EvaluatorDto> patchReq = new HttpEntity<>(patch, headers);
-        ResponseEntity<EvaluatorDto> patchResp = restTemplate.exchange("/evaluator/9999999", HttpMethod.PATCH, patchReq, EvaluatorDto.class);
+        ResponseEntity<EvaluatorDto> patchResp = restTemplate.exchange("/api/evaluator/9999999", HttpMethod.PATCH, patchReq, EvaluatorDto.class);
         assertThat(patchResp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
     public void deleteNotFoundReturns404() {
-        ResponseEntity<Void> delResp = restTemplate.exchange("/evaluator/9999999", HttpMethod.DELETE, null, Void.class);
+        ResponseEntity<Void> delResp = restTemplate.exchange("/api/evaluator/9999999", HttpMethod.DELETE, null, Void.class);
         assertThat(delResp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 }

@@ -8,6 +8,7 @@ public class MarkId implements Serializable {
     private MarkType type;
     private Long scientificWorkId;
     private Long evaluatorId;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -21,5 +22,18 @@ public class MarkId implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(evaluatorId, scientificWorkId, type);
+    }
+
+    // Public getters for use outside of JPA
+    public MarkType getType() {
+        return type;
+    }
+
+    public Long getScientificWorkId() {
+        return scientificWorkId;
+    }
+
+    public Long getEvaluatorId() {
+        return evaluatorId;
     }
 }
