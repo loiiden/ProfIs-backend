@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -106,4 +107,19 @@ public class EvaluatorController {
         evaluatorService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/main-user/{id}")
+    public ResponseEntity<Void> makeEvaluatorMainUser(@PathVariable Long id) {
+        evaluatorService.makeEvaluatorMainUserById(id);
+        return ResponseEntity.ok().build();
+    }
+
+   @GetMapping("/main-user")
+    public ResponseEntity<EvaluatorResponseDTO> getMainUser() {
+        Optional<Evaluator> mainUser = evaluatorService.findMainUser();
+        if (mainUser.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(evaluatorMapper.toDto(mainUser.get()));
+   }
 }

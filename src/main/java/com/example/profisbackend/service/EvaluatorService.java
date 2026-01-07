@@ -77,4 +77,21 @@ public class EvaluatorService {
         Evaluator toDelete = findById(id);
         evaluatorRepository.deleteById(toDelete.getId());
     }
+
+
+    public Optional<Evaluator> findMainUser(){
+        return  evaluatorRepository.findByMainUserOfSystemIsTrue();
+    }
+
+
+    public void makeEvaluatorMainUserById(Long id){
+        Optional<Evaluator> lastMainUser = findMainUser();
+        if (lastMainUser.isPresent()) {
+            Evaluator lastMainUserBody = lastMainUser.get();
+            lastMainUserBody.setMainUserOfSystem(false);
+        }
+        Evaluator evaluator = findById(id);
+        evaluator.setMainUserOfSystem(true);
+        evaluatorRepository.save(evaluator);
+    }
 }

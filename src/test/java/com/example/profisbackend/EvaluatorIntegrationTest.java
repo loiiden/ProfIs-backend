@@ -7,6 +7,7 @@ import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.enums.EvaluatorRole;
 import com.example.profisbackend.enums.Salutation;
 import com.example.profisbackend.repository.EvaluatorRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,5 +112,19 @@ public class EvaluatorIntegrationTest {
     public void deleteNotFoundReturns404() {
         ResponseEntity<Void> delResp = restTemplate.exchange("/api/evaluator/9999999", HttpMethod.DELETE, null, Void.class);
         assertThat(delResp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    @Transactional
+    public void setAndGetMainUser(){
+        EvaluatorResponseDTO created = createSampleEvaluator("Maksim", "255");
+        Long id = created.id();
+        String url1 = "/api/evaluator/main-user/" + id;
+        System.out.println(url1);
+        ResponseEntity<Void> makeMainUserResponse = restTemplate.exchange(url1, HttpMethod.POST, null, Void.class);
+        ResponseEntity<EvaluatorResponseDTO> getMainUserResp = restTemplate.getForEntity("/api/evaluator/main-user", EvaluatorResponseDTO.class);
+        assertThat(getMainUserResp.getStatusCode()).as("Main user not found").isEqualTo(HttpStatus.OK);
+        assertThat(getMainUserResp.getBody() != null);
+        assertThat(getMainUserResp.getBody().id().equals(id));
     }
 }

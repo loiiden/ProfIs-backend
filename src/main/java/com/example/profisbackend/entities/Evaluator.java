@@ -22,4 +22,6 @@ public  class Evaluator extends Person{
 
     @OneToMany(mappedBy = "secondEvaluator")
     private List<ScientificWork> scientificWorksAsSecondEvaluator = new ArrayList<>();
+
+    private Boolean mainUserOfSystem = false;
 }
