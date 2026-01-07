@@ -2,6 +2,7 @@ package com.example.profisbackend.dto.evaluator;
 
 import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.enums.EvaluatorRole;
+import com.example.profisbackend.enums.Salutation;
 
 /**
  * DTO used for PATCH updates to Evaluator resources.
@@ -14,7 +15,8 @@ public record EvaluatorPatchDTO(
         String email,
         String phoneNumber,
         AcademicLevel academicLevel,
-        EvaluatorRole role
+        EvaluatorRole role,
+        Salutation salutation
 ) {
 }
 

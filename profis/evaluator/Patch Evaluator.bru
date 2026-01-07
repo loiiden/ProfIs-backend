@@ -5,15 +5,22 @@ meta {
 }
 
 patch {
-  url: http://localhost:8080/api/evaluator/2
+  url: http://localhost:8080/api/evaluator/1
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "firstName": "New Name"
-  }
+      "firstName": "Alice",
+      "lastName": "Doe",
+      "address": "Wall Street 1",
+      "email": "alice@example.com",
+      "phoneNumber": "123123",
+      "academicLevel": "BACHELOR",
+      "role": "PROFESSOR",
+      "salutation": "FRAU"
+  }  
 }
 
 settings {

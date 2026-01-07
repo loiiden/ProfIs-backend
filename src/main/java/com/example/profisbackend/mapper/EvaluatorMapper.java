@@ -5,6 +5,10 @@ import com.example.profisbackend.entities.Evaluator;
 import com.example.profisbackend.entities.ScientificWork;
 import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
+import com.example.profisbackend.service.EvaluatorService;
+import com.example.profisbackend.service.StatisticsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 /**
  * Utility mapper that converts between EvaluatorDto and Evaluator entity.
@@ -18,7 +22,10 @@ import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
  * handled
  * by higher-level services if needed.
  */
+@Component
+@RequiredArgsConstructor
 public class EvaluatorMapper {
+    private final StatisticsService statisticsService;
     /**
      * Create an entity from a create-only DTO. This intentionally does not copy an
      * id.
@@ -34,6 +41,7 @@ public class EvaluatorMapper {
         r.setPhoneNumber(dto.phoneNumber());
         r.setAcademicLevel(dto.academicLevel());
         r.setRole(dto.role());
+        r.setSalutation(dto.salutation());
         return r;
     }
 
@@ -41,19 +49,23 @@ public class EvaluatorMapper {
      * Convert a persisted Evaluator into a DTO suitable for transport over HTTP.
      * The mapper reads fields inherited from Person and Evaluator.
      */
-    public static EvaluatorResponseDTO toDto(Evaluator Evaluator) {
+    public EvaluatorResponseDTO toDto(Evaluator Evaluator) {
         if (Evaluator == null)
             return null;
         return new EvaluatorResponseDTO(
                 Evaluator.getId(),
                 Evaluator.getFirstName(),
                 Evaluator.getLastName(),
+                Evaluator.getAddress(),
                 Evaluator.getEmail(),
                 Evaluator.getPhoneNumber(),
                 Evaluator.getAcademicLevel(),
                 Evaluator.getRole(),
                 Evaluator.getScientificWorksAsMainEvaluator().stream().map(ScientificWork::getId).toList(),
-                Evaluator.getScientificWorksAsSecondEvaluator().stream().map(ScientificWork::getId).toList());
+                Evaluator.getScientificWorksAsSecondEvaluator().stream().map(ScientificWork::getId).toList(),
+                Evaluator.getSalutation(),
+                statisticsService.getNumberOfOpenWorksByEvaluatorId(Evaluator.getId())
+        );
     }
 
     /**
@@ -64,18 +76,13 @@ public class EvaluatorMapper {
     public static void updateEntityFromDto(Evaluator entity, EvaluatorPatchDTO dto) {
         if (entity == null || dto == null)
             return;
-        if (dto.firstName() != null)
-            entity.setFirstName(dto.firstName());
-        if (dto.lastName() != null)
-            entity.setLastName(dto.lastName());
-        if (dto.email() != null)
-            entity.setEmail(dto.email());
-        if (dto.phoneNumber() != null)
-            entity.setPhoneNumber(dto.phoneNumber());
-        if (dto.academicLevel() != null)
-            entity.setAcademicLevel(dto.academicLevel());
-        if (dto.role() != null)
-            entity.setRole(dto.role());
-        // id is intentionally not updated here
+        entity.setFirstName(dto.firstName());
+        entity.setLastName(dto.lastName());
+        entity.setAddress(dto.address());
+        entity.setEmail(dto.email());
+        entity.setPhoneNumber(dto.phoneNumber());
+        entity.setAcademicLevel(dto.academicLevel());
+        entity.setRole(dto.role());
+        entity.setSalutation(dto.salutation());
     }
 }

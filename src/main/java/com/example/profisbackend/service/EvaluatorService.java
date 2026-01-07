@@ -3,6 +3,8 @@ package com.example.profisbackend.service;
 import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import com.example.profisbackend.entities.Evaluator;
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
+import com.example.profisbackend.entities.ScientificWork;
+import com.example.profisbackend.enums.EventType;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import com.example.profisbackend.mapper.EvaluatorMapper;

@@ -7,12 +7,13 @@ import com.example.profisbackend.entities.StudyProgram;
 public class StudyProgramMapper {
     public static StudyProgram studyProgramDtoToStudyProgram(StudyProgramDTO studyProgramDto) {
         return StudyProgram.builder()
+                .degreeType(studyProgramDto.degreeType())
                 .title(studyProgramDto.title())
                 .sws(studyProgramDto.sws())
                 .build();
     }
 
     public static StudyProgramResponseDTO convertToStudyProgramResponseDTO(StudyProgram studyProgram) {
-        return new StudyProgramResponseDTO(studyProgram.getId(), studyProgram.getTitle(), studyProgram.getSws());
+        return new StudyProgramResponseDTO(studyProgram.getId(), studyProgram.getDegreeType(), studyProgram.getTitle(), studyProgram.getSws());
     }
 }

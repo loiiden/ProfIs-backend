@@ -5,6 +5,7 @@ import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorResponseDTO;
 import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.enums.EvaluatorRole;
+import com.example.profisbackend.enums.Salutation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class EvaluatorIntegrationTest {
 
     // --- Helper ---
     private EvaluatorResponseDTO createSampleEvaluator(String firstName, String phone) {
-        EvaluatorCreateDTO create = new EvaluatorCreateDTO(firstName, "Doe", firstName.toLowerCase() + "@example.com", phone, null, AcademicLevel.MASTER, EvaluatorRole.PROFESSOR);
+        EvaluatorCreateDTO create = new EvaluatorCreateDTO(firstName, "Doe", "some adress",firstName.toLowerCase() + "@example.com", phone,  AcademicLevel.MASTER, EvaluatorRole.PROFESSOR, Salutation.HERR);
         ResponseEntity<EvaluatorResponseDTO> createResp = restTemplate.postForEntity("/api/evaluator", create, EvaluatorResponseDTO.class);
         assertThat(createResp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         EvaluatorResponseDTO created = createResp.getBody();
@@ -67,7 +68,7 @@ public class EvaluatorIntegrationTest {
         EvaluatorResponseDTO created = createSampleEvaluator("Bob", "555");
         Long id = created.id();
 
-        EvaluatorPatchDTO patch = new EvaluatorPatchDTO("Bobby", null, null, null, "999", null, null);
+        EvaluatorPatchDTO patch = new EvaluatorPatchDTO("Bobby", null, null, null, "999", null, null, null);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<EvaluatorPatchDTO> patchReq = new HttpEntity<>(patch, headers);
@@ -93,7 +94,7 @@ public class EvaluatorIntegrationTest {
 
     @Test
     public void patchNotFoundReturns404() {
-        EvaluatorPatchDTO patch = new EvaluatorPatchDTO("Nobody", null, null, null, null, null, null);
+        EvaluatorPatchDTO patch = new EvaluatorPatchDTO("Nobody", null, null, null, null, null, null, null);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<EvaluatorPatchDTO> patchReq = new HttpEntity<>(patch, headers);

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import com.example.profisbackend.enums.DegreeType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +34,7 @@ public class StudyProgramServiceTest {
         @Test
         void studyProgramSavedOnce() {
                 // Arrange
-                StudyProgramDTO studyProgramDto = new StudyProgramDTO("Computer Science", 0.1f);
+                StudyProgramDTO studyProgramDto = new StudyProgramDTO(DegreeType.B_SC, "Computer Science", 0.1f);
                 StudyProgram expectedProgram = StudyProgramMapper.studyProgramDtoToStudyProgram(studyProgramDto);
                 when(studyProgramRepository.save(any(StudyProgram.class)))
                                 .thenReturn(expectedProgram);

@@ -2,10 +2,8 @@ package com.example.profisbackend.service;
 
 import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkPatchDTO;
-import com.example.profisbackend.entities.Evaluator;
-import com.example.profisbackend.entities.ScientificWork;
-import com.example.profisbackend.entities.Student;
-import com.example.profisbackend.entities.StudyProgram;
+import com.example.profisbackend.entities.*;
+import com.example.profisbackend.enums.EventType;
 import com.example.profisbackend.repository.ScientificWorkRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,7 @@ public class ScientificWorkService {
     private final StudyProgramService studyProgramService;
     private final EvaluatorService evaluatorService;
 
-    public com.example.profisbackend.entities.ScientificWork findById(Long id) {
+    public ScientificWork findById(Long id) {
         return scientificWorkRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Scientific Work Not Found. ID: " + id));
     }

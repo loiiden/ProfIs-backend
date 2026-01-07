@@ -2,6 +2,7 @@ package com.example.profisbackend.dto.evaluator;
 
 import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.enums.EvaluatorRole;
+import com.example.profisbackend.enums.Salutation;
 
 import java.util.List;
 
@@ -24,11 +25,14 @@ public record EvaluatorResponseDTO(
         Long id,
         String firstName,
         String lastName,
+        String address,
         String email,
         String phoneNumber,
         AcademicLevel academicLevel,
         EvaluatorRole role,
         List<Long> scientificWorksIdsAsMainEvaluator,
-        List<Long> scientificWorksIdsAsSecondEvaluator
+        List<Long> scientificWorksIdsAsSecondEvaluator,
+        Salutation salutation,
+        Integer numberOfOpenWorks
 ) {
 }

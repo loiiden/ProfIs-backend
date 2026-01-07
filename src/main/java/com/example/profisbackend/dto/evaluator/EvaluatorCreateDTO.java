@@ -2,6 +2,7 @@ package com.example.profisbackend.dto.evaluator;
 
 import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.enums.EvaluatorRole;
+import com.example.profisbackend.enums.Salutation;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -17,9 +18,8 @@ public record EvaluatorCreateDTO(
         @NotBlank String email,
         String phoneNumber,
         AcademicLevel academicLevel,
-        @NotNull EvaluatorRole role
-        //Hr,Fr,Divers
-        //status ( intern,extern)
+        @NotNull EvaluatorRole role,
+        Salutation salutation
 
 ) {
 }
