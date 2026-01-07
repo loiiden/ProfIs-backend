@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,10 +35,15 @@ public class StatisticsService {
     }
 
 
-    public Double getSwsInCurrentSemesterForEvaluatorByEvaluatorId(Long evaluatorId){
-        Evaluator evaluator = evaluatorService.findById(evaluatorId);
+    public Double getSwsInCurrentSemesterForEvaluatorByEvaluator(Evaluator evaluator){
         String currentSemester = SemesterUtility.getSemesterByDate(LocalDate.now());
         return getSwsInGivenSemesterForEvaluator(evaluator, currentSemester);
+    }
+
+
+    public Double getSwsInCurrentSemesterForEvaluatorByEvaluatorId(Long evaluatorId){
+        Evaluator evaluator = evaluatorService.findById(evaluatorId);
+        return getSwsInCurrentSemesterForEvaluatorByEvaluator(evaluator);
     }
 
 
@@ -61,5 +67,25 @@ public class StatisticsService {
             }
         }
         return SWS;
+    }
+
+
+    public Double getSwsInCurrentSemesterForMainUser(){
+        Optional<Evaluator> mainUser = evaluatorService.findMainUser();
+        if (mainUser.isEmpty()){
+            return 0.0;
+        }
+        Evaluator evaluator = mainUser.get();
+        return getSwsInCurrentSemesterForEvaluatorByEvaluator(evaluator);
+    }
+
+
+    public Double getSwsInGivenSemesterForMainUser(String semester){
+        Optional<Evaluator> mainUser = evaluatorService.findMainUser();
+        if (mainUser.isEmpty()){
+            return 0.0;
+        }
+        Evaluator evaluator = mainUser.get();
+        return getSwsInGivenSemesterForEvaluator(evaluator, semester);
     }
 }

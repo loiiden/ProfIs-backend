@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -334,5 +335,122 @@ public class SwsTest {
         Double SWS2 = statisticsService.getSwsInCurrentSemesterForEvaluatorByEvaluatorId(evaluatorId2);
         assertThat(SWS1).isEqualTo(0.3);
         assertThat(SWS2).isEqualTo(0.3);
+    }
+
+    @Test
+    @Transactional
+    public void testSwsWithTwoEvaluatorsAndOnlyOneMainUser() {
+        EvaluatorCreateDTO mainUserEvaluatorCreateDTO = new EvaluatorCreateDTO(
+                "Maksim",
+                "Efremov",
+                "Adress",
+                "maksim@gmail",
+                "123",
+                AcademicLevel.BACHELOR,
+                EvaluatorRole.PROFESSOR,
+                Salutation.HERR
+        );
+
+        ResponseEntity<EvaluatorResponseDTO> createResp = restTemplate.postForEntity("/api/evaluator", mainUserEvaluatorCreateDTO, EvaluatorResponseDTO.class);
+        assertThat(createResp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(createResp.getBody()).isNotNull();
+        Long mainUserEvaluatorId = createResp.getBody().id();
+        ResponseEntity<Void> makeEvaluatorMainUserResp = restTemplate.exchange("/api/evaluator/main-user/" + mainUserEvaluatorId, HttpMethod.POST, null, Void.class);
+        ResponseEntity<EvaluatorResponseDTO> getMainUserResp = restTemplate.getForEntity("/api/evaluator/main-user", EvaluatorResponseDTO.class);
+        assertThat(getMainUserResp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getMainUserResp.getBody() != null);
+        assertThat(getMainUserResp.getBody().id().equals(createResp.getBody().id())).as("The main user is chosen right");
+
+        EvaluatorCreateDTO normalEvaluatorCreateDTO = new EvaluatorCreateDTO(
+                "FirstName",
+                "LastName",
+                "Adress",
+                "email@gmail",
+                "1234",
+                AcademicLevel.BACHELOR,
+                EvaluatorRole.PROFESSOR,
+                Salutation.HERR
+        );
+
+        ResponseEntity<EvaluatorResponseDTO> createResp2 = restTemplate.postForEntity("/api/evaluator", normalEvaluatorCreateDTO, EvaluatorResponseDTO.class);
+        assertThat(createResp2.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(createResp2.getBody()).isNotNull();
+        Long normalEvaluatorId = createResp2.getBody().id();
+
+
+        StudyProgramDTO studyProgramDTO = new StudyProgramDTO(
+                DegreeType.B_SC,
+                "Computer Science",
+                0.3
+        );
+
+        ResponseEntity<StudyProgram> createStudyProgramResp = restTemplate.postForEntity("/api/study-program", studyProgramDTO, StudyProgram.class);
+        assertThat(createStudyProgramResp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(createStudyProgramResp.getBody()).isNotNull();
+        Long studyProgramId = createStudyProgramResp.getBody().getId();
+
+
+        ScientificWorkCreateDTO scientificWorkCreateDTO1 = new ScientificWorkCreateDTO(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "Title 1",
+                LocalDate.of(2026, 1, 3),
+                LocalDate.of(2026, 1, 4),
+                null,
+                studyProgramId,
+                mainUserEvaluatorId,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        ScientificWorkCreateDTO scientificWorkCreateDTO2 = new ScientificWorkCreateDTO(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "Title 2",
+                LocalDate.of(2026, 1, 6),
+                LocalDate.of(2026, 1, 7),
+                null,
+                studyProgramId,
+                mainUserEvaluatorId,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        ResponseEntity<ScientificWorkResponseDTO> createScientificWorkResp1 = restTemplate.postForEntity("/api/scientific-work", scientificWorkCreateDTO1, ScientificWorkResponseDTO.class);
+        ResponseEntity<ScientificWorkResponseDTO> createScientificWorkResp2 = restTemplate.postForEntity("/api/scientific-work", scientificWorkCreateDTO2, ScientificWorkResponseDTO.class);
+
+
+        ResponseEntity<Double> mainUserSWSResp = restTemplate.exchange("/api/sws/main-user/current", HttpMethod.GET, null, Double.class);
+        assertThat(mainUserSWSResp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(mainUserSWSResp.getBody()).isNotNull();
+        Double mainUserSWS = mainUserSWSResp.getBody();
+
+        ResponseEntity<Double> normalEvaluatorSWSResp = restTemplate.exchange("/api/sws/" + normalEvaluatorId + "/current", HttpMethod.GET, null, Double.class);
+        assertThat(normalEvaluatorSWSResp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(normalEvaluatorSWSResp.getBody()).isNotNull();
+        Double normalEvaluatorSWS = normalEvaluatorSWSResp.getBody();
+        assertThat(mainUserSWS).isEqualTo(0.6);
+        assertThat(normalEvaluatorSWS).isEqualTo(0.0);
+
+        //we switch main user
+        ResponseEntity<Void> makeEvaluatorMainUserResp2 = restTemplate.exchange("/api/evaluator/main-user/" + normalEvaluatorId, HttpMethod.POST, null, Void.class);
+        assertThat(statisticsService.getSwsInCurrentSemesterForMainUser()).isEqualTo(0.0);
     }
 }

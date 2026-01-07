@@ -7,6 +7,8 @@ import com.example.profisbackend.enums.AcademicLevel;
 import com.example.profisbackend.enums.EvaluatorRole;
 import com.example.profisbackend.enums.Salutation;
 import com.example.profisbackend.repository.EvaluatorRepository;
+import com.example.profisbackend.repository.ScientificWorkRepository;
+import com.example.profisbackend.repository.StudyProgramRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,10 +31,16 @@ public class EvaluatorIntegrationTest {
     private TestRestTemplate restTemplate;
     @Autowired
     private EvaluatorRepository evaluatorRepository;
+    @Autowired
+    private ScientificWorkRepository scientificWorkRepository;
+    @Autowired
+    private StudyProgramRepository studyProgramRepository;
 
     @BeforeEach
     public void cleanup() {
+        scientificWorkRepository.deleteAll();
         evaluatorRepository.deleteAll();
+        studyProgramRepository.deleteAll();
     }
 
     // --- Helper ---
