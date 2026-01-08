@@ -4,6 +4,9 @@ public enum EvaluatorRole {
     PROFESSOR("Professor"),
     EXTERNAL("Extern");
     private String label;
+    public  String getLabel(){
+        return  this.label;
+    }
 
     EvaluatorRole(String label) {
         this.label = label;

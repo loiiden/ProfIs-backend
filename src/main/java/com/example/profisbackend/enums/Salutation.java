@@ -7,6 +7,9 @@ public enum Salutation {
     DIVERS("Divers");
 
     private String label;
+    public  String getLabel(){
+        return this.label;
+    }
 
     Salutation(String label) {
         this.label = label;

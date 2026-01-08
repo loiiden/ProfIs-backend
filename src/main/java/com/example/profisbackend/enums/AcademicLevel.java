@@ -12,14 +12,19 @@ public enum AcademicLevel {
     PROF_DOCTOR("Prof. Dr."),
     DIPLOMA("Diplom");
     private String label;
-
-    AcademicLevel(String label){
-        this.label=label;
+    public  String  getLabel(){
+        return this.label;
     }
 
-    public static AcademicLevel valueOfLabel(String label){
-        for (AcademicLevel e: values()){
-            if (Objects.equals(e.label,label))
+
+    AcademicLevel(String label) {
+        this.label = label;
+    }
+
+
+    public static AcademicLevel valueOfLabel(String label) {
+        for (AcademicLevel e : values()) {
+            if (Objects.equals(e.label, label))
                 return e;
         }
         return NONE;

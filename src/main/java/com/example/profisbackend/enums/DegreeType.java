@@ -12,18 +12,18 @@ public enum DegreeType {
     LL_M("LL.M."),
     MBA("MBA");
 
-    private String abbrevation;
-    public String getAbbrevation(){
-        return this.abbrevation;
+    private String label;
+    public String getLabel(){
+        return this.label;
     }
 
-    DegreeType(String abbrevation) {
-        this.abbrevation = abbrevation;
+    DegreeType(String label) {
+        this.label = label;
     }
 
-    public static DegreeType valueOfLabel(String abbrevation) {
+    public static DegreeType valueOfLabel(String label) {
         for (DegreeType e : values()) {
-            if (java.util.Objects.equals(e.abbrevation, abbrevation)) {
+            if (java.util.Objects.equals(e.label, label)) {
                 return e;
             }
         }

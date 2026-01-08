@@ -15,7 +15,7 @@ public class StudyProgramMapper {
     }
 
     public static StudyProgramResponseDTO convertToStudyProgramResponseDTO(StudyProgram studyProgram) {
-        return new StudyProgramResponseDTO(studyProgram.getId(), studyProgram.getDegreeType().getAbbrevation(), studyProgram.getTitle(), studyProgram.getSws());
+        return new StudyProgramResponseDTO(studyProgram.getId(), studyProgram.getDegreeType().getLabel(), studyProgram.getTitle(), studyProgram.getSws());
     }
     public static StudyProgramDTO convertExcelToStudyProgramResponseDTO(String degree,String title, Float sws){
         return new StudyProgramDTO(DegreeType.valueOfLabel(degree.strip()),title,sws);
