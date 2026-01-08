@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,6 +31,10 @@ public class StudentService {
 
     public Student findStudentById(Long id) {
         return studentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Student not found " + id));
+    }
+
+    public Student findStudentByStudentNumber(Long studentNumber) {
+        return studentRepository.findStudentByStudentNumber(studentNumber).orElseThrow(() -> new EntityNotFoundException("Student not found " + studentNumber));
     }
 
     public void deleteStudentById(Long id) {
@@ -56,8 +61,17 @@ public class StudentService {
 
         return studentRepository.save(student);
     }
+
     public List<ScientificWork> getStudentsScientificWorksByStudentId(Long studentId) {
         Student student = findStudentById(studentId);
         return student.getScientificWorks();
+    }
+
+    public Student findByStudentNumber(Long studentNumber) {
+        return studentRepository.findStudentByStudentNumber(studentNumber).orElseThrow(() -> new EntityNotFoundException("Student not found " + studentNumber));
+    }
+
+    public boolean existsByStudentNumber(Long studentNumber) {
+        return studentRepository.existsByStudentNumber(studentNumber);
     }
 }

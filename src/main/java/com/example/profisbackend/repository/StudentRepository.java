@@ -5,6 +5,11 @@ import org.springframework.stereotype.Repository;
 
 import com.example.profisbackend.entities.Student;
 
+import java.util.Optional;
+
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
+    boolean existsByStudentNumber (Long studentNumber);
+    Optional<Student> findStudentByStudentNumber(Long studentNumber);
+
 }

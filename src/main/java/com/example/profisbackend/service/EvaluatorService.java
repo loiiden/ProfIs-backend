@@ -77,4 +77,11 @@ public class EvaluatorService {
         Evaluator toDelete = findById(id);
         evaluatorRepository.deleteById(toDelete.getId());
     }
+
+    public  Boolean existsByEmail(String mail){
+       return evaluatorRepository.existsByEmail(mail);
+    }
+    public Evaluator findByEmail(String mail){
+        return evaluatorRepository.findByEmail(mail).orElseThrow(()-> new EntityNotFoundException("Evaluator not found with "+mail));
+    }
 }

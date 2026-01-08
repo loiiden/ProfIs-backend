@@ -1,0 +1,20 @@
+meta {
+  name: excel import
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8080/api/excel/import?file=/Users/gandloi/Downloads/test.xlsx
+  body: none
+  auth: inherit
+}
+
+params:query {
+  file: /Users/gandloi/Downloads/test.xlsx
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

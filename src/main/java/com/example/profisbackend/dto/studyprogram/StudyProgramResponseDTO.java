@@ -1,6 +1,6 @@
 package com.example.profisbackend.dto.studyprogram;
 
-import com.example.profisbackend.enums.DegreeType;
 
-public record StudyProgramResponseDTO(Long id, DegreeType degreeType, String title, float sws) {
+
+public record StudyProgramResponseDTO(Long id, String degreeType, String title, float sws) {
 }  

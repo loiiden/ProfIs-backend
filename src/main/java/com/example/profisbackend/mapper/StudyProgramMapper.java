@@ -3,6 +3,7 @@ package com.example.profisbackend.mapper;
 import com.example.profisbackend.dto.studyprogram.StudyProgramDTO;
 import com.example.profisbackend.dto.studyprogram.StudyProgramResponseDTO;
 import com.example.profisbackend.entities.StudyProgram;
+import com.example.profisbackend.enums.DegreeType;
 
 public class StudyProgramMapper {
     public static StudyProgram studyProgramDtoToStudyProgram(StudyProgramDTO studyProgramDto) {
@@ -14,6 +15,9 @@ public class StudyProgramMapper {
     }
 
     public static StudyProgramResponseDTO convertToStudyProgramResponseDTO(StudyProgram studyProgram) {
-        return new StudyProgramResponseDTO(studyProgram.getId(), studyProgram.getDegreeType(), studyProgram.getTitle(), studyProgram.getSws());
+        return new StudyProgramResponseDTO(studyProgram.getId(), studyProgram.getDegreeType().getAbbrevation(), studyProgram.getTitle(), studyProgram.getSws());
+    }
+    public static StudyProgramDTO convertExcelToStudyProgramResponseDTO(String degree,String title, Float sws){
+        return new StudyProgramDTO(DegreeType.valueOfLabel(degree.strip()),title,sws);
     }
 }

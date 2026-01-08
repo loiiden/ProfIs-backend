@@ -5,20 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.profisbackend.service.InputOutputService;
-
-import lombok.AllArgsConstructor;
+import com.example.profisbackend.service.InputService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.PostMapping;
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/api/excel")
 public class InputOutputController {
-    private InputOutputService inputOutputService;
+    private final InputService inputOutputService;
 
     @PostMapping("/import")
     public ResponseEntity<String> postMethodName( @RequestParam String file) {
-        return inputOutputService.readInputFile(file);
+        return inputOutputService.copyToDb(file);
     }  
 }

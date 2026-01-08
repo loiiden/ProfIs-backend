@@ -42,7 +42,7 @@ public record ScientificWorkCreateDTO(
     Integer mainEvaluatorColloquiumMark,
 
     Long secondEvaluatorId,
-    @Min(0)
+    @Min(0) 
     @Max(100)
     Integer secondEvaluatorWorkMark,
 

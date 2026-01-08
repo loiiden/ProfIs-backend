@@ -5,10 +5,15 @@ import org.springframework.stereotype.Repository;
 
 import com.example.profisbackend.entities.Evaluator;
 
+import java.util.Optional;
+
 /**
  * Spring Data JPA repository for Evaluator entities.
  * Provides standard CRUD operations and can be extended with custom queries.
  */
 @Repository
 public interface EvaluatorRepository extends JpaRepository<Evaluator, Long> {
+    Boolean existsByEmail(String mail);
+
+    Optional<Evaluator> findByEmail(String mail);
 }

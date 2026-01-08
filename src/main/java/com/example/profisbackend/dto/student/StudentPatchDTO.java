@@ -10,7 +10,7 @@ public record StudentPatchDTO(
         String email,
         String phoneNumber,
         Long studentNumber,
-        AcademicLevel academicLevel,
         Salutation salutation,
+        AcademicLevel academicLevel,
         Long studyProgramId
         ){}
