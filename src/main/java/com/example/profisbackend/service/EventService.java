@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -41,6 +42,13 @@ public class EventService {
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
+    }
+
+
+    public List<Event> getNextEvents(){
+        List<Event> nextEvents = eventRepository.getEventsByEventDateGreaterThanEqual(LocalDate.now());
+        nextEvents.sort(Comparator.comparing(Event::getEventDate));
+        return nextEvents;
     }
 
 
