@@ -1,4 +1,6 @@
 package com.example.profisbackend.dto.scientificWork;
 
-public record ScientificWorkShortDTO(String title, String StudyProgramTitle) {
+import com.example.profisbackend.dto.event.EventShortResponseDTO;
+
+public record ScientificWorkShortDTO(Long id, EventShortResponseDTO status, String title, String StudyProgramTitle) {
 }

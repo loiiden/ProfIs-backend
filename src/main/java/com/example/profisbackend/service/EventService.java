@@ -27,12 +27,12 @@ public class EventService {
     }
 
 
-    public EventType getCurrentStatusForScientificWorkByScientificWorkId(Long scientificWorkId) {
+    public Event getCurrentStatusForScientificWorkByScientificWorkId(Long scientificWorkId) {
         LocalDate today = LocalDate.now();
         List<Event> events = getAllEventsForScientificWorkByScientificWorkId(scientificWorkId);
         for(Event event : events.reversed()){
             if (event.getEventDate().isBefore(today) || event.getEventDate().isEqual(today)){
-                return event.getEventType();
+                return event;
             }
         }
         return null;

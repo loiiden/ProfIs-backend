@@ -170,4 +170,19 @@ public class ScientificWorkService {
         }
         return (getSemestersOfScientificWork(scientificWork).contains(semester));
     }
+
+    public List<ScientificWork> findAllScientificWorkByMainEvaluatorId(Long mainEvaluatorId) {
+        return scientificWorkRepository.getScientificWorksByMainEvaluator_Id(mainEvaluatorId);
+    }
+
+
+    public List<ScientificWork> findAllScientificWorkBySecondEvaluatorId(Long secondEvaluatorId) {
+        return scientificWorkRepository.getScientificWorksBySecondEvaluator_Id(secondEvaluatorId);
+    }
+    public List<ScientificWork> findAllScientificWorkAsMainOrSecondEvaluatorByEvaluatorId(Long evaluatorId) {
+        List<ScientificWork> result = new ArrayList<>();
+        result.addAll(findAllScientificWorkByMainEvaluatorId(evaluatorId));
+        result.addAll(findAllScientificWorkBySecondEvaluatorId(evaluatorId));
+        return result;
+    }
 }
