@@ -3,6 +3,7 @@ package com.example.profisbackend.controller;
 import com.example.profisbackend.dto.event.EventCreateDTO;
 import com.example.profisbackend.dto.event.EventPatchDTO;
 import com.example.profisbackend.dto.event.EventResponseDTO;
+import com.example.profisbackend.dto.event.EventWithStudentReferenceDTO;
 import com.example.profisbackend.mapper.EventMapper;
 import com.example.profisbackend.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ import java.util.List;
 public class EventController {
     private final EventService eventService;
     @GetMapping("/next")
-    public ResponseEntity<List<EventResponseDTO>> getNextEvents() {
-        return ResponseEntity.ok(eventService.getNextEvents().stream().map(EventMapper::toEventResponseDTO).toList());
+    public ResponseEntity<List<EventWithStudentReferenceDTO>> getNextEvents() {
+        return ResponseEntity.ok(eventService.getNextEvents().stream().map(EventMapper::toEventWithStudentNameDTO).toList());
     }
     @PostMapping
     public ResponseEntity<EventResponseDTO> createEvent(@RequestBody EventCreateDTO eventCreateDTO) {
