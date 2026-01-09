@@ -1,10 +1,10 @@
 package com.example.profisbackend.controller;
 
 import com.example.profisbackend.dto.scientificWork.ScientificWorkShortDTO;
+import com.example.profisbackend.dto.scientificWork.ScientificWorkSummaryDTO;
 import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.dto.student.StudentPatchDTO;
 import com.example.profisbackend.dto.student.StudentResponseDTO;
-import com.example.profisbackend.entities.Student;
 import com.example.profisbackend.mapper.ScientificWorkMapper;
 import com.example.profisbackend.mapper.StudentMapper;
 import com.example.profisbackend.service.StudentService;
@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping("api/student")
 public class StudentController {
     private final StudentService studentService;
+    private final ScientificWorkMapper scientificWorkMapper;
 
     @PostMapping
     public ResponseEntity<StudentResponseDTO> createStudent(@RequestBody StudentCreateDTO studentCreateDTO) {
@@ -52,5 +53,15 @@ public class StudentController {
     @GetMapping("/{id}/shortWorks")
     public ResponseEntity<List<ScientificWorkShortDTO>> getStudentMilestones(@PathVariable Long id) {
         return ResponseEntity.ok(studentService.getStudentsScientificWorksByStudentId(id).stream().map(ScientificWorkMapper::convertToShortDTO).toList());
+    }
+
+    @GetMapping("/{id}/summary")
+    public ResponseEntity<List<ScientificWorkSummaryDTO>> getScientificWorkSummary(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                studentService.getStudentsScientificWorksByStudentId(id)
+                        .stream()
+                        .map(scientificWorkMapper::convertToSummaryDTO)
+                        .toList()
+        );
     }
 }
