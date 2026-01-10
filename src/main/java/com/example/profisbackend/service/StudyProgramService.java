@@ -3,6 +3,7 @@ package com.example.profisbackend.service;
 import java.util.List;
 import com.example.profisbackend.dto.studyprogram.StudyProgramDTO;
 import com.example.profisbackend.entities.StudyProgram;
+import com.example.profisbackend.enums.DegreeType;
 
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,8 @@ public class StudyProgramService {
     }
 
     public StudyProgram findById(Long id) {
-        return studyProgramRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Study program not found " + id));
+        return studyProgramRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Study program not found " + id));
     }
 
     public void deleteStudyProgram(Long id) {
@@ -32,5 +34,12 @@ public class StudyProgramService {
 
     public List<StudyProgram> findAll() {
         return studyProgramRepository.findAll();
+    }
+
+    public Boolean existsByDegreeTypeAndTitle(DegreeType degreeType, String title) {
+        return studyProgramRepository.existsByDegreeTypeAndTitle(degreeType, title);
+    }
+    public StudyProgram findByDegreeTypeAndTitle(DegreeType degreeType, String title) {
+        return studyProgramRepository.findByDegreeTypeAndTitle(degreeType, title).orElseThrow(() -> new EntityNotFoundException("Study program not found "));
     }
 }

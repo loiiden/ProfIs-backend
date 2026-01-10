@@ -14,4 +14,6 @@ import java.util.Optional;
 @Repository
 public interface EvaluatorRepository extends JpaRepository<Evaluator, Long> {
     Optional<Evaluator> findByMainUserOfSystemIsTrue();
+    Boolean existsByEmail(String mail);
+    Optional<Evaluator> findByEmail(String mail);
 }

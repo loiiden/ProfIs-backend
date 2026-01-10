@@ -33,6 +33,7 @@ public class EvaluatorService {
 
     /**
      * Create and persist a Evaluator from a create DTO.
+     *
      * @param createDto DTO with data for the new Evaluator (id is not present).
      * @return persisted Evaluator entity with generated id.
      */
@@ -43,10 +44,11 @@ public class EvaluatorService {
 
     /**
      * Find a Evaluator by id.
+     *
      * @param id primary key
      * @return Evaluator entity
      */
-    public Evaluator findById(Long id){
+    public Evaluator findById(Long id) {
         return evaluatorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Evaluator Not Found. ID: " + id));
     }
@@ -54,7 +56,7 @@ public class EvaluatorService {
     /**
      * Return all Evaluators.
      */
-    public List<Evaluator> findAll(){
+    public List<Evaluator> findAll() {
         return evaluatorRepository.findAll();
     }
 
@@ -63,7 +65,7 @@ public class EvaluatorService {
      * are applied to the existing entity and saved. If the entity does not exist,
      * returns Optional.empty().
      */
-    public Evaluator patchEvaluator(Long id, EvaluatorPatchDTO dto){
+    public Evaluator patchEvaluator(Long id, EvaluatorPatchDTO dto) {
         Evaluator evaluator = findById(id);
         EvaluatorMapper.updateEntityFromDto(evaluator, dto);
         evaluatorRepository.save(evaluator);
@@ -73,18 +75,18 @@ public class EvaluatorService {
     /**
      * Delete evaluator by id. Returns true if an entity was deleted, false if none existed.
      */
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         Evaluator toDelete = findById(id);
         evaluatorRepository.deleteById(toDelete.getId());
     }
 
 
-    public Optional<Evaluator> findMainUser(){
-        return  evaluatorRepository.findByMainUserOfSystemIsTrue();
+    public Optional<Evaluator> findMainUser() {
+        return evaluatorRepository.findByMainUserOfSystemIsTrue();
     }
 
 
-    public void makeEvaluatorMainUserById(Long id){
+    public void makeEvaluatorMainUserById(Long id) {
         Optional<Evaluator> lastMainUser = findMainUser();
         if (lastMainUser.isPresent()) {
             Evaluator lastMainUserBody = lastMainUser.get();
@@ -93,5 +95,13 @@ public class EvaluatorService {
         Evaluator evaluator = findById(id);
         evaluator.setMainUserOfSystem(true);
         evaluatorRepository.save(evaluator);
+    }
+
+    public Boolean existsByEmail(String mail) {
+        return evaluatorRepository.existsByEmail(mail);
+    }
+
+    public Evaluator findByEmail(String mail) {
+        return evaluatorRepository.findByEmail(mail).orElseThrow(() -> new EntityNotFoundException("Evaluator not found with " + mail));
     }
 }
