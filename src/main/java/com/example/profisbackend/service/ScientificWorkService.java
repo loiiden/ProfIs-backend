@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -44,17 +45,17 @@ public class ScientificWorkService {
             student.getScientificWorks().add(scientificWork);
         }
 
-        if (scientificWorkCreateDTO.studyProgramId() != null) {
+        if(scientificWorkCreateDTO.studyProgramId() != null) {
             StudyProgram studyProgram = studyProgramService.findById(scientificWorkCreateDTO.studyProgramId());
             scientificWork.setStudyProgram(studyProgram);
         }
 
-        if (scientificWorkCreateDTO.mainEvaluatorId() != null) {
+        if(scientificWorkCreateDTO.mainEvaluatorId() != null) {
             Evaluator mainEvaluator = evaluatorService.findById(scientificWorkCreateDTO.mainEvaluatorId());
             scientificWork.setMainEvaluator(mainEvaluator);
             mainEvaluator.getScientificWorksAsMainEvaluator().add(scientificWork);
         }
-        if (scientificWorkCreateDTO.secondEvaluatorId() != null) {
+        if(scientificWorkCreateDTO.secondEvaluatorId() != null) {
             Evaluator secondEvaluator = evaluatorService.findById(scientificWorkCreateDTO.secondEvaluatorId());
             scientificWork.setSecondEvaluator(secondEvaluator);
             secondEvaluator.getScientificWorksAsSecondEvaluator().add(scientificWork);
@@ -88,46 +89,42 @@ public class ScientificWorkService {
         if (scientificWorkPatchDTO.studentId() != null) {
             Student newStudent = studentService.findStudentById(scientificWorkPatchDTO.studentId());
             scientificWork.setStudent(newStudent);
-        } else {
+        }else{
             scientificWork.setStudent(null);
         }
         if (scientificWorkPatchDTO.studyProgramId() != null) {
             StudyProgram newStudyProgram = studyProgramService
                     .findById(scientificWorkPatchDTO.studyProgramId());
             scientificWork.setStudyProgram(newStudyProgram);
-        } else {
+        }else{
             scientificWork.setStudyProgram(null);
         }
 
-        if (scientificWorkPatchDTO.mainEvaluatorId() != null) {
+        if(scientificWorkPatchDTO.mainEvaluatorId() != null) {
             if (scientificWork.getMainEvaluator() != null) {
-                Evaluator currentMainEvaluator = scientificWork.getMainEvaluator();
+                Evaluator currentMainEvaluator =  scientificWork.getMainEvaluator();
                 currentMainEvaluator.getScientificWorksAsMainEvaluator().remove(scientificWork);
-            }
-            ;
+            };
             scientificWork.setMainEvaluator(evaluatorService.findById(scientificWorkPatchDTO.mainEvaluatorId()));
-        } else {
+        }else{
             if (scientificWork.getMainEvaluator() != null) {
-                Evaluator currentMainEvaluator = scientificWork.getMainEvaluator();
+                Evaluator currentMainEvaluator =  scientificWork.getMainEvaluator();
                 currentMainEvaluator.getScientificWorksAsMainEvaluator().remove(scientificWork);
-            }
-            ;
+            };
             scientificWork.setMainEvaluator(null);
         }
 
-        if (scientificWorkPatchDTO.secondEvaluatorId() != null) {
+        if(scientificWorkPatchDTO.secondEvaluatorId() != null) {
             if (scientificWork.getSecondEvaluator() != null) {
-                Evaluator currentSecondEvaluator = scientificWork.getSecondEvaluator();
+                Evaluator currentSecondEvaluator =  scientificWork.getSecondEvaluator();
                 currentSecondEvaluator.getScientificWorksAsSecondEvaluator().remove(scientificWork);
-            }
-            ;
+            };
             scientificWork.setSecondEvaluator(evaluatorService.findById(scientificWorkPatchDTO.secondEvaluatorId()));
-        } else {
+        }else{
             if (scientificWork.getSecondEvaluator() != null) {
-                Evaluator currentSecondEvaluator = scientificWork.getSecondEvaluator();
+                Evaluator currentSecondEvaluator =  scientificWork.getSecondEvaluator();
                 currentSecondEvaluator.getScientificWorksAsSecondEvaluator().remove(scientificWork);
-            }
-            ;
+            };
             scientificWork.setSecondEvaluator(null);
         }
 
@@ -166,8 +163,8 @@ public class ScientificWorkService {
         return getSemestersOfScientificWork(scientificWork);
     }
 
-    public Boolean isScientificWorkHasSemester(ScientificWork scientificWork, String semester) {
-        if (!semester.matches("(WS|SS)\\d{4}")) {
+    public Boolean isScientificWorkHasSemester(ScientificWork scientificWork, String semester){
+        if (!semester.matches("(WS|SS)\\d{4}")){
             throw new IllegalArgumentException("Illegal semester argument in provided");
         }
         return (getSemestersOfScientificWork(scientificWork).contains(semester));
@@ -178,5 +175,20 @@ public class ScientificWorkService {
 
     public ScientificWork findByStartDateAndStudent(LocalDate startDate, Long studentId) {
         return scientificWorkRepository.findByStartDateAndStudentId(startDate, studentId).orElseThrow(() -> new EntityNotFoundException("ScientificWork not found  by  startdate and studentId "+ startDate+" "+studentId));
+    }
+
+    public List<ScientificWork> findAllScientificWorkByMainEvaluatorId(Long mainEvaluatorId) {
+        return scientificWorkRepository.getScientificWorksByMainEvaluator_Id(mainEvaluatorId);
+    }
+
+
+    public List<ScientificWork> findAllScientificWorkBySecondEvaluatorId(Long secondEvaluatorId) {
+        return scientificWorkRepository.getScientificWorksBySecondEvaluator_Id(secondEvaluatorId);
+    }
+    public List<ScientificWork> findAllScientificWorkAsMainOrSecondEvaluatorByEvaluatorId(Long evaluatorId) {
+        List<ScientificWork> result = new ArrayList<>();
+        result.addAll(findAllScientificWorkByMainEvaluatorId(evaluatorId));
+        result.addAll(findAllScientificWorkBySecondEvaluatorId(evaluatorId));
+        return result;
     }
 }

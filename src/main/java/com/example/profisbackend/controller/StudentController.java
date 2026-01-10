@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping("api/student")
 public class StudentController {
     private final StudentService studentService;
+    private final ScientificWorkMapper scientificWorkMapper;
 
     @PostMapping
     public ResponseEntity<StudentResponseDTO> createStudent(@RequestBody StudentCreateDTO studentCreateDTO) {
@@ -51,6 +52,6 @@ public class StudentController {
 
     @GetMapping("/{id}/shortWorks")
     public ResponseEntity<List<ScientificWorkShortDTO>> getStudentMilestones(@PathVariable Long id) {
-        return ResponseEntity.ok(studentService.getStudentsScientificWorksByStudentId(id).stream().map(ScientificWorkMapper::convertToShortDTO).toList());
+        return ResponseEntity.ok(studentService.getStudentsScientificWorksByStudentId(id).stream().map(scientificWorkMapper::convertToShortDTO).toList());
     }
 }

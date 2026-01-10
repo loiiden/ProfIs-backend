@@ -1,7 +1,10 @@
 package com.example.profisbackend.mapper;
 
+import com.example.profisbackend.dto.event.EventShortResponseDTO;
+import com.example.profisbackend.dto.scientificWork.ScientificWorkForReferentViewDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkResponseDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkShortDTO;
+import com.example.profisbackend.entities.Event;
 import com.example.profisbackend.entities.ScientificWork;
 import com.example.profisbackend.enums.EventType;
 import com.example.profisbackend.service.EventService;
@@ -29,7 +32,9 @@ public class ScientificWorkMapper {
         if(scientificWork.getSecondEvaluator() != null) {
             secondEvaluatorId = scientificWork.getSecondEvaluator().getId();
         }
-        EventType status = eventService.getCurrentStatusForScientificWorkByScientificWorkId(scientificWork.getId());
+        EventShortResponseDTO status = EventMapper.toEventShortResponseDTO(
+                eventService.getCurrentStatusForScientificWorkByScientificWorkId(scientificWork.getId())
+        );
 
         return new ScientificWorkResponseDTO(
                 scientificWork.getId(),
@@ -55,11 +60,27 @@ public class ScientificWorkMapper {
                 status
         );
     }
-    public static ScientificWorkShortDTO convertToShortDTO(ScientificWork scientificWork) {
+    public ScientificWorkShortDTO convertToShortDTO(ScientificWork scientificWork) {
         String StudyProgramTitle = null;
         if(scientificWork.getStudyProgram() != null) {
             StudyProgramTitle = scientificWork.getStudyProgram().getTitle();
         }
-        return new ScientificWorkShortDTO(scientificWork.getTitle(), StudyProgramTitle);
+        EventShortResponseDTO status  = EventMapper.toEventShortResponseDTO(eventService.getCurrentStatusForScientificWorkByScientificWorkId(scientificWork.getId()));
+        return new ScientificWorkShortDTO(scientificWork.getId(), status, scientificWork.getTitle(), StudyProgramTitle);
+    }
+
+    public ScientificWorkForReferentViewDTO convertToReferentViewDTO(ScientificWork scientificWork) {
+        String studyProgramTitle = null;
+        if(scientificWork.getStudyProgram() != null) {
+            studyProgramTitle = scientificWork.getStudyProgram().getTitle();
+        }
+        EventShortResponseDTO status  = EventMapper.toEventShortResponseDTO(eventService.getCurrentStatusForScientificWorkByScientificWorkId(scientificWork.getId()));
+        String studentFirstName = null;
+        String studentLastName = null;
+        if (scientificWork.getStudent() != null) {
+            studentFirstName = scientificWork.getStudent().getFirstName();
+            studentLastName = scientificWork.getStudent().getLastName();
+        }
+        return new ScientificWorkForReferentViewDTO(scientificWork.getId(), status, studentFirstName, studentLastName, studyProgramTitle, scientificWork.getTitle());
     }
 }

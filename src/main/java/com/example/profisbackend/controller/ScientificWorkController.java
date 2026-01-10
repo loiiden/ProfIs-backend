@@ -2,6 +2,7 @@ package com.example.profisbackend.controller;
 
 import com.example.profisbackend.dto.event.EventResponseDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
+import com.example.profisbackend.dto.scientificWork.ScientificWorkForReferentViewDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkPatchDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkResponseDTO;
 import com.example.profisbackend.mapper.EventMapper;
@@ -56,5 +57,17 @@ public class ScientificWorkController {
     @GetMapping("{id}/events")
     public ResponseEntity<List<EventResponseDTO>> getEventsByScientificWorkId(@PathVariable Long id) {
         return ResponseEntity.ok(eventService.getAllEventsForScientificWorkByScientificWorkId(id).stream().map(EventMapper::toEventResponseDTO).toList()) ;
+    }
+    @GetMapping("/filter/mainEvaluator/{id}")
+    public ResponseEntity<List<ScientificWorkForReferentViewDTO>> getScientificWorkByMainEvaluatorId(@PathVariable Long id) {
+        return ResponseEntity.ok(scientificWorkService.findAllScientificWorkByMainEvaluatorId(id).stream().map(scientificWorkMapper::convertToReferentViewDTO).toList());
+    }
+    @GetMapping("/filter/secondEvaluator/{id}")
+    public ResponseEntity<List<ScientificWorkForReferentViewDTO>> getScientificWorkBySecondEvaluatorId(@PathVariable Long id) {
+        return ResponseEntity.ok(scientificWorkService.findAllScientificWorkBySecondEvaluatorId(id).stream().map(scientificWorkMapper::convertToReferentViewDTO).toList());
+    }
+    @GetMapping("/filter/mainOrSecondEvaluator/{id}")
+    public ResponseEntity<List<ScientificWorkForReferentViewDTO>> getScientificWorkByMainOrSecondEvaluatorId(@PathVariable Long id) {
+        return ResponseEntity.ok(scientificWorkService.findAllScientificWorkAsMainOrSecondEvaluatorByEvaluatorId(id).stream().map(scientificWorkMapper::convertToReferentViewDTO).toList());
     }
 }
