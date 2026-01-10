@@ -67,9 +67,6 @@ public class StudentService {
         return student.getScientificWorks();
     }
 
-    public Student findByStudentNumber(Long studentNumber) {
-        return studentRepository.findStudentByStudentNumber(studentNumber).orElseThrow(() -> new EntityNotFoundException("Student not found " + studentNumber));
-    }
 
     public boolean existsByStudentNumber(Long studentNumber) {
         return studentRepository.existsByStudentNumber(studentNumber);
