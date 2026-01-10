@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -91,4 +92,7 @@ public class StatisticsService {
         Evaluator evaluator = mainUser.get();
         return getSwsInGivenSemesterForEvaluator(evaluator, semester);
     }
+
+
+    // create ScientificWorkMarkDistribution for homepage
 }
