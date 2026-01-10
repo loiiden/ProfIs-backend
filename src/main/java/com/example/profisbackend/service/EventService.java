@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -29,6 +30,7 @@ public class EventService {
 
 
     public Event getCurrentStatusForScientificWorkByScientificWorkId(Long scientificWorkId) {
+        ScientificWork scientificWork = scientificWorkService.findById(scientificWorkId);
         LocalDate today = LocalDate.now();
         List<Event> events = getAllEventsForScientificWorkByScientificWorkId(scientificWorkId);
         for(Event event : events.reversed()){
@@ -36,7 +38,34 @@ public class EventService {
                 return event;
             }
         }
-        return null;
+        //in case there is no fitting events, we send status planned, because this work is already inside of system
+        Event defaultStatus = new Event();
+        defaultStatus.setEventType(EventType.PLANNED);
+        //THIS START DATE COULD BE NULL BE CAREFUL
+        defaultStatus.setEventDate(scientificWork.getStartDate());
+        return defaultStatus;
+    }
+
+    public List<ScientificWork> getAllScientificWorksForStatusOfEventType(EventType eventType) {
+        List<ScientificWork> result = new ArrayList<>();
+        List<ScientificWork> scientificWorks = scientificWorkService.findAll();
+        for (ScientificWork scientificWork : scientificWorks) {
+            if (getCurrentStatusForScientificWorkByScientificWorkId(scientificWork.getId()).getEventType().equals(eventType)){
+                result.add(scientificWork);
+            }
+        }
+        return result;
+    }
+
+    public List<ScientificWork> getAllNotArchivedScientificWorks() {
+        List<ScientificWork> result = new ArrayList<>();
+        List<ScientificWork> scientificWorks = scientificWorkService.findAll();
+        for (ScientificWork scientificWork : scientificWorks) {
+            if (!getCurrentStatusForScientificWorkByScientificWorkId(scientificWork.getId()).getEventType().equals(EventType.ARCHIVE)){
+                result.add(scientificWork);
+            }
+        }
+        return result;
     }
 
 

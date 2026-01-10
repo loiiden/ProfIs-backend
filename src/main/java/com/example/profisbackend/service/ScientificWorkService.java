@@ -3,6 +3,8 @@ package com.example.profisbackend.service;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkPatchDTO;
 import com.example.profisbackend.entities.*;
+import com.example.profisbackend.enums.EventType;
+import com.example.profisbackend.mapper.MarkMapper;
 import com.example.profisbackend.repository.ScientificWorkRepository;
 import com.example.profisbackend.utils.SemesterUtility;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -185,10 +188,65 @@ public class ScientificWorkService {
     public List<ScientificWork> findAllScientificWorkBySecondEvaluatorId(Long secondEvaluatorId) {
         return scientificWorkRepository.getScientificWorksBySecondEvaluator_Id(secondEvaluatorId);
     }
+
+
     public List<ScientificWork> findAllScientificWorkAsMainOrSecondEvaluatorByEvaluatorId(Long evaluatorId) {
         List<ScientificWork> result = new ArrayList<>();
         result.addAll(findAllScientificWorkByMainEvaluatorId(evaluatorId));
         result.addAll(findAllScientificWorkBySecondEvaluatorId(evaluatorId));
         return result;
+    }
+
+
+    public Optional<Double> getAverageScore(ScientificWork scientificWork) {
+        int count = 0;
+        double totalScore = 0;
+        if (scientificWork.getMainEvaluatorWorkMark() != null) {
+            totalScore += scientificWork.getMainEvaluatorWorkMark();
+            count++;
+        }
+        if (scientificWork.getMainEvaluatorColloquiumMark() != null) {
+            totalScore += scientificWork.getMainEvaluatorColloquiumMark();
+            count++;
+        }
+        if (scientificWork.getSecondEvaluatorWorkMark() != null) {
+            totalScore += scientificWork.getSecondEvaluatorWorkMark();
+            count++;
+        }
+        if (scientificWork.getSecondEvaluatorColloquiumMark() != null) {
+            totalScore += scientificWork.getSecondEvaluatorColloquiumMark();
+            count++;
+        }
+        if (count == 0){
+            return Optional.empty();
+        }
+        return Optional.of(totalScore / count);
+    }
+
+
+    public Optional<Double> getAverageScoreInGermanSystem(ScientificWork scientificWork) {
+        Optional<Double> averageScore = getAverageScore(scientificWork);
+        if (averageScore.isPresent()){
+            return Optional.of(MarkMapper.pointsToGermanNote(averageScore.get()));
+        }
+        return Optional.empty();
+    }
+
+
+    public Optional<Double> getAverageMarkForAllWorks(){
+        double totalScore = 0.0;
+        int count = 0;
+        List<ScientificWork> scientificWorks = findAll();
+        for (ScientificWork scientificWork : scientificWorks) {
+            Optional<Double> averageScoreInGermanSystem = getAverageScoreInGermanSystem(scientificWork);
+            if (averageScoreInGermanSystem.isPresent()){
+                totalScore = totalScore + averageScoreInGermanSystem.get();
+                count++;
+            }
+        }
+        if (count == 0){
+            return Optional.empty();
+        }
+        return Optional.of(totalScore/count);
     }
 }
