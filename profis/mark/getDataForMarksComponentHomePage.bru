@@ -1,11 +1,11 @@
 meta {
-  name: filterByMainEvaluatorId
+  name: getDataForMarksComponentHomePage
   type: http
   seq: 1
 }
 
 get {
-  url: http://localhost:8080/api/scientific-work/filter/mainEvaluator/2
+  url: http://localhost:8080/api/mark/info
   body: none
   auth: inherit
 }

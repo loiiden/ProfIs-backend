@@ -1,11 +1,12 @@
 package com.example.profisbackend.service;
 
+import com.example.profisbackend.derivedStructures.ScientificWorkMarkDistribution;
+import com.example.profisbackend.dto.components.MarksComponentHomePageDTO;
 import com.example.profisbackend.entities.Evaluator;
 import com.example.profisbackend.entities.Event;
 import com.example.profisbackend.entities.ScientificWork;
 import com.example.profisbackend.enums.EventType;
 import com.example.profisbackend.utils.SemesterUtility;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -94,5 +95,45 @@ public class StatisticsService {
     }
 
 
-    // create ScientificWorkMarkDistribution for homepage
+    public ScientificWorkMarkDistribution getScientificWorkMarkDistribution(){
+        int countWorksWithMarkFromOneToTwo = 0;
+        int countWorksWithMarkFromTwoToThree = 0;
+        int countWorksWithMarkFromThreeToFour = 0;
+        int countWorksWithMarkFromFourToFive = 0;
+        List<ScientificWork> scientificWorks = scientificWorkService.findAll();
+        for (ScientificWork scientificWork: scientificWorks){
+            Optional<Double> averageMarkOptional = scientificWorkService.getAverageScoreInGermanSystem(scientificWork);
+            if (averageMarkOptional.isPresent()){
+                double averageMark = averageMarkOptional.get();
+                if (averageMark >= 1.0 && averageMark < 2.0){
+                    countWorksWithMarkFromOneToTwo++;
+                } else if (averageMark >= 2.0 && averageMark < 3.0){
+                    countWorksWithMarkFromTwoToThree++;
+                } else if (averageMark >= 3.0 && averageMark < 4.0){
+                    countWorksWithMarkFromThreeToFour++;
+                } else if (averageMark >= 4.0 && averageMark <= 5.0){
+                    countWorksWithMarkFromFourToFive++;
+                }
+            }
+        }
+        return new ScientificWorkMarkDistribution(
+                countWorksWithMarkFromOneToTwo,
+                countWorksWithMarkFromTwoToThree,
+                countWorksWithMarkFromThreeToFour,
+                countWorksWithMarkFromFourToFive
+        );
+    }
+    public MarksComponentHomePageDTO getDataForMarksComponentHomePage(){
+        Optional<Double> averageMarkForAllScientificWorksOptional = scientificWorkService.getAverageMarkForAllWorks();
+        Double averageMarkForAllScientificWorks = null;
+        if (averageMarkForAllScientificWorksOptional.isPresent()){
+            averageMarkForAllScientificWorks = averageMarkForAllScientificWorksOptional.get();
+        }
+        return new MarksComponentHomePageDTO(
+                eventService.getAllScientificWorksForStatusOfEventType(EventType.ARCHIVE).size(),
+                eventService.getAllNotArchivedScientificWorks().size(),
+                averageMarkForAllScientificWorks,
+                getScientificWorkMarkDistribution()
+        );
+    }
 }
