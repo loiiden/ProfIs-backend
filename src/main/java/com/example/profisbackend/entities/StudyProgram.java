@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "degree_type", "title" }) }) // doesn't work yet
+//if excel stops working like before, return this constrain
+//@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "degree_type", "title" }) }) // doesn't work yet
 public class StudyProgram {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

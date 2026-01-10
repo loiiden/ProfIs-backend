@@ -1,12 +1,15 @@
 package com.example.profisbackend.dto.scientificWork;
 
+import com.example.profisbackend.dto.event.EventResponseDTO;
 import com.example.profisbackend.dto.event.EventShortResponseDTO;
+import com.example.profisbackend.entities.Event;
 import com.example.profisbackend.enums.EventType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 public record ScientificWorkResponseDTO(
         Long id,
@@ -33,6 +36,7 @@ public record ScientificWorkResponseDTO(
         Integer secondEvaluatorWorkMark,
         Integer secondEvaluatorColloquiumMark,
         String comment,
-        EventShortResponseDTO status
+        EventShortResponseDTO status,
+        List<EventResponseDTO> events
 ) {
 }
