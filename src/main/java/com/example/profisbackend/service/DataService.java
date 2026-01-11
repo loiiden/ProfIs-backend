@@ -435,8 +435,8 @@ public class DataService {
         studyProgramService.deleteAllStudyPrograms();
         studentService.deleteAllStudents();
         evaluatorService.deleteAllEvaluators();
+        eventService.deleteAllEvents();
         scientificWorkService.deleteAllScientificWorks();
-        //eventService.deleteAllEvents(); Todo need to discuss with Maksim why its not working properly associated to unexpected Http Responses
         return ResponseEntity.ok().body("Database successfully reset ");
     }
 }

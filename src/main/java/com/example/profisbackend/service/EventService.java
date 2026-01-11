@@ -106,6 +106,6 @@ public class EventService {
     }
     public  void deleteAllEvents(){
         eventRepository.deleteAll();
-        log.info("Evaluators have been deleted");
+        log.info("Events have been deleted");
     }
 }
