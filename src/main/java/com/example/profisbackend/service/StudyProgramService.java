@@ -5,6 +5,7 @@ import com.example.profisbackend.dto.studyprogram.StudyProgramDTO;
 import com.example.profisbackend.entities.StudyProgram;
 import com.example.profisbackend.enums.DegreeType;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import com.example.profisbackend.mapper.StudyProgramMapper;
@@ -14,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Log4j2
 @Service
 
 public class StudyProgramService {
@@ -41,5 +43,9 @@ public class StudyProgramService {
     }
     public StudyProgram findByDegreeTypeAndTitle(DegreeType degreeType, String title) {
         return studyProgramRepository.findByDegreeTypeAndTitle(degreeType, title).orElseThrow(() -> new EntityNotFoundException("Study program not found "));
+    }
+    public  void deleteAllStudyPrograms(){
+        studyProgramRepository.deleteAll();
+        log.info("Studyprograms have been deleted");
     }
 }
