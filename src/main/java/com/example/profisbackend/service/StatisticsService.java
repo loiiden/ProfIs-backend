@@ -127,7 +127,7 @@ public class StatisticsService {
                 }
             }
         }
-        return SWS;
+        return (double) Math.round(SWS * 100.0) / 100.0;
     }
 
 
