@@ -3,6 +3,7 @@ package com.example.profisbackend.service;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,6 +38,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.example.profisbackend.config.Constants.*;
 
@@ -52,8 +54,8 @@ public class DataService {
     private final EvaluatorService evaluatorService;
     private final EventService eventService;
 
-    public ResponseEntity<String> copyToDb(String path) {
-        try (FileInputStream file = new FileInputStream(path);
+    public ResponseEntity<String> copyToDb(MultipartFile excelFile) {
+        try (InputStream file = excelFile.getInputStream();
              XSSFWorkbook workbook = new XSSFWorkbook(file)) {
 
             saveStudyProgramsFromExcel(workbook);
