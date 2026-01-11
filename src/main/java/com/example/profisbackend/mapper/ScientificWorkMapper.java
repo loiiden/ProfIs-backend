@@ -106,10 +106,13 @@ public class ScientificWorkMapper {
             }
             studentStudentNumber = scientificWork.getStudent().getStudentNumber();
         }
-        String studyProgramTitle = "No study program";
+        String studyProgramTitle = "";
         double sws = 0.0;
         if(scientificWork.getStudyProgram() != null) {
-            studyProgramTitle = scientificWork.getStudyProgram().getTitle();
+            if (scientificWork.getStudyProgram().getDegreeType() != null) {
+                studyProgramTitle = scientificWork.getStudyProgram().getDegreeType().getLabel() + " ";
+            }
+            studyProgramTitle = studyProgramTitle + scientificWork.getStudyProgram().getTitle();
             sws = scientificWork.getStudyProgram().getSws();
         }
         return new ScientificWorkSwsReportDTO(
