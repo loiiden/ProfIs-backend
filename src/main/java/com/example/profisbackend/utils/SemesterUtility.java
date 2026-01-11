@@ -47,6 +47,38 @@ public class SemesterUtility {
         String newSemester = newSeason + newYear;
         return newSemester;
     }
+
+
+    public static String decreaseSemester(String semester) {
+        if (semester == null || semester.isEmpty()) {
+            return null;
+        }
+        String season = semester.substring(0, 2);
+        String year = semester.substring(2);
+        int newYear = Integer.parseInt(year);
+        String newSeason;
+        if (season.equals("SS")) {
+            newSeason = "WS";
+            newYear--;
+        }else{
+            newSeason = "SS";
+        }
+        String newSemester = newSeason + newYear;
+        return newSemester;
+    }
+
+
+    public static List<String> getLastNSemestersFromLocalDate(int n, LocalDate localDate) {
+        List<String> lastNSemesters = new ArrayList<>();
+        String curSemester = getSemesterByDate(localDate);
+        for (int i = 0; i < n; i++) {
+            lastNSemesters.add(curSemester);
+            curSemester = decreaseSemester(curSemester);
+        }
+        return lastNSemesters;
+    }
+
+
     public static List<String> getAllSemestersBetweenTwoDates(LocalDate startDate, LocalDate endDate) throws IllegalArgumentException {
         if (startDate == null && endDate == null) {
             throw new IllegalArgumentException("Start date end dates cannot be null at the same time");

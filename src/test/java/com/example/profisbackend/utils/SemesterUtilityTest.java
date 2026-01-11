@@ -51,4 +51,8 @@ public class SemesterUtilityTest {
                 )
         );
     }
+    @Test
+    void getLastNSemestersFromLocalDate(){
+        assertEquals(SemesterUtility.getLastNSemestersFromLocalDate(5, LocalDate.of(2026, 1, 11)), List.of("WS2025", "SS2025", "WS2024", "SS2024", "WS2023"));
+    }
 }

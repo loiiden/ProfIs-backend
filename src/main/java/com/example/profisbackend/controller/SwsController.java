@@ -3,11 +3,14 @@ package com.example.profisbackend.controller;
 import com.example.profisbackend.dto.reports.SwsReportDTO;
 import com.example.profisbackend.service.PdfService;
 import com.example.profisbackend.service.StatisticsService;
+import com.example.profisbackend.utils.SemesterUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -44,5 +47,11 @@ public class SwsController {
         } catch (IOException e){
             return ResponseEntity.badRequest().build();
         }
+    }
+
+
+    @GetMapping("/semestersToSelect")
+    public ResponseEntity<List<String>> getLastTenSemestersFromCurrentLocalDate(){
+        return ResponseEntity.ok(SemesterUtility.getLastNSemestersFromLocalDate(10, LocalDate.now()));
     }
 }
