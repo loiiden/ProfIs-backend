@@ -1,11 +1,13 @@
 package com.example.profisbackend.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.profisbackend.service.DataService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -16,9 +18,9 @@ public class DataController {
     private final DataService inputOutputService;
 
 
-    @PostMapping("/import")
-    public ResponseEntity<String> importData(@RequestParam String file) {
-        return inputOutputService.copyToDb(file);
+    @PostMapping(value = "/import",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> importData(@RequestPart MultipartFile excelFile) {
+        return inputOutputService.copyToDb(excelFile);
     }
 
     @GetMapping("/export")
