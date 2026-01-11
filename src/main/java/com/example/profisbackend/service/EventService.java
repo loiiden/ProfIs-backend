@@ -8,6 +8,7 @@ import com.example.profisbackend.enums.EventType;
 import com.example.profisbackend.repository.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Log4j2
 @Service
 public class EventService {
     private final EventRepository eventRepository;
@@ -101,5 +103,9 @@ public class EventService {
     public void deleteEvent(Long id) {
         Event event = findEventById(id);
         eventRepository.deleteById(id);
+    }
+    public  void deleteAllEvents(){
+        eventRepository.deleteAll();
+        log.info("Events have been deleted");
     }
 }

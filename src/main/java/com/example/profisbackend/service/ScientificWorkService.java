@@ -9,6 +9,7 @@ import com.example.profisbackend.repository.ScientificWorkRepository;
 import com.example.profisbackend.utils.SemesterUtility;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Log4j2
 @Service
 public class ScientificWorkService {
     private final ScientificWorkRepository scientificWorkRepository;
@@ -248,5 +250,9 @@ public class ScientificWorkService {
             return Optional.empty();
         }
         return Optional.of(totalScore/count);
+    }
+    public  void deleteAllScientificWorks(){
+        scientificWorkRepository.deleteAll();
+        log.info("Scientificworks have been deleted");
     }
 }

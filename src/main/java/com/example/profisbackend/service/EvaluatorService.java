@@ -4,6 +4,8 @@ import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
 import com.example.profisbackend.entities.Evaluator;
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.profisbackend.mapper.EvaluatorMapper;
 import com.example.profisbackend.repository.EvaluatorRepository;
@@ -25,6 +27,7 @@ import java.util.Optional;
  * you could return DTOs or domain objects to keep a clean separation between layers.
  */
 @RequiredArgsConstructor
+@Log4j2
 @Service
 public class EvaluatorService {
     private final EvaluatorRepository evaluatorRepository;
@@ -101,5 +104,10 @@ public class EvaluatorService {
 
     public Evaluator findByEmail(String mail) {
         return evaluatorRepository.findByEmail(mail).orElseThrow(() -> new EntityNotFoundException("Evaluator not found with " + mail));
+    }
+    public void deleteAllEvaluators(){
+        evaluatorRepository.deleteAll();
+        log.info("Evaluators have been deleted");
+
     }
 }

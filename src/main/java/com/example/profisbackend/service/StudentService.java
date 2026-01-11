@@ -9,12 +9,14 @@ import com.example.profisbackend.mapper.StudentMapper;
 import com.example.profisbackend.repository.StudentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Log4j2
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
@@ -70,5 +72,9 @@ public class StudentService {
 
     public boolean existsByStudentNumber(Long studentNumber) {
         return studentRepository.existsByStudentNumber(studentNumber);
+    }
+    public  void deleteAllStudents(){
+        studentRepository.deleteAll();
+        log.info("Students have been deleted");
     }
 }
