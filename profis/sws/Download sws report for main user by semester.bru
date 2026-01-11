@@ -1,0 +1,16 @@
+meta {
+  name: Download sws report for main user by semester
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/api/sws/main-user/report/SS2024
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

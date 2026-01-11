@@ -5,6 +5,7 @@ import com.example.profisbackend.dto.event.EventShortResponseDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkForReferentViewDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkResponseDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkShortDTO;
+import com.example.profisbackend.dto.scientificWork.ScientificWorkSwsReportDTO;
 import com.example.profisbackend.entities.Event;
 import com.example.profisbackend.entities.ScientificWork;
 import com.example.profisbackend.enums.EventType;
@@ -90,5 +91,33 @@ public class ScientificWorkMapper {
             studentLastName = scientificWork.getStudent().getLastName();
         }
         return new ScientificWorkForReferentViewDTO(scientificWork.getId(), status, studentFirstName, studentLastName, studyProgramTitle, scientificWork.getTitle());
+    }
+
+
+    public static ScientificWorkSwsReportDTO convertToSwsReportDTO(ScientificWork scientificWork) {
+        String studentFullName = "";
+        Long studentStudentNumber = null;
+        if(scientificWork.getStudent() != null) {
+            if (scientificWork.getStudent().getFirstName() != null) {
+                studentFullName = scientificWork.getStudent().getFirstName();
+            }
+            if (scientificWork.getStudent().getLastName() != null) {
+                studentFullName = studentFullName + " " + scientificWork.getStudent().getLastName();
+            }
+            studentStudentNumber = scientificWork.getStudent().getStudentNumber();
+        }
+        String studyProgramTitle = "No study program";
+        double sws = 0.0;
+        if(scientificWork.getStudyProgram() != null) {
+            studyProgramTitle = scientificWork.getStudyProgram().getTitle();
+            sws = scientificWork.getStudyProgram().getSws();
+        }
+        return new ScientificWorkSwsReportDTO(
+                scientificWork.getTitle(),
+                studentFullName,
+                studentStudentNumber,
+                studyProgramTitle,
+                sws
+        );
     }
 }

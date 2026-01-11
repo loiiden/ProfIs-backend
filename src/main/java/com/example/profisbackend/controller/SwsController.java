@@ -1,18 +1,21 @@
 package com.example.profisbackend.controller;
 
+import com.example.profisbackend.dto.reports.SwsReportDTO;
+import com.example.profisbackend.service.PdfService;
 import com.example.profisbackend.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/sws")
 public class SwsController {
     final private StatisticsService statisticsService;
+    final private PdfService pdfService;
 
     @GetMapping("/main-user/current")
     public ResponseEntity<Double> getSwsInCurrentSemesterForMainUser(){
@@ -29,5 +32,17 @@ public class SwsController {
     @GetMapping("/{evaluatorId}/{semester}")
     public ResponseEntity<Double> getSwsInGivenSemesterForEvaluator(@PathVariable Long evaluatorId, @PathVariable String semester){
         return ResponseEntity.ok(statisticsService.getSwsInGivenSemesterForEvaluatorByEvaluatorId(evaluatorId, semester));
+    }
+    @GetMapping("/main-user/report/{semester}")
+    public ResponseEntity<byte[]> getSwsReportForMainUser(@PathVariable String semester){
+        Optional<SwsReportDTO> reportDTO = statisticsService.getSwsReportForMainUserBySemester(semester);
+        if(reportDTO.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        try {
+            return ResponseEntity.ok(pdfService.generatePdfSwsReport(reportDTO.get()));
+        } catch (IOException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

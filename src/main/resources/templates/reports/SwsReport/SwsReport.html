@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        .header-info { margin-bottom: 20px; }
+        /* Use standard block/inline for PDF instead of Flex */
+        .info-line { margin-bottom: 5px; }
+        .label { font-weight: bold; display: inline-block; width: 100px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .student-number { font-size: 10px; color: #555; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Semesterwochenstunde Bericht</h1>
+    <div class="header-info">
+        <div class="info-line">
+            <span class="label">Referent:</span>
+            <span th:text="${reportDTO.evaluatorFullName}">Name</span>
+        </div>
+        <div class="info-line">
+            <span class="label">Semester:</span>
+            <span th:text="${reportDTO.semester}">WS2025</span>
+        </div>
+    </div>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>Arbeit</th>
+        <th>Student</th>
+        <th>Studiengang</th>
+        <th>SWS</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="work : ${reportDTO.works}">
+        <td th:text="${work.title}">Title</td>
+        <td>
+            <div th:text="${work.studentFullName}">Student Name</div>
+            <div class="student-number" th:text="${work.studentStudentNumber}">12345</div>
+        </td>
+        <td th:text="${work.studyProgramTitle}">Program</td>
+        <td th:text="${work.sws}">0.3</td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr class="total-row">
+        <td colspan="3" style="text-align: right;"><strong>Gesamt SWS:</strong></td>
+        <td><strong th:text="${reportDTO.totalSws}">0.0</strong></td>
+    </tr>
+    </tfoot>
+</table>
+</body>
+</html>
