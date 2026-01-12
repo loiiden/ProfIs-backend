@@ -102,13 +102,17 @@ public class DataService {
                         SECOND_EVALUATOR_ADDRESS, SECOND_EVALUATOR_EMAIL, SECOND_EVALUATOR_PHONE);
 
                 Long scientificWorkId = upsertScientificWork(row, studentId, studyProgramId, mainEvalId, secondEvalId);
-                upsertAllEvents(row, scientificWorkId);
-
+                if (scientificWorkId != null) {
+                    eventService.deleteAllEventsByScientificWorkId(scientificWorkId);
+                    upsertAllEvents(row, scientificWorkId);
+                }
             } catch (Exception e) {
                 log.warn("Skipping row {}: {}", i, e.getMessage());
             }
         }
     }
+
+
     private void upsertAllEvents(Row row, Long scientificWorkId) {
         upsertEventsByEventTypeForScientificWork(scientificWorkId, EventType.PLANNED, row, EVENT_PLANNED_COLUMN);
         upsertEventsByEventTypeForScientificWork(scientificWorkId, EventType.PROPOSAL, row, EVENT_PROPOSAL_COLUMN);
@@ -124,21 +128,12 @@ public class DataService {
         String eventDatesInStringFormat = getSafeString(row.getCell(column));
         List<LocalDate> eventDatesList = LocalDateUtility.parseEventDatesStringToLocalDates((eventDatesInStringFormat));
         for(LocalDate eventDate : eventDatesList){
-            Optional<Event> foundEvent = eventService.findByEventTypeAndScientificWorkId(eventType, scientificWorkId);
-            if (foundEvent.isEmpty()){
-                EventCreateDTO eventCreateDTO = new EventCreateDTO(
-                        eventType,
-                        eventDate,
-                        scientificWorkId
-                );
-                eventService.createEvent(eventCreateDTO);
-            } else {
-                EventPatchDTO eventPatchDTO = new EventPatchDTO(
-                        eventType,
-                        eventDate
-                );
-                eventService.updateEvent(foundEvent.get().getId(), eventPatchDTO);
-            }
+            EventCreateDTO eventCreateDTO = new EventCreateDTO(
+                eventType,
+                eventDate,
+                scientificWorkId
+            );
+            eventService.createEvent(eventCreateDTO);
         }
     }
 
@@ -228,7 +223,9 @@ public class DataService {
     }
 
     private Long getStudyProgram(Row row) {
-        String type = getSafeString(row.getCell(STUDYPROGRAM_DEGREETYPE_COLUMN)).toUpperCase();
+        //Why upper case? It causes a bug with no found study program.
+        //String type = getSafeString(row.getCell(STUDYPROGRAM_DEGREETYPE_COLUMN)).toUpperCase();
+        String type = getSafeString(row.getCell(STUDYPROGRAM_DEGREETYPE_COLUMN));
         String title = getSafeString(row.getCell(STUDYPROGRAM_TITLE));
         return studyProgramService.findByDegreeTypeAndTitle(DegreeType.valueOfLabel(type), title).getId();
     }

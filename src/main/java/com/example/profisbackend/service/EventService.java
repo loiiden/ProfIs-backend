@@ -112,4 +112,8 @@ public class EventService {
     public Optional<Event> findByEventTypeAndScientificWorkId(EventType eventType, Long scientificWorkId) {
         return eventRepository.findByEventTypeAndScientificWork_Id(eventType, scientificWorkId);
     }
+
+    public void deleteAllEventsByScientificWorkId(Long scientificWorkId) {
+        eventRepository.deleteAllByScientificWork_Id(scientificWorkId);
+    }
 }
