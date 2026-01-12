@@ -334,8 +334,26 @@ public class DataService {
         int rowIdx = 1;
 
         for (ScientificWork work : works) {
-            Row row = sheet.createRow(rowIdx++);
-            row.createCell(0).setCellValue("Angemeldet");
+            Row row = sheet.createRow(rowIdx);
+
+             if (work.getStudent() != null) {
+                Student s = work.getStudent();
+                if (s.getStudentNumber()==null) {
+                    continue; 
+                }else{
+                    row.createCell(0).setCellValue("Angemeldet");
+                    row.createCell(23).setCellValue(s.getStudentNumber());
+                }
+
+                row.createCell(17).setCellValue(s.getFirstName());
+                row.createCell(18).setCellValue(s.getLastName());
+                row.createCell(19).setCellValue(s.getAcademicLevel().getLabel());
+                row.createCell(20).setCellValue(s.getSalutation().getLabel());
+                row.createCell(21).setCellValue(s.getPhoneNumber());
+                row.createCell(22).setCellValue(s.getEmail());
+                row.createCell(24).setCellValue(s.getAddress());
+            }
+
 
             if (work.getMainEvaluator() != null) {
                 Evaluator me = work.getMainEvaluator();
@@ -361,18 +379,7 @@ public class DataService {
                 row.createCell(16).setCellValue(se.getPhoneNumber());
             }
 
-            if (work.getStudent() != null) {
-                Student s = work.getStudent();
-                row.createCell(17).setCellValue(s.getFirstName());
-                row.createCell(18).setCellValue(s.getLastName());
-                row.createCell(19).setCellValue(s.getAcademicLevel().getLabel());
-                row.createCell(20).setCellValue(s.getSalutation().getLabel());
-                row.createCell(21).setCellValue(s.getPhoneNumber());
-                row.createCell(22).setCellValue(s.getEmail());
-                row.createCell(23).setCellValue(s.getStudentNumber());
-                row.createCell(24).setCellValue(s.getAddress());
-            }
-
+           
             if (work.getStudyProgram() != null) {
                 row.createCell(25).setCellValue(work.getStudyProgram().getDegreeType().getLabel());
                 row.createCell(26).setCellValue(work.getStudyProgram().getTitle());
@@ -388,13 +395,14 @@ public class DataService {
             row.createCell(34).setCellValue(work.getDiscussionStart() != null ? work.getDiscussionStart().toString() : "");
             row.createCell(35).setCellValue(work.getDiscussionEnd() != null ? work.getDiscussionEnd().toString() : "");
 
-            row.createCell(36).setCellValue(work.getMainEvaluatorWorkMark());
-            row.createCell(37).setCellValue(work.getMainEvaluatorColloquiumMark());
-            row.createCell(38).setCellValue(work.getSecondEvaluatorWorkMark());
-            row.createCell(39).setCellValue(work.getSecondEvaluatorColloquiumMark());
+            row.createCell(36).setCellValue(work.getMainEvaluatorWorkMark()!=null?work.getMainEvaluatorWorkMark():0);
+            row.createCell(37).setCellValue(work.getMainEvaluatorColloquiumMark()!=null?work.getMainEvaluatorWorkMark():0);
+            row.createCell(38).setCellValue(work.getSecondEvaluatorWorkMark()!=null?work.getSecondEvaluatorWorkMark():0);
+            row.createCell(39).setCellValue(work.getSecondEvaluatorColloquiumMark()!=null?work.getSecondEvaluatorColloquiumMark():0);
 
             row.createCell(40).setCellValue(0.5);
             row.createCell(41).setCellValue(work.getComment());
+            rowIdx++;
         }
     }
 
