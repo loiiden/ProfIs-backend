@@ -108,4 +108,8 @@ public class EventService {
         eventRepository.deleteAll();
         log.info("Events have been deleted");
     }
+
+    public Optional<Event> findByEventTypeAndScientificWorkId(EventType eventType, Long scientificWorkId) {
+        return eventRepository.findByEventTypeAndScientificWork_Id(eventType, scientificWorkId);
+    }
 }

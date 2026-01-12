@@ -63,4 +63,13 @@ public class Constants {
     public static final int MARK_SECOND_COLLOQ = 39;
 
     public static final int COMMENT_COLUMN = 41; // Assuming it stays two steps after the last mark
+
+    //Events
+    public static final int EVENT_PLANNED_COLUMN = 42;
+    public static final int EVENT_PROPOSAL_COLUMN = 43;
+    public static final int EVENT_DISCUSSION_COLUMN = 44;
+    public static final int EVENT_FINAL_SUBMISSION_COLUMN = 45;
+    public static final int EVENT_REVIEW_COLUMN = 46;
+    public static final int EVENT_ARCHIVE_COLUMN = 47;
+    public static final int EVENT_ABORT_COLUMN = 48;
 }

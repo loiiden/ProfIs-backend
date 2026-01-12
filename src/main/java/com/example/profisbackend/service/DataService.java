@@ -10,21 +10,18 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
+import com.example.profisbackend.dto.event.EventCreateDTO;
+import com.example.profisbackend.dto.event.EventPatchDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkCreateDTO;
 import com.example.profisbackend.dto.scientificWork.ScientificWorkPatchDTO;
 import com.example.profisbackend.dto.student.StudentCreateDTO;
 import com.example.profisbackend.dto.student.StudentPatchDTO;
-import com.example.profisbackend.entities.Evaluator;
-import com.example.profisbackend.entities.ScientificWork;
-import com.example.profisbackend.entities.Student;
-import com.example.profisbackend.entities.StudyProgram;
-import com.example.profisbackend.enums.AcademicLevel;
-import com.example.profisbackend.enums.EvaluatorRole;
-import com.example.profisbackend.enums.Salutation;
-import com.example.profisbackend.enums.DegreeType;
+import com.example.profisbackend.entities.*;
+import com.example.profisbackend.enums.*;
 import com.example.profisbackend.dto.studyprogram.StudyProgramDTO;
 import com.example.profisbackend.mapper.StudyProgramMapper;
 import org.apache.poi.ss.usermodel.*;
@@ -103,10 +100,43 @@ public class DataService {
                         SECOND_EVALUATOR_LASTNAME, SECOND_EVALUATOR_ACADEMICLEVEL, SECOND_EVALUATOR_ROLE,
                         SECOND_EVALUATOR_ADDRESS, SECOND_EVALUATOR_EMAIL, SECOND_EVALUATOR_PHONE);
 
-                upsertScientificWork(row, studentId, studyProgramId, mainEvalId, secondEvalId);
+                Long scientificWorkId = upsertScientificWork(row, studentId, studyProgramId, mainEvalId, secondEvalId);
+                upsertAllEvents(row, scientificWorkId);
+
             } catch (Exception e) {
                 log.warn("Skipping row {}: {}", i, e.getMessage());
             }
+        }
+    }
+    private void upsertAllEvents(Row row, Long scientificWorkId) {
+        upsertPlannedEvent(row, scientificWorkId);
+        /*
+        upsertProposalEvent();
+        upsertDiscussionPlannedEvent();
+        upsertFinalSubmissionPlannedEvent();
+        upsertReviewEvent();
+        upsertArchiveEvent();
+        upsertAbortEvent();
+         */
+    }
+    private Long upsertPlannedEvent(Row row, Long scientificWorkId) {
+        LocalDate eventDate = getSafeLocalDate(row.getCell(START_DATE_COLUMN), "StartDate");
+        Optional<Event> foundEvent = eventService.findByEventTypeAndScientificWorkId(EventType.PLANNED, scientificWorkId);
+        if (foundEvent.isEmpty()){
+            EventCreateDTO eventCreateDTO = new EventCreateDTO(
+                    EventType.PLANNED,
+                    eventDate,
+                    scientificWorkId
+            );
+            Event created = eventService.createEvent(eventCreateDTO);
+            return created.getId();
+        } else {
+            EventPatchDTO eventPatchDTO = new EventPatchDTO(
+                    EventType.PLANNED,
+                    eventDate
+            );
+            Event updated = eventService.updateEvent(foundEvent.get().getId(), eventPatchDTO);
+            return updated.getId();
         }
     }
 
@@ -157,7 +187,7 @@ public class DataService {
         return id;
     }
 
-    private void upsertScientificWork(Row row, Long studentId, Long studyProgramId, Long mainEvalId, Long secondEvalId) {
+    private Long upsertScientificWork(Row row, Long studentId, Long studyProgramId, Long mainEvalId, Long secondEvalId) {
         LocalDate start = getSafeLocalDate(row.getCell(START_DATE_COLUMN), "StartDate");
         LocalTime pStart = getSafeLocalTime(row.getCell(PRESENTATION_START_COLUMN), "PresStart");
         LocalTime pEnd = getSafeLocalTime(row.getCell(PRESENTATION_END_COLUMN), "PresEnd");
@@ -180,7 +210,8 @@ public class DataService {
                 getSafeString(row.getCell(COMMENT_COLUMN)));
 
         if (!scientificWorkService.existsByStartDateAndStudent(start, studentId)) {
-            scientificWorkService.create(dto);
+            ScientificWork created = scientificWorkService.create(dto);
+            return created.getId();
         } else {
             Long id = scientificWorkService.findByStartDateAndStudent(start, studentId).getId();
             scientificWorkService.patchScientificWorkById(id, new ScientificWorkPatchDTO(
@@ -190,6 +221,7 @@ public class DataService {
                     dto.mainEvaluatorId(), dto.mainEvaluatorColloquiumMark(), dto.mainEvaluatorWorkMark(),
                     dto.secondEvaluatorId(), dto.secondEvaluatorColloquiumMark(), dto.secondEvaluatorWorkMark(),
                     dto.comment()));
+            return id;
         }
     }
 
