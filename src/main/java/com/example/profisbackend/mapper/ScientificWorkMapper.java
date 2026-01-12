@@ -70,18 +70,28 @@ public class ScientificWorkMapper {
         );
     }
     public ScientificWorkShortDTO convertToShortDTO(ScientificWork scientificWork) {
-        String StudyProgramTitle = null;
+        String studyProgramTitle = null;
         if(scientificWork.getStudyProgram() != null) {
-            StudyProgramTitle = scientificWork.getStudyProgram().getTitle();
+            if(scientificWork.getStudyProgram().getDegreeType() != null) {
+                studyProgramTitle = scientificWork.getStudyProgram().getDegreeType().getLabel();
+            }
+            if(scientificWork.getStudyProgram().getTitle() != null) {
+                studyProgramTitle = studyProgramTitle + " " + scientificWork.getStudyProgram().getTitle();
+            }
         }
         EventShortResponseDTO status  = EventMapper.toEventShortResponseDTO(eventService.getCurrentStatusForScientificWorkByScientificWorkId(scientificWork.getId()));
-        return new ScientificWorkShortDTO(scientificWork.getId(), status, scientificWork.getTitle(), StudyProgramTitle);
+        return new ScientificWorkShortDTO(scientificWork.getId(), status, scientificWork.getTitle(), studyProgramTitle);
     }
 
     public ScientificWorkForReferentViewDTO convertToReferentViewDTO(ScientificWork scientificWork) {
         String studyProgramTitle = null;
         if(scientificWork.getStudyProgram() != null) {
-            studyProgramTitle = scientificWork.getStudyProgram().getTitle();
+            if(scientificWork.getStudyProgram().getDegreeType() != null) {
+                studyProgramTitle = scientificWork.getStudyProgram().getDegreeType().getLabel();
+            }
+            if(scientificWork.getStudyProgram().getTitle() != null) {
+                studyProgramTitle = studyProgramTitle + " " + scientificWork.getStudyProgram().getTitle();
+            }
         }
         EventShortResponseDTO status  = EventMapper.toEventShortResponseDTO(eventService.getCurrentStatusForScientificWorkByScientificWorkId(scientificWork.getId()));
         String studentFirstName = null;
