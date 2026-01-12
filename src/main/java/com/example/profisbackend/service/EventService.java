@@ -109,11 +109,12 @@ public class EventService {
         log.info("Events have been deleted");
     }
 
-    public Optional<Event> findByEventTypeAndScientificWorkId(EventType eventType, Long scientificWorkId) {
-        return eventRepository.findByEventTypeAndScientificWork_Id(eventType, scientificWorkId);
-    }
-
     public void deleteAllEventsByScientificWorkId(Long scientificWorkId) {
         eventRepository.deleteAllByScientificWork_Id(scientificWorkId);
+    }
+
+
+    public List<Event> findEventsByEventTypeAndScientificWorkId(EventType eventType, Long scientificWorkId) {
+        return eventRepository.findEventsByEventTypeAndScientificWork_Id(eventType, scientificWorkId);
     }
 }

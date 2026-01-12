@@ -15,7 +15,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> getEventsByEventDateGreaterThanEqual(LocalDate eventDateIsGreaterThan);
 
-    Optional<Event> findByEventTypeAndScientificWork_Id(EventType eventType, Long scientificWorkId);
-
     void deleteAllByScientificWork_Id(Long scientificWorkId);
+
+    List<Event> findEventsByEventTypeAndScientificWork_Id(EventType eventType, Long scientificWorkId);
 }

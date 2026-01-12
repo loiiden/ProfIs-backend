@@ -23,4 +23,13 @@ public class LocalDateUtility {
         }
         return eventDatesList;
     }
+    public static String parseEventDatesToString(List<LocalDate> eventDatesList){
+        StringBuilder eventDatesString = new StringBuilder();
+        for(LocalDate localDate : eventDatesList){
+            if (localDate != null){
+                eventDatesString.append(localDate.toString()).append(";");
+            }
+        }
+        return eventDatesString.toString();
+    }
 }

@@ -358,6 +358,13 @@ public class DataService {
 
         addCell(header, 40, "Deputat (SWS)", style);
         addCell(header, 41, "Kommentar", style);
+        addCell(header, EVENT_PLANNED_COLUMN, "EventPlanned", style);
+        addCell(header, EVENT_PROPOSAL_COLUMN, "EventProposal", style);
+        addCell(header, EVENT_DISCUSSION_COLUMN, "EventDiscussion", style);
+        addCell(header, EVENT_FINAL_SUBMISSION_COLUMN, "EventFinalSubmission", style);
+        addCell(header, EVENT_REVIEW_COLUMN, "EventReview", style);
+        addCell(header, EVENT_ARCHIVE_COLUMN, "EventArchive", style);
+        addCell(header, EVENT_ABORT_COLUMN, "EventAbort", style);
     }
 
     private void fillWorkData(Sheet sheet) {
@@ -426,7 +433,29 @@ public class DataService {
 
             row.createCell(40).setCellValue(0.5);
             row.createCell(41).setCellValue(work.getComment());
+            row.createCell(EVENT_PLANNED_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.PLANNED, work.getId()));
+            row.createCell(EVENT_PROPOSAL_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.PROPOSAL, work.getId()));
+            row.createCell(EVENT_DISCUSSION_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.DISCUSSION, work.getId()));
+            row.createCell(EVENT_FINAL_SUBMISSION_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.FINAL_SUBMISSION, work.getId()));
+            row.createCell(EVENT_REVIEW_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.REVIEW, work.getId()));
+            row.createCell(EVENT_ARCHIVE_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.ARCHIVE, work.getId()));
+            row.createCell(EVENT_ABORT_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.ABORT, work.getId()));
         }
+    }
+
+
+    private String getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType eventType, Long scientificWorkId) {
+        String res = LocalDateUtility.parseEventDatesToString(
+                //get Events
+                eventService.findEventsByEventTypeAndScientificWorkId(eventType, scientificWorkId)
+                        .stream().map(
+                                //get localDate of every event
+                                Event::getEventDate
+                        ).toList()
+                //map it to string. Null will be mapped to noting. "";
+        );
+        System.out.println(res);
+        return res;
     }
 
     private void fillProgramData(Sheet sheet) {
