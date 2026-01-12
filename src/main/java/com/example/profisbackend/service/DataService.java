@@ -1,13 +1,13 @@
 package com.example.profisbackend.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -24,6 +24,7 @@ import com.example.profisbackend.entities.*;
 import com.example.profisbackend.enums.*;
 import com.example.profisbackend.dto.studyprogram.StudyProgramDTO;
 import com.example.profisbackend.mapper.StudyProgramMapper;
+import com.example.profisbackend.utils.LocalDateUtility;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -109,34 +110,35 @@ public class DataService {
         }
     }
     private void upsertAllEvents(Row row, Long scientificWorkId) {
-        upsertPlannedEvent(row, scientificWorkId);
-        /*
-        upsertProposalEvent();
-        upsertDiscussionPlannedEvent();
-        upsertFinalSubmissionPlannedEvent();
-        upsertReviewEvent();
-        upsertArchiveEvent();
-        upsertAbortEvent();
-         */
+        upsertEventsByEventTypeForScientificWork(scientificWorkId, EventType.PLANNED, row, EVENT_PLANNED_COLUMN);
+        upsertEventsByEventTypeForScientificWork(scientificWorkId, EventType.PROPOSAL, row, EVENT_PROPOSAL_COLUMN);
+        upsertEventsByEventTypeForScientificWork(scientificWorkId, EventType.DISCUSSION, row, EVENT_DISCUSSION_COLUMN);
+        upsertEventsByEventTypeForScientificWork(scientificWorkId, EventType.FINAL_SUBMISSION, row, EVENT_FINAL_SUBMISSION_COLUMN);
+        upsertEventsByEventTypeForScientificWork(scientificWorkId, EventType.REVIEW, row, EVENT_REVIEW_COLUMN);
+        upsertEventsByEventTypeForScientificWork(scientificWorkId, EventType.ARCHIVE, row, EVENT_ARCHIVE_COLUMN);
+        upsertEventsByEventTypeForScientificWork(scientificWorkId, EventType.ABORT, row, EVENT_ABORT_COLUMN);
     }
-    private Long upsertPlannedEvent(Row row, Long scientificWorkId) {
-        LocalDate eventDate = getSafeLocalDate(row.getCell(START_DATE_COLUMN), "StartDate");
-        Optional<Event> foundEvent = eventService.findByEventTypeAndScientificWorkId(EventType.PLANNED, scientificWorkId);
-        if (foundEvent.isEmpty()){
-            EventCreateDTO eventCreateDTO = new EventCreateDTO(
-                    EventType.PLANNED,
-                    eventDate,
-                    scientificWorkId
-            );
-            Event created = eventService.createEvent(eventCreateDTO);
-            return created.getId();
-        } else {
-            EventPatchDTO eventPatchDTO = new EventPatchDTO(
-                    EventType.PLANNED,
-                    eventDate
-            );
-            Event updated = eventService.updateEvent(foundEvent.get().getId(), eventPatchDTO);
-            return updated.getId();
+
+
+    private void upsertEventsByEventTypeForScientificWork (Long scientificWorkId, EventType eventType, Row row, int column) {
+        String eventDatesInStringFormat = getSafeString(row.getCell(column));
+        List<LocalDate> eventDatesList = LocalDateUtility.parseEventDatesStringToLocalDates((eventDatesInStringFormat));
+        for(LocalDate eventDate : eventDatesList){
+            Optional<Event> foundEvent = eventService.findByEventTypeAndScientificWorkId(eventType, scientificWorkId);
+            if (foundEvent.isEmpty()){
+                EventCreateDTO eventCreateDTO = new EventCreateDTO(
+                        eventType,
+                        eventDate,
+                        scientificWorkId
+                );
+                eventService.createEvent(eventCreateDTO);
+            } else {
+                EventPatchDTO eventPatchDTO = new EventPatchDTO(
+                        eventType,
+                        eventDate
+                );
+                eventService.updateEvent(foundEvent.get().getId(), eventPatchDTO);
+            }
         }
     }
 
