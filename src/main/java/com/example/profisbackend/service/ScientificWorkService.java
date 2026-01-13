@@ -6,6 +6,7 @@ import com.example.profisbackend.entities.*;
 import com.example.profisbackend.enums.EventType;
 import com.example.profisbackend.mapper.MarkMapper;
 import com.example.profisbackend.repository.ScientificWorkRepository;
+import com.example.profisbackend.utils.AcademicLevelUtility;
 import com.example.profisbackend.utils.SemesterUtility;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,9 @@ public class ScientificWorkService {
         scientificWork.setSecondEvaluatorColloquiumMark(scientificWorkCreateDTO.secondEvaluatorColloquiumMark());
         scientificWork.setComment(scientificWorkCreateDTO.comment());
 
+        if (!AcademicLevelUtility.isConfigurationOfScientificWorkAllowed(scientificWork)){
+            throw new IllegalArgumentException("This configuration of academic levels is not allowed.");
+        }
 
         scientificWorkRepository.save(scientificWork);
 
@@ -138,6 +142,10 @@ public class ScientificWorkService {
         scientificWork.setSecondEvaluatorWorkMark(scientificWorkPatchDTO.secondEvaluatorWorkMark());
         scientificWork.setSecondEvaluatorColloquiumMark(scientificWorkPatchDTO.secondEvaluatorColloquiumMark());
         scientificWork.setComment(scientificWorkPatchDTO.comment());
+
+        if (!AcademicLevelUtility.isConfigurationOfScientificWorkAllowed(scientificWork)){
+            throw new IllegalArgumentException("This configuration of academic levels is not allowed.");
+        }
 
         scientificWorkRepository.save(scientificWork);
         return scientificWork;

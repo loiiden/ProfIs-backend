@@ -37,15 +37,23 @@ public class ScientificWorkController {
     @PatchMapping("{id}")
     public ResponseEntity<ScientificWorkResponseDTO> patchScientificWorkById(@PathVariable Long id,
             @RequestBody ScientificWorkPatchDTO patchDTO) {
-        return ResponseEntity.ok(
-                scientificWorkMapper.convertToResponseDTO(scientificWorkService.patchScientificWorkById(id, patchDTO)));
+        try {
+            return ResponseEntity.ok(
+                    scientificWorkMapper.convertToResponseDTO(scientificWorkService.patchScientificWorkById(id, patchDTO)));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping
     public ResponseEntity<ScientificWorkResponseDTO> createScientificWork(
             @RequestBody ScientificWorkCreateDTO scientificWorkCreateDTO) {
-        return ResponseEntity
-                .ok(scientificWorkMapper.convertToResponseDTO(scientificWorkService.create(scientificWorkCreateDTO)));
+        try {
+            return ResponseEntity
+                    .ok(scientificWorkMapper.convertToResponseDTO(scientificWorkService.create(scientificWorkCreateDTO)));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("{id}")
