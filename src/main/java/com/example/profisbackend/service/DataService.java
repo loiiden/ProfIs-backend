@@ -8,10 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 import com.example.profisbackend.dto.evaluator.EvaluatorCreateDTO;
 import com.example.profisbackend.dto.evaluator.EvaluatorPatchDTO;
@@ -189,7 +186,18 @@ public class DataService {
     }
 
     private Long upsertScientificWork(Row row, Long studentId, Long studyProgramId, Long mainEvalId, Long secondEvalId) {
-        LocalDate start = getSafeLocalDate(row.getCell(START_DATE_COLUMN), "StartDate");
+        String startDateString =  getSafeString(row.getCell(START_DATE_COLUMN));
+        LocalDate startDate = null;
+        if (!Objects.equals(startDateString, "")) {
+            startDate = LocalDate.parse(startDateString);
+        }
+        LocalDate endDate = null;
+
+        String endDateString =  getSafeString(row.getCell(END_DATE_COLUMN));
+        if (!Objects.equals(endDateString, "")) {
+            endDate = LocalDate.parse(endDateString);
+        }
+
         LocalTime pStart = getSafeLocalTime(row.getCell(PRESENTATION_START_COLUMN), "PresStart");
         LocalTime pEnd = getSafeLocalTime(row.getCell(PRESENTATION_END_COLUMN), "PresEnd");
 
@@ -197,11 +205,13 @@ public class DataService {
                 getSafeLocalDateTime(row.getCell(COLLOQUIUM_DATE_COLUMN), "ColloqDate"),
                 getSafeString(row.getCell(COLLOQUIUM_LOCATION_COLUMN)),
                 getSafeDuration(row.getCell(DURATION_COLUMN), "Duration"),
-                pStart, pEnd,
+                pStart,
+                pEnd,
                 getSafeLocalTime(row.getCell(DISCUSSION_START_COLUMN), "DiscStart"),
                 getSafeLocalTime(row.getCell(DISCUSSION_END_COLUMN), "DiscEnd"),
-                getSafeString(row.getCell(WORK_TITLE_COLUMN)), start,
-                getSafeLocalDate(row.getCell(END_DATE_COLUMN), "EndDate"),
+                getSafeString(row.getCell(WORK_TITLE_COLUMN)),
+                startDate,
+                endDate,
                 studentId, studyProgramId, mainEvalId,
                 getSafeInteger(row.getCell(MARK_MAIN_WORK)),
                 getSafeInteger(row.getCell(MARK_MAIN_COLLOQ)),
@@ -210,11 +220,11 @@ public class DataService {
                 getSafeInteger(row.getCell(MARK_SECOND_COLLOQ)),
                 getSafeString(row.getCell(COMMENT_COLUMN)));
 
-        if (!scientificWorkService.existsByStartDateAndStudent(start, studentId)) {
+        if (!scientificWorkService.existsByStartDateAndStudent(startDate, studentId)) {
             ScientificWork created = scientificWorkService.create(dto);
             return created.getId();
         } else {
-            Long id = scientificWorkService.findByStartDateAndStudent(start, studentId).getId();
+            Long id = scientificWorkService.findByStartDateAndStudent(startDate, studentId).getId();
             scientificWorkService.patchScientificWorkById(id, new ScientificWorkPatchDTO(
                     dto.colloquium(), dto.colloquiumLocation(), dto.colloquiumDuration(),
                     dto.presentationStart(), dto.presentationEnd(), dto.discussionStart(), dto.discussionEnd(),
@@ -358,7 +368,7 @@ public class DataService {
         addCell(header, FIRST_EVALUATOR_PHONE, "Erstprüfer Telefon", style);
 
         addCell(header, SECOND_EVALUATOR_SALUTATION, "Zweitprüfer Anrede", style);
-        addCell(header, SECOND_EVALUATOR_LASTNAME, "Zweitprüfer Vorname", style);
+        addCell(header, SECOND_EVALUATOR_FIRSTNAME, "Zweitprüfer Vorname", style);
         addCell(header, SECOND_EVALUATOR_LASTNAME, "Zweitprüfer Nachname", style);
         addCell(header, SECOND_EVALUATOR_ACADEMICLEVEL, "Zweitprüfer Abschluss", style);
         addCell(header, SECOND_EVALUATOR_ROLE, "Zweitprüfer Rolle", style);
