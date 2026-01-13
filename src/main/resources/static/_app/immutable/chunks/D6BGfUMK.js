@@ -1,0 +1,1 @@
+import{d as c,h as _,n as d,V as o,w as y,x as T,y as b,k as E,W as g,j as f}from "./C-QRPYMU.js";function p(n, i, h=!1){_&&d();var r=new g(n),u=h?o:0;function t(a, s){if(_){const l=y(n)===T;if(a===l){var e=b();E(e),r.anchor=e,f(!1),r.ensure(a,s),f(!0);return}}r.ensure(a,s)}c(()=>{var a=!1;i((s, e=!0)=>{a=!0,t(e,s)}),a||t(!1,null)},u)}export{p as i};

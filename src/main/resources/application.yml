@@ -8,6 +8,10 @@ spring:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
       ddl-auto: update
+  web:
+    resources:
+      static-locations: classpath:/static/
+
    
 
 
