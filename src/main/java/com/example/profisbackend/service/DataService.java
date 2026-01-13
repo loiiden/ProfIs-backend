@@ -440,7 +440,7 @@ public class DataService {
 
         for (ScientificWork work : works) {
             Row row = sheet.createRow(rowIdx++);
-            row.createCell(0).setCellValue(eventService.getCurrentStatusForScientificWorkByScientificWorkId(work.getId()).toString());
+            row.createCell(0).setCellValue(eventService.getCurrentStatusForScientificWorkByScientificWorkId(work.getId()).getEventType().toString());
 
             if (work.getMainEvaluator() != null) {
                 Evaluator me = work.getMainEvaluator();
