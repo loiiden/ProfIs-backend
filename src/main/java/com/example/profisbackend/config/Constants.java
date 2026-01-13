@@ -50,26 +50,28 @@ public class Constants {
     public static final int START_DATE_COLUMN = 28;
     public static final int END_DATE_COLUMN = 29;
     public static final int COLLOQUIUM_DATE_COLUMN = 30;
-    public static final int COLLOQUIUM_LOCATION_COLUMN = 31;
-    public static final int PRESENTATION_START_COLUMN = 32;
-    public static final int PRESENTATION_END_COLUMN = 33;
-    public static final int DISCUSSION_START_COLUMN = 34;
-    public static final int DISCUSSION_END_COLUMN = 35;
+    public static final int DURATION_COLUMN = 31;
+    public static final int COLLOQUIUM_LOCATION_COLUMN = 32;
+    public static final int PRESENTATION_START_COLUMN = 33;
+    public static final int PRESENTATION_END_COLUMN = 34;
+    public static final int DISCUSSION_START_COLUMN = 35;
+    public static final int DISCUSSION_END_COLUMN = 36;
 
     // Marks
-    public static final int MARK_MAIN_WORK = 36;
-    public static final int MARK_MAIN_COLLOQ = 37;
-    public static final int MARK_SECOND_WORK = 38;
-    public static final int MARK_SECOND_COLLOQ = 39;
+    public static final int MARK_MAIN_WORK = 37;
+    public static final int MARK_MAIN_COLLOQ = 38;
+    public static final int MARK_SECOND_WORK = 39;
+    public static final int MARK_SECOND_COLLOQ = 40;
+    public static final int SWS_COLUMN = 41;
 
-    public static final int COMMENT_COLUMN = 41; // Assuming it stays two steps after the last mark
+    public static final int COMMENT_COLUMN = 42; // Assuming it stays two steps after the last mark
 
     //Events
-    public static final int EVENT_PLANNED_COLUMN = 42;
-    public static final int EVENT_PROPOSAL_COLUMN = 43;
-    public static final int EVENT_DISCUSSION_COLUMN = 44;
-    public static final int EVENT_FINAL_SUBMISSION_COLUMN = 45;
-    public static final int EVENT_REVIEW_COLUMN = 46;
-    public static final int EVENT_ARCHIVE_COLUMN = 47;
-    public static final int EVENT_ABORT_COLUMN = 48;
+    public static final int EVENT_PLANNED_COLUMN = 43;
+    public static final int EVENT_PROPOSAL_COLUMN = 44;
+    public static final int EVENT_DISCUSSION_COLUMN = 45;
+    public static final int EVENT_FINAL_SUBMISSION_COLUMN = 46;
+    public static final int EVENT_REVIEW_COLUMN = 47;
+    public static final int EVENT_ARCHIVE_COLUMN = 48;
+    public static final int EVENT_ABORT_COLUMN = 49;
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -160,7 +161,10 @@ public class DataService {
     }
 
     private Long upsertStudent(Row row, Long studyProgramId) {
-        Long studentNumber = (long) getSafeNumeric(row.getCell(STUDENT_NUMBER_COLUMN));
+        Long studentNumber = getSafeLong(row.getCell(STUDENT_NUMBER_COLUMN));
+        if (studentNumber == null) {
+            throw new IllegalArgumentException("Student number is mandatory");
+        }
         StudentCreateDTO createDto = new StudentCreateDTO(
                 getSafeString(row.getCell(STUDENT_FIRSTNAME_COLUMN)),
                 getSafeString(row.getCell(STUDENT_LASTNAME_COLUMN)),
@@ -190,20 +194,20 @@ public class DataService {
         LocalTime pEnd = getSafeLocalTime(row.getCell(PRESENTATION_END_COLUMN), "PresEnd");
 
         ScientificWorkCreateDTO dto = new ScientificWorkCreateDTO(
-                getSafeLocalDate(row.getCell(COLLOQUIUM_DATE_COLUMN), "ColloqDate").atTime(pStart),
+                getSafeLocalDateTime(row.getCell(COLLOQUIUM_DATE_COLUMN), "ColloqDate"),
                 getSafeString(row.getCell(COLLOQUIUM_LOCATION_COLUMN)),
-                Duration.between(pStart, pEnd),
+                getSafeDuration(row.getCell(DURATION_COLUMN), "Duration"),
                 pStart, pEnd,
                 getSafeLocalTime(row.getCell(DISCUSSION_START_COLUMN), "DiscStart"),
                 getSafeLocalTime(row.getCell(DISCUSSION_END_COLUMN), "DiscEnd"),
                 getSafeString(row.getCell(WORK_TITLE_COLUMN)), start,
                 getSafeLocalDate(row.getCell(END_DATE_COLUMN), "EndDate"),
                 studentId, studyProgramId, mainEvalId,
-                (int) getSafeNumeric(row.getCell(MARK_MAIN_COLLOQ)),
-                (int) getSafeNumeric(row.getCell(MARK_MAIN_WORK)),
+                getSafeInteger(row.getCell(MARK_MAIN_WORK)),
+                getSafeInteger(row.getCell(MARK_MAIN_COLLOQ)),
                 secondEvalId,
-                (int) getSafeNumeric(row.getCell(MARK_SECOND_COLLOQ)),
-                (int) getSafeNumeric(row.getCell(MARK_SECOND_WORK)),
+                getSafeInteger(row.getCell(MARK_SECOND_WORK)),
+                getSafeInteger(row.getCell(MARK_SECOND_COLLOQ)),
                 getSafeString(row.getCell(COMMENT_COLUMN)));
 
         if (!scientificWorkService.existsByStartDateAndStudent(start, studentId)) {
@@ -238,30 +242,63 @@ public class DataService {
         return cell.getStringCellValue().trim();
     }
 
-    private double getSafeNumeric(Cell cell) {
-        if (cell == null || cell.getCellType() == CellType.BLANK) return 0.0;
+    private Double getSafeNumeric(Cell cell) {
+        if (cell == null || cell.getCellType() == CellType.BLANK) return null;
         if (cell.getCellType() == CellType.NUMERIC) return cell.getNumericCellValue();
         try {
             return Double.parseDouble(cell.getStringCellValue().replace(",", "."));
         } catch (Exception e) {
-            return 0.0;
+            return null;
         }
     }
 
+    private Integer getSafeInteger(Cell cell) {
+        Double d = getSafeNumeric(cell);
+        if (d == null) return null;
+        return d.intValue();
+    }
+
+    private Long getSafeLong(Cell cell) {
+        Double d = getSafeNumeric(cell);
+        if (d == null) return null;
+        return d.longValue();
+    }
+
     private LocalDate getSafeLocalDate(Cell cell, String logTag) {
-        if (cell == null || cell.getCellType() == CellType.BLANK) return LocalDate.now();
+        if (cell == null || cell.getCellType() == CellType.BLANK) return null;
         try {
             if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
                 return cell.getLocalDateTimeCellValue().toLocalDate();
             }
             return LocalDate.parse(cell.getStringCellValue().trim(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         } catch (Exception e) {
-            return LocalDate.now();
+            return null;
+        }
+    }
+
+    private Duration getSafeDuration(Cell cell, String logTag) {
+        if (cell == null || cell.getCellType() == CellType.BLANK) return null;
+        try{
+            return Duration.parse(cell.getStringCellValue().replace(",", "."));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private LocalDateTime getSafeLocalDateTime(Cell cell, String logTag) {
+        if (cell == null || cell.getCellType() == CellType.BLANK) return null;
+        try{
+            if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+                return cell.getLocalDateTimeCellValue();
+            }
+            return LocalDateTime.parse(cell.getStringCellValue().trim());
+        } catch (Exception e) {
+            return null;
         }
     }
 
     private LocalTime getSafeLocalTime(Cell cell, String logTag) {
-        if (cell == null || cell.getCellType() == CellType.BLANK) return LocalTime.MIDNIGHT;
+        if (cell == null || cell.getCellType() == CellType.BLANK) return null;
         try {
             if (cell.getCellType() == CellType.NUMERIC) return cell.getLocalDateTimeCellValue().toLocalTime();
             String val = cell.getStringCellValue().trim().toUpperCase();
@@ -270,7 +307,7 @@ public class DataService {
             }
             return LocalTime.parse(val);
         } catch (Exception e) {
-            return LocalTime.MIDNIGHT;
+            return null;
         }
     }
 
@@ -311,53 +348,54 @@ public class DataService {
         CellStyle style = createHeaderStyle(sheet.getWorkbook());
 
         addCell(header, 0, "Status", style);
-        addCell(header, 1, "Erstprüfer Anrede", style);
-        addCell(header, 2, "Erstprüfer Vorname", style);
-        addCell(header, 3, "Erstprüfer Nachname", style);
-        addCell(header, 4, "Erstprüfer Abschluss", style);
-        addCell(header, 5, "Erstprüfer Rolle", style);
-        addCell(header, 6, "Erstprüfer Adresse", style);
-        addCell(header, 7, "Erstprüfer E-Mail", style);
-        addCell(header, 8, "Erstprüfer Telefon", style);
+        addCell(header, FIRST_EVALUATOR_SALUTATION, "Erstprüfer Anrede", style);
+        addCell(header, FIRST_EVALUATOR_FIRSTNAME, "Erstprüfer Vorname", style);
+        addCell(header, FIRST_EVALUATOR_LASTNAME, "Erstprüfer Nachname", style);
+        addCell(header, FIRST_EVALUATOR_ACADEMICLEVEL, "Erstprüfer Abschluss", style);
+        addCell(header, FIRST_EVALUATOR_ROLE, "Erstprüfer Rolle", style);
+        addCell(header, FIRST_EVALUATOR_ADDRESS, "Erstprüfer Adresse", style);
+        addCell(header, FIRST_EVALUATOR_EMAIL, "Erstprüfer E-Mail", style);
+        addCell(header, FIRST_EVALUATOR_PHONE, "Erstprüfer Telefon", style);
 
-        addCell(header, 9, "Zweitprüfer Anrede", style);
-        addCell(header, 10, "Zweitprüfer Vorname", style);
-        addCell(header, 11, "Zweitprüfer Nachname", style);
-        addCell(header, 12, "Zweitprüfer Abschluss", style);
-        addCell(header, 13, "Zweitprüfer Rolle", style);
-        addCell(header, 14, "Zweitprüfer Adresse", style);
-        addCell(header, 15, "Zweitprüfer E-Mail", style);
-        addCell(header, 16, "Zweitprüfer Telefon", style);
+        addCell(header, SECOND_EVALUATOR_SALUTATION, "Zweitprüfer Anrede", style);
+        addCell(header, SECOND_EVALUATOR_LASTNAME, "Zweitprüfer Vorname", style);
+        addCell(header, SECOND_EVALUATOR_LASTNAME, "Zweitprüfer Nachname", style);
+        addCell(header, SECOND_EVALUATOR_ACADEMICLEVEL, "Zweitprüfer Abschluss", style);
+        addCell(header, SECOND_EVALUATOR_ROLE, "Zweitprüfer Rolle", style);
+        addCell(header, SECOND_EVALUATOR_ADDRESS, "Zweitprüfer Adresse", style);
+        addCell(header, SECOND_EVALUATOR_EMAIL, "Zweitprüfer E-Mail", style);
+        addCell(header, SECOND_EVALUATOR_PHONE, "Zweitprüfer Telefon", style);
 
-        addCell(header, 17, "Vorname Stud.", style);
-        addCell(header, 18, "Nachname Stud.", style);
-        addCell(header, 19, "Abschluss Stud.", style);
-        addCell(header, 20, "Anrede", style);
-        addCell(header, 21, "Telefonnummer", style);
-        addCell(header, 22, "E-Mail Stud.", style);
-        addCell(header, 23, "Matrikelnummer", style);
-        addCell(header, 24, "Adresse Stud.", style);
+        addCell(header, STUDENT_FIRSTNAME_COLUMN, "Vorname Stud.", style);
+        addCell(header, STUDENT_LASTNAME_COLUMN, "Nachname Stud.", style);
+        addCell(header, STUDENT_ACADEMICLEVEL_COLUMN, "Abschluss Stud.", style);
+        addCell(header, STUDENT_SALUTATION_COLUMN, "Anrede", style);
+        addCell(header, STUDENT_PHONENUMBER_COLUMN, "Telefonnummer", style);
+        addCell(header, STUDENT_MAIL_COLUMN, "E-Mail Stud.", style);
+        addCell(header, STUDENT_NUMBER_COLUMN, "Matrikelnummer", style);
+        addCell(header, STUDENT_ADDRESS_COLUMN, "Adresse Stud.", style);
 
-        addCell(header, 25, "Studiengang Level", style);
-        addCell(header, 26, "Studiengang Name", style);
+        addCell(header, STUDYPROGRAM_DEGREETYPE_COLUMN, "Studiengang Level", style);
+        addCell(header, STUDYPROGRAM_TITLE, "Studiengang Name", style);
 
-        addCell(header, 27, "Titel der Arbeit", style);
-        addCell(header, 28, "Startdatum", style);
-        addCell(header, 29, "Abgabedatum", style);
-        addCell(header, 30, "Kolloquium Datum", style);
-        addCell(header, 31, "Kolloquium Ort", style);
-        addCell(header, 32, "Präsentat. Start", style);
-        addCell(header, 33, "Präsentat. Ende", style);
-        addCell(header, 34, "Diskussions Start", style);
-        addCell(header, 35, "Diskussions Ende", style);
+        addCell(header, WORK_TITLE_COLUMN, "Titel der Arbeit", style);
+        addCell(header, START_DATE_COLUMN, "Startdatum", style);
+        addCell(header, END_DATE_COLUMN, "Abgabedatum", style);
+        addCell(header, COLLOQUIUM_DATE_COLUMN, "Kolloquium Datum", style);
+        addCell(header, DURATION_COLUMN, "Dauer", style);
+        addCell(header, COLLOQUIUM_LOCATION_COLUMN, "Kolloquium Ort", style);
+        addCell(header, PRESENTATION_START_COLUMN, "Präsentat. Start", style);
+        addCell(header, PRESENTATION_END_COLUMN, "Präsentat. Ende", style);
+        addCell(header, DISCUSSION_START_COLUMN, "Diskussions Start", style);
+        addCell(header, DISCUSSION_END_COLUMN, "Diskussions Ende", style);
 
-        addCell(header, 36, "Erstprüfer Note Arbeit", style);
-        addCell(header, 37, "Erstprüfer Note Kolloq.", style);
-        addCell(header, 38, "Zweitprüfer Note Arbeit", style);
-        addCell(header, 39, "Zweitprüfer Note Kolloq.", style);
+        addCell(header, MARK_MAIN_WORK, "Erstprüfer Note Arbeit", style);
+        addCell(header, MARK_MAIN_COLLOQ, "Erstprüfer Note Kolloq.", style);
+        addCell(header, MARK_SECOND_WORK, "Zweitprüfer Note Arbeit", style);
+        addCell(header, MARK_SECOND_COLLOQ, "Zweitprüfer Note Kolloq.", style);
 
-        addCell(header, 40, "Deputat (SWS)", style);
-        addCell(header, 41, "Kommentar", style);
+        addCell(header, SWS_COLUMN, "Deputat (SWS)", style);
+        addCell(header, COMMENT_COLUMN, "Kommentar", style);
         addCell(header, EVENT_PLANNED_COLUMN, "EventPlanned", style);
         addCell(header, EVENT_PROPOSAL_COLUMN, "EventProposal", style);
         addCell(header, EVENT_DISCUSSION_COLUMN, "EventDiscussion", style);
@@ -367,72 +405,108 @@ public class DataService {
         addCell(header, EVENT_ABORT_COLUMN, "EventAbort", style);
     }
 
+
+
+    private void createCellInteger(Row row, int colIndex, Integer value){
+        Cell cell = row.createCell(colIndex);
+        if (value != null){
+            cell.setCellValue(value);
+        }
+    }
+
+    private void createCellString(Row row, int colIndex, String value){
+        Cell cell = row.createCell(colIndex);
+        if (value != null){
+            cell.setCellValue(value);
+        }
+    }
+    private void createCellLong(Row row, int colIndex, Long value){
+        Cell cell = row.createCell(colIndex);
+        if (value != null){
+            cell.setCellValue(value);
+        }
+    }
+
+    private void createCellDouble(Row row, int colIndex, Double value){
+        Cell cell = row.createCell(colIndex);
+        if (value != null){
+            cell.setCellValue(value);
+        }
+    }
+
     private void fillWorkData(Sheet sheet) {
         List<ScientificWork> works = scientificWorkService.findAll();
         int rowIdx = 1;
 
         for (ScientificWork work : works) {
             Row row = sheet.createRow(rowIdx++);
-            row.createCell(0).setCellValue("Angemeldet");
+            row.createCell(0).setCellValue(eventService.getCurrentStatusForScientificWorkByScientificWorkId(work.getId()).toString());
 
             if (work.getMainEvaluator() != null) {
                 Evaluator me = work.getMainEvaluator();
-                row.createCell(1).setCellValue(me.getSalutation().getLabel());
-                row.createCell(2).setCellValue(me.getFirstName());
-                row.createCell(3).setCellValue(me.getLastName());
-                row.createCell(4).setCellValue(me.getAcademicLevel().getLabel());
-                row.createCell(5).setCellValue(me.getRole().getLabel());
-                row.createCell(6).setCellValue(me.getAddress());
-                row.createCell(7).setCellValue(me.getEmail());
-                row.createCell(8).setCellValue(me.getPhoneNumber());
+                createCellString(row, FIRST_EVALUATOR_SALUTATION, me.getSalutation() != null ? me.getSalutation().getLabel() : null);
+                createCellString(row, FIRST_EVALUATOR_FIRSTNAME, me.getFirstName());
+                createCellString(row, FIRST_EVALUATOR_LASTNAME, me.getLastName());
+                createCellString(row, FIRST_EVALUATOR_ACADEMICLEVEL, me.getAcademicLevel() != null ? me.getAcademicLevel().getLabel() : null);
+                //TODO: CONTROL THAT IR WORKS
+                createCellString(row, FIRST_EVALUATOR_ROLE, me.getRole() != null ? me.getRole().getLabel() : null);
+                createCellString(row, FIRST_EVALUATOR_ADDRESS, me.getAddress());
+                createCellString(row, FIRST_EVALUATOR_EMAIL, me.getEmail());
+                createCellString(row, FIRST_EVALUATOR_PHONE, me.getPhoneNumber());
             }
 
             if (work.getSecondEvaluator() != null) {
                 Evaluator se = work.getSecondEvaluator();
-                row.createCell(9).setCellValue(se.getSalutation().getLabel());
-                row.createCell(10).setCellValue(se.getFirstName());
-                row.createCell(11).setCellValue(se.getLastName());
-                row.createCell(12).setCellValue(se.getAcademicLevel().getLabel());
-                row.createCell(13).setCellValue(se.getRole().getLabel());
-                row.createCell(14).setCellValue(se.getAddress());
-                row.createCell(15).setCellValue(se.getEmail());
-                row.createCell(16).setCellValue(se.getPhoneNumber());
+
+                createCellString(row, SECOND_EVALUATOR_SALUTATION, se.getSalutation() != null ? se.getSalutation().getLabel() : null);
+                createCellString(row, SECOND_EVALUATOR_FIRSTNAME, se.getFirstName());
+                createCellString(row, SECOND_EVALUATOR_LASTNAME, se.getLastName());
+                createCellString(row, SECOND_EVALUATOR_ACADEMICLEVEL, se.getAcademicLevel() != null ? se.getAcademicLevel().getLabel() : null);
+                createCellString(row, SECOND_EVALUATOR_ROLE, se.getRole() != null ? se.getRole().getLabel() : null);
+                createCellString(row, SECOND_EVALUATOR_ADDRESS, se.getAddress());
+                createCellString(row, SECOND_EVALUATOR_EMAIL, se.getEmail());
+                createCellString(row, SECOND_EVALUATOR_PHONE, se.getPhoneNumber());
             }
 
             if (work.getStudent() != null) {
                 Student s = work.getStudent();
-                row.createCell(17).setCellValue(s.getFirstName());
-                row.createCell(18).setCellValue(s.getLastName());
-                row.createCell(19).setCellValue(s.getAcademicLevel().getLabel());
-                row.createCell(20).setCellValue(s.getSalutation().getLabel());
-                row.createCell(21).setCellValue(s.getPhoneNumber());
-                row.createCell(22).setCellValue(s.getEmail());
-                row.createCell(23).setCellValue(s.getStudentNumber());
-                row.createCell(24).setCellValue(s.getAddress());
+
+                createCellString(row, STUDENT_FIRSTNAME_COLUMN, s.getFirstName());
+                createCellString(row, STUDENT_LASTNAME_COLUMN, s.getLastName());
+                createCellString(row, STUDENT_ACADEMICLEVEL_COLUMN, s.getAcademicLevel() != null ? s.getAcademicLevel().getLabel() : null);
+                createCellString(row, STUDENT_SALUTATION_COLUMN, s.getSalutation() != null ? s.getSalutation().getLabel() : null);
+                createCellString(row, STUDENT_PHONENUMBER_COLUMN, s.getPhoneNumber());
+                createCellString(row, STUDENT_MAIL_COLUMN, s.getEmail());
+                createCellLong(row, STUDENT_NUMBER_COLUMN, s.getStudentNumber());
+                createCellString(row, STUDENT_ADDRESS_COLUMN, s.getAddress());
             }
 
             if (work.getStudyProgram() != null) {
-                row.createCell(25).setCellValue(work.getStudyProgram().getDegreeType().getLabel());
-                row.createCell(26).setCellValue(work.getStudyProgram().getTitle());
+                createCellString(row, STUDYPROGRAM_DEGREETYPE_COLUMN, work.getStudyProgram().getDegreeType() != null ? work.getStudyProgram().getDegreeType().getLabel() : null);
+                createCellString(row, STUDYPROGRAM_TITLE, work.getStudyProgram().getTitle());
             }
 
-            row.createCell(27).setCellValue(work.getTitle());
-            row.createCell(28).setCellValue(work.getStartDate() != null ? work.getStartDate().toString() : "");
-            row.createCell(29).setCellValue(work.getEndDate() != null ? work.getEndDate().toString() : "");
-            row.createCell(30).setCellValue(work.getColloquium() != null ? work.getColloquium().toString() : "");
-            row.createCell(31).setCellValue(work.getColloquiumLocation());
-            row.createCell(32).setCellValue(work.getPresentationStart() != null ? work.getPresentationStart().toString() : "");
-            row.createCell(33).setCellValue(work.getPresentationEnd() != null ? work.getPresentationEnd().toString() : "");
-            row.createCell(34).setCellValue(work.getDiscussionStart() != null ? work.getDiscussionStart().toString() : "");
-            row.createCell(35).setCellValue(work.getDiscussionEnd() != null ? work.getDiscussionEnd().toString() : "");
+            createCellString(row, WORK_TITLE_COLUMN, work.getTitle());
+            createCellString(row, START_DATE_COLUMN, work.getStartDate() != null ? work.getStartDate().toString() : null);
+            createCellString(row, END_DATE_COLUMN, work.getEndDate() != null ? work.getEndDate().toString() : null);
+            createCellString(row, COLLOQUIUM_DATE_COLUMN, work.getColloquium() != null ? work.getColloquium().toString() : null);
+            createCellString(row, DURATION_COLUMN, work.getColloquiumDuration() != null ? work.getColloquiumDuration().toString() : null);
+            createCellString(row, COLLOQUIUM_LOCATION_COLUMN, work.getColloquiumLocation());
+            createCellString(row, PRESENTATION_START_COLUMN, work.getPresentationStart() != null ? work.getPresentationStart().toString() : null);
+            createCellString(row, PRESENTATION_END_COLUMN, work.getPresentationEnd() != null ? work.getPresentationEnd().toString() : null );
+            createCellString(row, DISCUSSION_START_COLUMN, work.getDiscussionStart() != null ? work.getDiscussionStart().toString() : null);
+            createCellString(row, DISCUSSION_END_COLUMN, work.getDiscussionEnd() != null ? work.getDiscussionEnd().toString() : null);
 
-            row.createCell(36).setCellValue(work.getMainEvaluatorWorkMark());
-            row.createCell(37).setCellValue(work.getMainEvaluatorColloquiumMark());
-            row.createCell(38).setCellValue(work.getSecondEvaluatorWorkMark());
-            row.createCell(39).setCellValue(work.getSecondEvaluatorColloquiumMark());
 
-            row.createCell(40).setCellValue(0.5);
-            row.createCell(41).setCellValue(work.getComment());
+            // This prevents using nulls as a value and just leave it blank
+            createCellInteger(row, MARK_MAIN_WORK, work.getMainEvaluatorWorkMark());
+            createCellInteger(row, MARK_MAIN_COLLOQ, work.getMainEvaluatorColloquiumMark());
+            createCellInteger(row, MARK_SECOND_WORK, work.getSecondEvaluatorWorkMark());
+            createCellInteger(row, MARK_SECOND_COLLOQ, work.getSecondEvaluatorColloquiumMark());
+
+            // sws in study program must be initialized and not null
+            createCellDouble(row, SWS_COLUMN, work.getStudyProgram() != null ? work.getStudyProgram().getSws() : 0.0);
+            createCellString(row, COMMENT_COLUMN, work.getComment());
             row.createCell(EVENT_PLANNED_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.PLANNED, work.getId()));
             row.createCell(EVENT_PROPOSAL_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.PROPOSAL, work.getId()));
             row.createCell(EVENT_DISCUSSION_COLUMN).setCellValue(getAndMapLocalDatesToStringByEventTypeAndScientificWorkId(EventType.DISCUSSION, work.getId()));

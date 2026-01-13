@@ -24,5 +24,5 @@ public class StudyProgram {
     private Long id;
     private DegreeType degreeType;
     private String title;
-    private double sws;
+    private double sws = 0.0;
 }
